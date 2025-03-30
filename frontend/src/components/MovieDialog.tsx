@@ -34,7 +34,6 @@ interface MovieDialogProps {
     open: boolean;
     onClose: () => void;
     movie: Movie | null;
-    onUpdate?: (movie: Movie) => void;
 }
 
 const MoviePoster = styled("img")(({ theme }) => ({
@@ -54,7 +53,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export const MovieDialog = ({ movie, open, onClose, onUpdate }: MovieDialogProps) => {
+export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
     const queryClient = useQueryClient();
     const [isUpdating, setIsUpdating] = useState(false);
     const [updatedMovie, setUpdatedMovie] = useState<Movie | null>(null);
@@ -124,7 +123,7 @@ export const MovieDialog = ({ movie, open, onClose, onUpdate }: MovieDialogProps
 
     const handleSave = () => {
         if (updatedMovie) {
-            onUpdate?.(updatedMovie);
+            saveMovieMutation.mutate(updatedMovie);
         }
     };
 
@@ -133,6 +132,13 @@ export const MovieDialog = ({ movie, open, onClose, onUpdate }: MovieDialogProps
     if (!displayMovie) return null;
 
     const year = displayMovie.release_date ? new Date(displayMovie.release_date).getFullYear() : "Unbekanntes Jahr";
+
+    const hasChanges =
+        updatedMovie &&
+        Object.keys(updatedMovie).some((key) => {
+            if (key === "id") return false;
+            return JSON.stringify(updatedMovie[key as keyof Movie]) !== JSON.stringify(movie?.[key as keyof Movie]);
+        });
 
     const handleDelete = () => {
         if (window.confirm(`Möchten Sie "${displayMovie.title}" wirklich löschen?`)) {
@@ -143,17 +149,10 @@ export const MovieDialog = ({ movie, open, onClose, onUpdate }: MovieDialogProps
     return (
         <StyledDialog open={open} onClose={onClose} maxWidth='md' fullWidth>
             <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography variant='h5' component='div'>
-                    {displayMovie.title}
-                </Typography>
-                <Box>
-                    <IconButton onClick={handleUpdateFromTMDB} disabled={isUpdating} sx={{ mr: 1 }}>
-                        {isUpdating ? <CircularProgress size={24} /> : <RefreshIcon />}
-                    </IconButton>
-                    <IconButton aria-label='close' onClick={onClose} sx={{ color: "text.secondary" }}>
-                        <CloseIcon />
-                    </IconButton>
-                </Box>
+                <Typography variant='h5'>{displayMovie.title}</Typography>
+                <IconButton aria-label='close' onClick={onClose} sx={{ color: "text.secondary" }}>
+                    <CloseIcon />
+                </IconButton>
             </DialogTitle>
             <DialogContent dividers>
                 <Box sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", md: "row" } }}>
@@ -234,30 +233,57 @@ export const MovieDialog = ({ movie, open, onClose, onUpdate }: MovieDialogProps
                                     </ListItem>
                                 </List>
                             </Box>
+
+                            {/* Metadaten */}
+                            {displayMovie.genres && displayMovie.genres.length > 0 && (
+                                <Box>
+                                    <Typography variant='h6' gutterBottom>
+                                        GENRES
+                                    </Typography>
+                                    <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
+                                        {displayMovie.genres.map((genre) => (
+                                            <Chip key={genre.id} label={genre.name} size='small' />
+                                        ))}
+                                    </Stack>
+                                </Box>
+                            )}
+
+                            {/* Produktionsfirmen */}
+                            {displayMovie.production_companies && displayMovie.production_companies.length > 0 && (
+                                <Box>
+                                    <Typography variant='h6' gutterBottom>
+                                        PRODUKTIONSFIRMEN
+                                    </Typography>
+                                    <List dense>
+                                        {displayMovie.production_companies.map((company) => (
+                                            <ListItem key={company.id}>
+                                                <ListItemIcon>
+                                                    <NumbersIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={company.name} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Box>
+                            )}
                         </Stack>
                     </Box>
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button
-                    startIcon={<DeleteIcon />}
-                    onClick={handleDelete}
-                    color='error'
-                    disabled={deleteMovieMutation.isPending}
-                >
+                <Button startIcon={<DeleteIcon />} color='error' onClick={handleDelete}>
                     Löschen
                 </Button>
-                {updatedMovie && (
-                    <Button
-                        startIcon={<SaveIcon />}
-                        onClick={handleSave}
-                        variant='contained'
-                        color='primary'
-                        disabled={saveMovieMutation.isPending}
-                    >
-                        Speichern
-                    </Button>
-                )}
+                <Button
+                    startIcon={isUpdating ? <CircularProgress size={20} /> : <RefreshIcon />}
+                    onClick={handleUpdateFromTMDB}
+                    disabled={isUpdating}
+                >
+                    Aktualisieren
+                </Button>
+                <Button startIcon={<SaveIcon />} variant='contained' onClick={handleSave} disabled={!hasChanges}>
+                    Speichern
+                </Button>
             </DialogActions>
         </StyledDialog>
     );

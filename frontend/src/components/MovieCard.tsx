@@ -9,6 +9,7 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
     return (
         <Card
+            role='article'
             sx={{
                 height: "100%",
                 display: "flex",
@@ -48,6 +49,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
                     }}
                 >
                     {movie.description}
+                </Typography>
+                <Typography variant='body2' color='text.secondary'>
+                    {movie.year}
                 </Typography>
             </CardContent>
         </Card>

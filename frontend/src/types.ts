@@ -1,3 +1,13 @@
+export interface Genre {
+    id: number;
+    name: string;
+}
+
+export interface ProductionCompany {
+    id: number;
+    name: string;
+}
+
 export interface Movie {
     id: number;
     title: string;
@@ -11,4 +21,6 @@ export interface Movie {
     rating: number;
     created_at?: string;
     updated_at?: string;
+    genres?: Genre[];
+    production_companies?: ProductionCompany[];
 }
