@@ -11,11 +11,12 @@ import (
 	"time"
 )
 
-var baseURL = "https://api.themoviedb.org/3"
+var defaultBaseURL = "https://api.themoviedb.org/3"
 
 type TMDBClient struct {
 	apiKey     string
 	imageURL   string
+	baseURL    string
 	httpClient *http.Client
 	cache      *TMDBCache
 }
@@ -55,6 +56,18 @@ func NewTMDBClient() *TMDBClient {
 	return &TMDBClient{
 		apiKey:     os.Getenv("TMDB_API_KEY"),
 		imageURL:   "https://image.tmdb.org/t/p/w500",
+		baseURL:    defaultBaseURL,
+		httpClient: &http.Client{},
+		cache:      &TMDBCache{movies: make(map[int]*CacheEntry)},
+	}
+}
+
+// NewTMDBClientWithBaseURL erstellt einen neuen TMDB-Client mit einer benutzerdefinierten Base-URL
+func NewTMDBClientWithBaseURL(baseURL string) *TMDBClient {
+	return &TMDBClient{
+		apiKey:     os.Getenv("TMDB_API_KEY"),
+		imageURL:   "https://image.tmdb.org/t/p/w500",
+		baseURL:    baseURL,
 		httpClient: &http.Client{},
 		cache:      &TMDBCache{movies: make(map[int]*CacheEntry)},
 	}
@@ -69,7 +82,7 @@ func (c *TMDBClient) SearchMovies(query string) ([]TMDBMovie, error) {
 		return nil, fmt.Errorf("suchanfrage zu lang")
 	}
 
-	searchURL := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s&language=de-DE&include_adult=false", baseURL, c.apiKey, url.QueryEscape(query))
+	searchURL := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s&language=de-DE&include_adult=false", c.baseURL, c.apiKey, url.QueryEscape(query))
 	req, err := http.NewRequest("GET", searchURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("fehler beim Erstellen der Anfrage: %v", err)
@@ -102,14 +115,14 @@ func (c *TMDBClient) GetMovieDetails(id int) (*TMDBMovie, error) {
 
 	// Prüfe Cache
 	c.cache.RLock()
-	if entry, ok := c.cache.movies[id]; ok && time.Now().Before(entry.expiration) {
+	if entry, exists := c.cache.movies[id]; exists && time.Now().Before(entry.expiration) {
 		c.cache.RUnlock()
 		return entry.movie, nil
 	}
 	c.cache.RUnlock()
 
-	detailsURL := fmt.Sprintf("%s/movie/%d?api_key=%s&language=de-DE", baseURL, id, c.apiKey)
-	req, err := http.NewRequest("GET", detailsURL, nil)
+	movieURL := fmt.Sprintf("%s/movie/%d?api_key=%s&language=de-DE&append_to_response=credits", c.baseURL, id, c.apiKey)
+	req, err := http.NewRequest("GET", movieURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("fehler beim Erstellen der Anfrage: %v", err)
 	}
@@ -118,7 +131,7 @@ func (c *TMDBClient) GetMovieDetails(id int) (*TMDBMovie, error) {
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("fehler beim Abrufen der Filmdetails: %v", err)
+		return nil, fmt.Errorf("fehler bei der TMDB-Anfrage: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -132,14 +145,14 @@ func (c *TMDBClient) GetMovieDetails(id int) (*TMDBMovie, error) {
 
 	var movie TMDBMovie
 	if err := json.NewDecoder(resp.Body).Decode(&movie); err != nil {
-		return nil, fmt.Errorf("fehler beim Decodieren der Filmdetails: %v", err)
+		return nil, fmt.Errorf("fehler beim Decodieren der TMDB-Antwort: %v", err)
 	}
 
 	// Speichere im Cache
 	c.cache.Lock()
 	c.cache.movies[id] = &CacheEntry{
 		movie:      &movie,
-		expiration: time.Now().Add(1 * time.Hour),
+		expiration: time.Now().Add(24 * time.Hour),
 	}
 	c.cache.Unlock()
 
@@ -147,7 +160,7 @@ func (c *TMDBClient) GetMovieDetails(id int) (*TMDBMovie, error) {
 }
 
 func (c *TMDBClient) TestConnection() error {
-	testURL := fmt.Sprintf("%s/configuration?api_key=%s", baseURL, c.apiKey)
+	testURL := fmt.Sprintf("%s/configuration?api_key=%s", c.baseURL, c.apiKey)
 	req, err := http.NewRequest("GET", testURL, nil)
 	if err != nil {
 		return fmt.Errorf("fehler beim Erstellen der Anfrage: %v", err)
@@ -157,21 +170,12 @@ func (c *TMDBClient) TestConnection() error {
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		if os.IsTimeout(err) {
-			return fmt.Errorf("timeout bei der TMDB-Verbindung: %v", err)
-		}
 		return fmt.Errorf("fehler bei der TMDB-Verbindung: %v", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("TMDB-API-Fehler: %d", resp.StatusCode)
-	}
-
-	// Validiere JSON-Antwort
-	var result map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return fmt.Errorf("ungültige JSON-Antwort: %v", err)
 	}
 
 	return nil
@@ -195,7 +199,7 @@ func searchTMDBMovies(query string) ([]TMDBMovie, error) {
 
 	// URL-Encode die Suchanfrage
 	encodedQuery := url.QueryEscape(query)
-	url := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s&language=de-DE&include_adult=false", baseURL, apiKey, encodedQuery)
+	url := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s&language=de-DE&include_adult=false", defaultBaseURL, apiKey, encodedQuery)
 	fmt.Printf("TMDB API URL: %s\n", url)
 	
 	req, err := http.NewRequest("GET", url, nil)
@@ -232,7 +236,7 @@ func searchTMDBMovies(query string) ([]TMDBMovie, error) {
 
 	// Hole für jeden Film die Credits
 	for i := range searchResp.Results {
-		creditsURL := fmt.Sprintf("%s/movie/%d/credits?api_key=%s&language=de-DE", baseURL, searchResp.Results[i].ID, apiKey)
+		creditsURL := fmt.Sprintf("%s/movie/%d/credits?api_key=%s&language=de-DE", defaultBaseURL, searchResp.Results[i].ID, apiKey)
 		creditsReq, err := http.NewRequest("GET", creditsURL, nil)
 		if err != nil {
 			fmt.Printf("Error creating credits request for movie %d: %v\n", searchResp.Results[i].ID, err)
