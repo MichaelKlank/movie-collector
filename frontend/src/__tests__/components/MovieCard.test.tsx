@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import MovieCard from "../../components/MovieCard";
+import { MovieCard } from "../../components/MovieCard";
 
 const mockMovie = {
     id: 1,

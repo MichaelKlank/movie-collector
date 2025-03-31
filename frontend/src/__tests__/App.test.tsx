@@ -1,66 +1,211 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { screen, waitFor, within } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import App from "../App";
+import { renderWithProviders } from "./test-utils";
+import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
+import { Movie } from "../types";
+import { useQuery, QueryObserverResult } from "@tanstack/react-query";
 
-const mockMovies = [
+const mockMovies: Movie[] = [
     {
         id: 1,
-        title: "Avatar",
-        description: "Ein epischer Film",
-        year: 2009,
-        poster_path: "/avatar.jpg",
-        image_path: "/avatar-backdrop.jpg",
+        title: "Andromeda",
+        description: "A young man must travel to the furthest reaches of the universe to find his long lost father.",
+        year: 2022,
+        poster_path: "/tr12gW9tqHJ4jypEpNuE5vRtAOw.jpg",
+        image_path: "/tr12gW9tqHJ4jypEpNuE5vRtAOw.jpg",
         tmdb_id: "123",
-        overview: "Ein epischer Film",
-        release_date: "2009-12-18",
+        overview: "A young man must travel to the furthest reaches of the universe to find his long lost father.",
+        release_date: "2022-01-01",
         rating: 7.8,
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-01T00:00:00Z",
+    },
+    {
+        id: 2,
+        title: "Berta",
+        description:
+            "Following the extraordinary DANA, Spanish filmmaker Lucía Forner Segarra returns to Fantasia with BERTA...",
+        year: 2024,
+        poster_path: "/ha8LoZnnQGXcwH8atEUTNcGn2fU.jpg",
+        image_path: "/ha8LoZnnQGXcwH8atEUTNcGn2fU.jpg",
+        tmdb_id: "124",
+        overview: "Following the extraordinary DANA...",
+        release_date: "2024-01-01",
+        rating: 8.2,
         created_at: "2024-01-01T00:00:00Z",
         updated_at: "2024-01-01T00:00:00Z",
     },
 ];
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            retry: false,
-        },
-    },
+const defaultQueryResult = {
+    dataUpdatedAt: 0,
+    errorUpdatedAt: 0,
+    failureCount: 0,
+    failureReason: null,
+    errorUpdateCount: 0,
+    isFetchedAfterMount: false,
+    isPaused: false,
+    isPlaceholderData: false,
+    isPreviousData: false,
+    isRefetchError: false,
+    isRefetching: false,
+    isRefetchingError: false,
+    isRefetchingSuccess: false,
+    isStale: false,
+    isStaleError: false,
+    isStaleSuccess: false,
+    isFetching: false,
+    isFetchingError: false,
+    isFetchingSuccess: false,
+    isPausedError: false,
+    isPausedSuccess: false,
+    isPlaceholderDataError: false,
+    isPlaceholderDataSuccess: false,
+    refetch: vi.fn(),
+    remove: vi.fn(),
+    isInitialLoading: false,
+    promise: Promise.resolve([] as Movie[]),
+};
+
+vi.mock("@tanstack/react-query", async () => {
+    const actual = await vi.importActual("@tanstack/react-query");
+    return {
+        ...actual,
+        useQuery: vi.fn().mockImplementation(({ queryKey }): QueryObserverResult<Movie[], Error> => {
+            if (queryKey[0] === "movies") {
+                return {
+                    ...defaultQueryResult,
+                    data: mockMovies,
+                    isLoading: false,
+                    isError: false,
+                    error: null,
+                    isSuccess: true,
+                    isPending: false,
+                    isFetched: true,
+                    isFetchedAfterMount: true,
+                    isLoadingError: false,
+                    isRefetchError: false,
+                    isPlaceholderData: false,
+                    fetchStatus: "idle" as const,
+                    status: "success" as const,
+                    promise: Promise.resolve(mockMovies),
+                };
+            }
+            return {
+                ...defaultQueryResult,
+                data: undefined,
+                isLoading: false,
+                isError: false,
+                error: null,
+                isSuccess: false,
+                isPending: true,
+                isFetched: false,
+                isLoadingError: false,
+                isRefetchError: false,
+                isPlaceholderData: false,
+                fetchStatus: "idle" as const,
+                status: "pending" as const,
+                promise: Promise.resolve([] as Movie[]),
+            };
+        }),
+        useMutation: vi.fn().mockImplementation(() => ({
+            mutate: vi.fn(),
+            reset: vi.fn(),
+            data: undefined,
+            error: null,
+            isError: false,
+            isIdle: true,
+            isPaused: false,
+            isSuccess: false,
+            status: "idle",
+            variables: undefined,
+            failureCount: 0,
+            failureReason: null,
+        })),
+        QueryClient: vi.fn().mockImplementation(() => ({
+            defaultOptions: {
+                queries: {
+                    retry: false,
+                    staleTime: Infinity,
+                },
+                mutations: {
+                    retry: false,
+                },
+            },
+            setQueryData: vi.fn(),
+            setQueryDefaults: vi.fn(),
+            getQueryDefaults: vi.fn(),
+            getQueryCache: vi.fn(),
+            getMutationCache: vi.fn().mockReturnValue({
+                build: vi.fn(),
+                add: vi.fn(),
+                remove: vi.fn(),
+                clear: vi.fn(),
+                getAll: vi.fn(),
+                notify: vi.fn(),
+                onFocus: vi.fn(),
+                onOnline: vi.fn(),
+            }),
+            getQueryData: vi.fn(),
+            ensureQueryData: vi.fn(),
+            getQueriesData: vi.fn(),
+            getQueryState: vi.fn(),
+            removeQueries: vi.fn(),
+            resetQueries: vi.fn(),
+            cancelQueries: vi.fn(),
+            invalidateQueries: vi.fn(),
+            refetchQueries: vi.fn(),
+            fetchQuery: vi.fn(),
+            prefetchQuery: vi.fn(),
+            fetchInfiniteQuery: vi.fn(),
+            prefetchInfiniteQuery: vi.fn(),
+            setMutationData: vi.fn(),
+            getMutationData: vi.fn(),
+            getMutationState: vi.fn(),
+            executeMutation: vi.fn(),
+            mount: vi.fn(),
+            unmount: vi.fn(),
+            isFetching: vi.fn(),
+            isMutating: vi.fn(),
+            getLogger: vi.fn(),
+            clear: vi.fn(),
+            suspend: vi.fn(),
+            resumePausedMutations: vi.fn(),
+            getDefaultState: vi.fn(),
+            setOptions: vi.fn(),
+            setLogger: vi.fn(),
+            getOptions: vi.fn(),
+            defaultMutationOptions: vi.fn(),
+        })),
+    };
 });
-
-const renderWithProviders = (ui: React.ReactElement) => {
-    return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
-};
-
-type MockResponse = Response & {
-    json: () => Promise<unknown>;
-};
 
 describe("App", () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        queryClient.clear();
     });
 
-    it("zeigt einen Ladeindikator während des Ladens", () => {
-        global.fetch = vi.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve([]),
-                headers: new Headers(),
-                redirected: false,
-                status: 200,
-                statusText: "OK",
-                type: "default",
-                url: "",
-                clone: () => new Response(),
-                body: null,
-                bodyUsed: false,
-                arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-                blob: () => Promise.resolve(new Blob()),
-                formData: () => Promise.resolve(new FormData()),
-                text: () => Promise.resolve(""),
-            } as MockResponse)
+    it("zeigt einen Ladeindikator während des Ladens", async () => {
+        vi.mocked(useQuery).mockImplementationOnce(
+            (): QueryObserverResult<Movie[], Error> => ({
+                ...defaultQueryResult,
+                data: undefined,
+                isLoading: true,
+                isError: false,
+                error: null,
+                isSuccess: false,
+                isPending: true,
+                isFetched: false,
+                isLoadingError: false,
+                isRefetchError: false,
+                isPlaceholderData: false,
+                fetchStatus: "fetching" as const,
+                status: "pending" as const,
+                isInitialLoading: true,
+                promise: Promise.resolve([] as Movie[]),
+            })
         );
 
         renderWithProviders(<App />);
@@ -68,132 +213,79 @@ describe("App", () => {
     });
 
     it("zeigt eine Fehlermeldung bei einem Ladefehler", async () => {
-        global.fetch = vi.fn(() => Promise.reject(new Error("Fehler beim Laden")));
+        const testError = new Error("Test Error");
+        vi.mocked(useQuery).mockImplementationOnce(
+            (): QueryObserverResult<Movie[], Error> => ({
+                ...defaultQueryResult,
+                data: undefined,
+                isLoading: false,
+                isError: true,
+                error: testError,
+                isSuccess: false,
+                isPending: false,
+                isFetched: true,
+                isLoadingError: true,
+                isRefetchError: false,
+                isPlaceholderData: false,
+                fetchStatus: "idle" as const,
+                status: "error" as const,
+                isInitialLoading: false,
+                promise: Promise.resolve([] as Movie[]),
+            })
+        );
 
         renderWithProviders(<App />);
-
-        await waitFor(
-            () => {
-                expect(screen.getByText(/Fehler beim Laden der Filme/i)).toBeInTheDocument();
-            },
-            { timeout: 3000 }
-        );
+        const alert = await screen.findByRole("alert");
+        expect(alert).toHaveTextContent("Test Error");
     });
 
     it("zeigt die Filme korrekt gruppiert nach Buchstaben an", async () => {
-        global.fetch = vi.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve(mockMovies),
-                headers: new Headers(),
-                redirected: false,
-                status: 200,
-                statusText: "OK",
-                type: "default",
-                url: "",
-                clone: () => new Response(),
-                body: null,
-                bodyUsed: false,
-                arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-                blob: () => Promise.resolve(new Blob()),
-                formData: () => Promise.resolve(new FormData()),
-                text: () => Promise.resolve(""),
-            } as MockResponse)
-        );
-
         renderWithProviders(<App />);
 
-        await waitFor(
-            () => {
-                expect(screen.getByRole("heading", { name: "A" })).toBeInTheDocument();
-                expect(screen.getByRole("heading", { name: "Avatar" })).toBeInTheDocument();
-            },
-            { timeout: 3000 }
-        );
+        await waitFor(() => {
+            expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+        });
+
+        const sectionA = screen.getByTestId("section-A");
+        const sectionB = screen.getByTestId("section-B");
+
+        expect(sectionA).toBeInTheDocument();
+        expect(sectionB).toBeInTheDocument();
+
+        const movieCardsA = within(sectionA).getAllByRole("article");
+        const movieCardsB = within(sectionB).getAllByRole("article");
+
+        expect(movieCardsA[0]).toHaveTextContent("Andromeda");
+        expect(movieCardsB[0]).toHaveTextContent("Berta");
     });
 
     it("öffnet den AddMovieDialog beim Klick auf den FAB", async () => {
-        global.fetch = vi.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve(mockMovies),
-                headers: new Headers(),
-                redirected: false,
-                status: 200,
-                statusText: "OK",
-                type: "default",
-                url: "",
-                clone: () => new Response(),
-                body: null,
-                bodyUsed: false,
-                arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-                blob: () => Promise.resolve(new Blob()),
-                formData: () => Promise.resolve(new FormData()),
-                text: () => Promise.resolve(""),
-            } as MockResponse)
-        );
-
         renderWithProviders(<App />);
+        const user = userEvent.setup();
 
-        await waitFor(
-            () => {
-                expect(screen.getByRole("button", { name: /hinzufügen/i })).toBeInTheDocument();
-            },
-            { timeout: 3000 }
-        );
+        await waitFor(() => {
+            expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+        });
 
-        const addButton = screen.getByRole("button", { name: /hinzufügen/i });
-        fireEvent.click(addButton);
+        const addButton = screen.getByRole("button", { name: /film hinzufügen/i });
+        await user.click(addButton);
 
-        await waitFor(
-            () => {
-                expect(screen.getByRole("dialog")).toBeInTheDocument();
-                expect(screen.getByText("Film hinzufügen")).toBeInTheDocument();
-            },
-            { timeout: 3000 }
-        );
+        const dialog = screen.getByRole("dialog");
+        expect(dialog).toHaveTextContent(/film hinzufügen/i);
     });
 
     it("zeigt den MovieDialog beim Klick auf einen Film", async () => {
-        global.fetch = vi.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve(mockMovies),
-                headers: new Headers(),
-                redirected: false,
-                status: 200,
-                statusText: "OK",
-                type: "default",
-                url: "",
-                clone: () => new Response(),
-                body: null,
-                bodyUsed: false,
-                arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-                blob: () => Promise.resolve(new Blob()),
-                formData: () => Promise.resolve(new FormData()),
-                text: () => Promise.resolve(""),
-            } as MockResponse)
-        );
-
         renderWithProviders(<App />);
+        const user = userEvent.setup();
 
-        await waitFor(
-            () => {
-                expect(screen.getByRole("article")).toBeInTheDocument();
-            },
-            { timeout: 3000 }
-        );
+        await waitFor(() => {
+            expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+        });
 
-        const movieCard = screen.getByRole("article");
-        fireEvent.click(movieCard);
+        const movieCard = screen.getByRole("article", { name: /andromeda/i });
+        await user.click(movieCard);
 
-        await waitFor(
-            () => {
-                const dialog = screen.getByRole("dialog");
-                const dialogTitle = within(dialog).getByText("Avatar", { selector: ".MuiTypography-h6" });
-                expect(dialogTitle).toBeInTheDocument();
-            },
-            { timeout: 3000 }
-        );
+        const dialog = await screen.findByRole("dialog");
+        expect(dialog).toHaveTextContent("Andromeda");
     });
 });

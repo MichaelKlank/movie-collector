@@ -177,19 +177,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                 rating: metadata?.rating || 0,
             };
             console.log("Sende Daten:", movieData);
-            const response = await fetch(`${BACKEND_URL}/movies`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(movieData),
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Fehler beim Hinzufügen des Films:", errorData);
-                throw new Error(errorData.error || "Fehler beim Hinzufügen des Films");
-            }
-            return response.json();
+            const response = await axios.post(`${BACKEND_URL}/movies`, movieData);
+            return response.data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["movies"] });

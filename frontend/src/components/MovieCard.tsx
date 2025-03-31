@@ -6,10 +6,11 @@ interface MovieCardProps {
     onClick?: (movie: Movie) => void;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
+export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
     return (
         <Card
             role='article'
+            aria-label={movie.title}
             sx={{
                 height: "100%",
                 display: "flex",
@@ -57,5 +58,3 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
         </Card>
     );
 };
-
-export default MovieCard;
