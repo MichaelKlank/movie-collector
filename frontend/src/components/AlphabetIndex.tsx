@@ -16,18 +16,18 @@ const IndexContainer = styled(Box)(({ theme }) => ({
     zIndex: 1000,
 }));
 
-const IndexLetter = styled(Typography)<{ active?: boolean }>(({ theme, active }) => ({
+const IndexLetter = styled(Typography)<{ active?: string }>(({ theme, active }) => ({
     cursor: "pointer",
     padding: theme.spacing(0.5),
     minWidth: "24px",
     textAlign: "center",
     borderRadius: theme.shape.borderRadius,
-    ...(active && {
+    ...(active === "true" && {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText,
     }),
     "&:hover": {
-        backgroundColor: active ? theme.palette.primary.dark : theme.palette.action.hover,
+        backgroundColor: active === "true" ? theme.palette.primary.dark : theme.palette.action.hover,
     },
 }));
 
@@ -46,8 +46,8 @@ export const AlphabetIndex = ({ currentLetter, availableLetters, onLetterClick }
                 <IndexLetter
                     key={letter}
                     variant='body2'
-                    active={currentLetter === letter}
-                    onClick={() => onLetterClick(letter)}
+                    active={currentLetter === letter ? "true" : "false"}
+                    onClick={() => availableLetters.includes(letter) && onLetterClick(letter)}
                     sx={{
                         opacity: availableLetters.includes(letter) ? 1 : 0.3,
                         pointerEvents: availableLetters.includes(letter) ? "auto" : "none",

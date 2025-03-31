@@ -1,39 +1,36 @@
-import { useState, useEffect, useRef } from "react";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-    TextField,
-    ListItemButton,
-    ListItemText,
-    ListItemAvatar,
-    Avatar,
-    Box,
-    InputAdornment,
-    Alert,
-    Typography,
-    Rating,
-    Chip,
-    IconButton,
-    Stack,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    CircularProgress,
-} from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import SearchIcon from "@mui/icons-material/Search";
-import MovieIcon from "@mui/icons-material/Movie";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MovieIcon from "@mui/icons-material/Movie";
+import SearchIcon from "@mui/icons-material/Search";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    InputAdornment,
+    ListItemAvatar,
+    ListItemButton,
+    ListItemText,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
 import { TMDBMovie } from "../types/tmdb";
 
@@ -119,19 +116,21 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                 const encodedQuery = encodeURIComponent(searchQuery.trim());
                 console.log("Sending search request for query:", encodedQuery);
                 console.log("Search URL:", `${BACKEND_URL}/tmdb/search?query=${encodedQuery}`);
-                const response = await axios.get<TMDBMovie[]>(`${BACKEND_URL}/tmdb/search?query=${encodedQuery}`);
+                const response = await axios.get<{ results: TMDBMovie[] }>(
+                    `${BACKEND_URL}/tmdb/search?query=${encodedQuery}`
+                );
                 console.log("TMDB Suchergebnisse (vollständig):", JSON.stringify(response.data, null, 2));
-                console.log("Anzahl der gefundenen Filme:", response.data.length);
+                console.log("Anzahl der gefundenen Filme:", response.data.results.length);
                 console.log(
                     "TMDB Suchergebnisse (mit Overview):",
-                    response.data.map((movie: TMDBMovie) => ({
+                    response.data.results.map((movie: TMDBMovie) => ({
                         title: movie.title,
                         overview: movie.overview || "Keine Beschreibung",
                         overviewLength: movie.overview ? movie.overview.length : 0,
                     }))
                 );
                 setDebugInfo(`Suche erfolgreich: ${JSON.stringify(response.data, null, 2)}`);
-                return response.data;
+                return response.data.results;
             } catch (error) {
                 console.error("TMDB Suchfehler:", error);
                 let errorMessage = "Ein unbekannter Fehler ist aufgetreten";
@@ -276,20 +275,14 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
         }));
     };
 
-    const handleRatingChange = (movieId: number, newValue: number | null) => {
-        setMovieMetadata((prev) => ({
-            ...prev,
-            [movieId]: {
-                ...prev[movieId],
-                rating: newValue || 0,
-            },
-        }));
+    const handleAddMovie = () => {
+        if (!selectedMovie) return;
+        addMovieMutation.mutate(selectedMovie);
     };
 
-    const handleAddMovie = () => {
-        if (selectedMovie) {
-            addMovieMutation.mutate(selectedMovie);
-        }
+    const isAddButtonDisabled = () => {
+        if (!selectedMovie) return true;
+        return !selectedMovie.title || !selectedMovie.overview || !selectedMovie.release_date;
     };
 
     return (
@@ -322,39 +315,25 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                     py: { xs: 1, sm: 2 },
                 }}
             >
-                <Accordion
-                    sx={{
-                        mb: 2,
-                        "&.MuiAccordion-root": {
-                            borderRadius: 1,
-                            "&:before": {
-                                display: "none",
-                            },
-                        },
-                    }}
-                >
+                <Accordion sx={{ mb: 2, "&.MuiAccordion-root": { borderRadius: 1, "&:before": { display: "none" } } }}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
-                        sx={{
-                            bgcolor: (theme) => (theme.palette.mode === "dark" ? "grey.800" : "grey.100"),
-                        }}
+                        sx={{ bgcolor: (theme) => (theme.palette.mode === "dark" ? "grey.800" : "grey.100") }}
                     >
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                testTMDBConnection();
-                            }}
-                            variant='outlined'
-                            size='small'
-                            sx={{ mr: 2 }}
-                        >
-                            TMDB Verbindung testen
-                        </Button>
                         <Typography variant='body2' color='text.secondary'>
                             Debug Informationen
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
+                        <Button
+                            variant='outlined'
+                            size='small'
+                            color='primary'
+                            onClick={testTMDBConnection}
+                            sx={{ mb: 2 }}
+                        >
+                            TMDB Verbindung testen
+                        </Button>
                         {debugInfo && (
                             <Box
                                 sx={{
@@ -531,7 +510,9 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                     </ListItemAvatar>
                                                     <ListItemText
                                                         primary={
-                                                            <Box
+                                                            <Typography
+                                                                component='div'
+                                                                variant='body2'
                                                                 sx={{
                                                                     display: "flex",
                                                                     flexDirection: "row",
@@ -544,8 +525,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                                 }}
                                                             >
                                                                 <Typography
-                                                                    variant='h6'
                                                                     component='div'
+                                                                    variant='h6'
                                                                     sx={{
                                                                         fontSize: "1.25rem",
                                                                         fontWeight: 500,
@@ -555,87 +536,63 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                                 >
                                                                     {movie.title}
                                                                 </Typography>
-                                                                <Chip
-                                                                    label={metadata.mediaType}
-                                                                    size='small'
-                                                                    color='primary'
-                                                                    sx={{
-                                                                        ml: 0,
-                                                                        flex: "0 0 auto",
-                                                                    }}
-                                                                />
-                                                            </Box>
+                                                                <Box sx={{ display: "flex", gap: 1 }}>
+                                                                    <IconButton
+                                                                        size='small'
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            toggleMovieSeen(movie.id);
+                                                                        }}
+                                                                    >
+                                                                        {metadata.seen ? (
+                                                                            <VisibilityIcon />
+                                                                        ) : (
+                                                                            <VisibilityOffIcon />
+                                                                        )}
+                                                                    </IconButton>
+                                                                    <IconButton
+                                                                        size='small'
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            toggleMovieWatchlist(movie.id);
+                                                                        }}
+                                                                    >
+                                                                        {metadata.watchlist ? (
+                                                                            <BookmarkIcon />
+                                                                        ) : (
+                                                                            <BookmarkBorderIcon />
+                                                                        )}
+                                                                    </IconButton>
+                                                                </Box>
+                                                            </Typography>
                                                         }
                                                         secondary={
-                                                            <Stack spacing={2} sx={{ width: "100%" }}>
-                                                                <Box
+                                                            <Typography
+                                                                component='div'
+                                                                variant='body2'
+                                                                color='text.secondary'
+                                                            >
+                                                                <Typography
+                                                                    component='div'
+                                                                    variant='body2'
                                                                     sx={{
-                                                                        display: "flex",
-                                                                        gap: 2,
-                                                                        alignItems: "center",
+                                                                        fontSize: {
+                                                                            xs: "0.875rem",
+                                                                            sm: "0.875rem",
+                                                                        },
                                                                     }}
                                                                 >
-                                                                    <Typography variant='body2' color='text.secondary'>
-                                                                        {movie.release_date
-                                                                            ? new Date(movie.release_date).getFullYear()
-                                                                            : "Unbekanntes Jahr"}
-                                                                    </Typography>
-                                                                    <Rating
-                                                                        name={`rating-${movie.id}`}
-                                                                        value={metadata.rating}
-                                                                        onChange={(_, newValue) =>
-                                                                            handleRatingChange(movie.id, newValue)
-                                                                        }
-                                                                        size='small'
-                                                                    />
-                                                                    <Box sx={{ display: "flex", gap: 1 }}>
-                                                                        <IconButton
-                                                                            size='small'
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                toggleMovieSeen(movie.id);
-                                                                            }}
-                                                                        >
-                                                                            {metadata.seen ? (
-                                                                                <VisibilityIcon />
-                                                                            ) : (
-                                                                                <VisibilityOffIcon />
-                                                                            )}
-                                                                        </IconButton>
-                                                                        <IconButton
-                                                                            size='small'
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                toggleMovieWatchlist(movie.id);
-                                                                            }}
-                                                                        >
-                                                                            {metadata.watchlist ? (
-                                                                                <BookmarkIcon />
-                                                                            ) : (
-                                                                                <BookmarkBorderIcon />
-                                                                            )}
-                                                                        </IconButton>
-                                                                    </Box>
-                                                                </Box>
-                                                                {movie.overview && (
-                                                                    <Typography
-                                                                        sx={{
-                                                                            display: "-webkit-box",
-                                                                            WebkitLineClamp: { xs: 3, sm: 2 },
-                                                                            WebkitBoxOrient: "vertical",
-                                                                            overflow: "hidden",
-                                                                        }}
-                                                                        component='div'
-                                                                        variant='body2'
-                                                                    >
-                                                                        {movie.overview}
-                                                                    </Typography>
-                                                                )}
+                                                                    {movie.overview
+                                                                        ? movie.overview.length > 150
+                                                                            ? `${movie.overview.substring(0, 150)}...`
+                                                                            : movie.overview
+                                                                        : "Keine Beschreibung verfügbar"}
+                                                                </Typography>
                                                                 {movie.credits?.cast &&
                                                                     movie.credits.cast.length > 0 && (
                                                                         <Typography
+                                                                            component='div'
                                                                             variant='body2'
-                                                                            color='text.secondary'
                                                                             sx={{
                                                                                 fontSize: {
                                                                                     xs: "0.875rem",
@@ -656,8 +613,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                                         (c) => c.job === "Director"
                                                                     ) && (
                                                                         <Typography
+                                                                            component='div'
                                                                             variant='body2'
-                                                                            color='text.secondary'
                                                                             sx={{
                                                                                 fontSize: {
                                                                                     xs: "0.875rem",
@@ -673,12 +630,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                                             }
                                                                         </Typography>
                                                                     )}
-                                                            </Stack>
+                                                            </Typography>
                                                         }
-                                                        sx={{
-                                                            ml: { xs: 0, sm: 2 },
-                                                            width: "100%",
-                                                        }}
                                                     />
                                                 </ListItemButton>
                                             );
@@ -708,7 +661,7 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                 </Button>
                 <Button
                     onClick={handleAddMovie}
-                    disabled={!selectedMovie || addMovieMutation.isPending}
+                    disabled={isAddButtonDisabled()}
                     variant='contained'
                     color='primary'
                     sx={{

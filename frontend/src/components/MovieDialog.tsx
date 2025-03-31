@@ -15,6 +15,7 @@ import {
     Button,
     DialogActions,
     CircularProgress,
+    Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -57,10 +58,12 @@ export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
     const queryClient = useQueryClient();
     const [isUpdating, setIsUpdating] = useState(false);
     const [updatedMovie, setUpdatedMovie] = useState<Movie | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     // Reset updatedMovie when movie prop changes
     useEffect(() => {
         setUpdatedMovie(null);
+        setError(null);
     }, [movie]);
 
     const deleteMovieMutation = useMutation({
@@ -85,18 +88,23 @@ export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
             const response = await axios.get(`${BACKEND_URL}/tmdb/movie/${movie.tmdb_id}`);
             console.log("TMDB Update Response:", response.data);
             return {
+                ...movie,
                 ...response.data,
                 id: movie.id,
+                description: response.data.overview || movie.description,
+                overview: response.data.overview || movie.overview,
             };
         },
         onSuccess: (data) => {
             console.log("TMDB Update successful:", data);
             setUpdatedMovie(data);
             setIsUpdating(false);
+            setError(null);
         },
         onError: (error) => {
             console.error("TMDB Update error:", error);
             setIsUpdating(false);
+            setError("TMDB Update fehlgeschlagen");
         },
     });
 
@@ -109,10 +117,12 @@ export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
         onSuccess: (data) => {
             console.log("Movie saved successfully:", data);
             queryClient.invalidateQueries({ queryKey: ["movies"] });
+            setError(null);
             onClose();
         },
         onError: (error) => {
             console.error("Error saving movie:", error);
+            setError("Speichern fehlgeschlagen");
         },
     });
 
@@ -149,12 +159,19 @@ export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
     return (
         <StyledDialog open={open} onClose={onClose} maxWidth='md' fullWidth>
             <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography variant='h5'>{displayMovie.title}</Typography>
+                <Typography variant='h6' component='div'>
+                    {displayMovie.title}
+                </Typography>
                 <IconButton aria-label='close' onClick={onClose} sx={{ color: "text.secondary" }}>
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
             <DialogContent dividers>
+                {error && (
+                    <Box sx={{ mb: 2 }}>
+                        <Alert severity='error'>{error}</Alert>
+                    </Box>
+                )}
                 <Box sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", md: "row" } }}>
                     {/* Linke Spalte mit Poster */}
                     <Box sx={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 2 }}>
@@ -217,6 +234,7 @@ export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
                                             primary='Beschreibung'
                                             secondary={
                                                 <Typography
+                                                    component='div'
                                                     variant='body2'
                                                     sx={{
                                                         whiteSpace: "pre-wrap",

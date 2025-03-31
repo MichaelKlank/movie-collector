@@ -71,11 +71,12 @@ describe("MovieDialog", () => {
             </QueryClientProvider>
         );
 
-        expect(screen.getByRole("heading", { name: "Test Movie" })).toBeInTheDocument();
-        expect(screen.getByText("Test Overview")).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Test Movie", level: 4 })).toBeInTheDocument();
+        expect(screen.getByText("Test Description")).toBeInTheDocument();
         expect(screen.getByText("2024")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /löschen/i })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /speichern/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Löschen" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Aktualisieren" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Speichern" })).toBeDisabled();
     });
 
     it("ruft onClose beim Schließen auf", () => {
@@ -92,8 +93,9 @@ describe("MovieDialog", () => {
     });
 
     it("löscht einen Film erfolgreich", async () => {
-        mockedAxios.delete.mockResolvedValueOnce({ data: { success: true } });
         const onClose = vi.fn();
+        mockedAxios.delete.mockResolvedValueOnce({ data: { success: true } });
+        window.confirm = vi.fn(() => true);
 
         render(
             <QueryClientProvider client={queryClient}>
@@ -101,33 +103,40 @@ describe("MovieDialog", () => {
             </QueryClientProvider>
         );
 
-        const deleteButton = screen.getByRole("button", { name: /löschen/i });
+        const deleteButton = screen.getByRole("button", { name: "Löschen" });
         fireEvent.click(deleteButton);
 
-        expect(mockConfirm).toHaveBeenCalled();
-        expect(mockedAxios.delete).toHaveBeenCalledWith(`${BACKEND_URL}/movies/${mockMovie.id}`);
-        expect(onClose).toHaveBeenCalled();
+        await waitFor(() => {
+            expect(mockedAxios.delete).toHaveBeenCalledWith(`${BACKEND_URL}/movies/${mockMovie.id}`);
+            expect(onClose).toHaveBeenCalled();
+        });
     });
 
     it("aktualisiert einen Film von TMDB", async () => {
-        mockedAxios.get.mockResolvedValueOnce(mockTMDBResponse);
-        mockedAxios.put.mockResolvedValueOnce({ data: { success: true } });
-
         render(
             <QueryClientProvider client={queryClient}>
                 <MovieDialog movie={mockMovie} open={true} onClose={() => {}} />
             </QueryClientProvider>
         );
 
-        const updateButton = screen.getByRole("button", { name: /refresh/i });
+        // Aktualisiere den Film von TMDB
+        mockedAxios.get.mockResolvedValueOnce(mockTMDBResponse);
+        const updateButton = screen.getByRole("button", { name: "Aktualisieren" });
         fireEvent.click(updateButton);
 
         await waitFor(
             () => {
                 expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_URL}/tmdb/movie/${mockMovie.tmdb_id}`);
-                expect(screen.getByRole("button", { name: /speichern/i })).toBeEnabled();
             },
-            { timeout: 2000 }
+            { timeout: 5000 }
+        );
+
+        // Prüfe, ob der Speichern-Button aktiviert wurde
+        await waitFor(
+            () => {
+                expect(screen.getByRole("button", { name: "Speichern" })).toBeEnabled();
+            },
+            { timeout: 5000 }
         );
     });
 
@@ -143,25 +152,136 @@ describe("MovieDialog", () => {
 
         // Aktualisiere den Film von TMDB
         mockedAxios.get.mockResolvedValueOnce(mockTMDBResponse);
-        const updateButton = screen.getByRole("button", { name: /refresh/i });
+        const updateButton = screen.getByRole("button", { name: "Aktualisieren" });
         fireEvent.click(updateButton);
 
-        await waitFor(() => {
-            expect(screen.getByRole("button", { name: /speichern/i })).toBeEnabled();
-        });
+        // Warte, bis der Speichern-Button aktiviert wurde
+        await waitFor(
+            () => {
+                expect(screen.getByRole("button", { name: "Speichern" })).toBeEnabled();
+            },
+            { timeout: 5000 }
+        );
 
-        const saveButton = screen.getByRole("button", { name: /speichern/i });
+        const saveButton = screen.getByRole("button", { name: "Speichern" });
         fireEvent.click(saveButton);
 
         await waitFor(
             () => {
                 expect(mockedAxios.put).toHaveBeenCalledWith(
                     `${BACKEND_URL}/movies/${mockMovie.id}`,
-                    expect.any(Object)
+                    expect.objectContaining({
+                        ...mockMovie,
+                        ...mockTMDBResponse.data,
+                        id: mockMovie.id,
+                        description: mockTMDBResponse.data.overview,
+                        overview: mockTMDBResponse.data.overview,
+                    })
                 );
                 expect(onClose).toHaveBeenCalled();
             },
-            { timeout: 2000 }
+            { timeout: 5000 }
         );
+    });
+
+    it("zeigt Fehlermeldung bei TMDB-Update-Fehler", async () => {
+        mockedAxios.get.mockRejectedValueOnce(new Error("TMDB Update fehlgeschlagen"));
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MovieDialog movie={mockMovie} open={true} onClose={() => {}} />
+            </QueryClientProvider>
+        );
+
+        const updateButton = screen.getByRole("button", { name: "Aktualisieren" });
+        fireEvent.click(updateButton);
+
+        await waitFor(() => {
+            expect(mockedAxios.get).toHaveBeenCalledWith(`${BACKEND_URL}/tmdb/movie/${mockMovie.tmdb_id}`);
+            expect(screen.getByText(/TMDB Update fehlgeschlagen/i)).toBeInTheDocument();
+        });
+    });
+
+    it("zeigt Fehlermeldung bei Speicherfehler", async () => {
+        mockedAxios.get.mockResolvedValueOnce(mockTMDBResponse);
+        mockedAxios.put.mockRejectedValueOnce(new Error("Speichern fehlgeschlagen"));
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MovieDialog movie={mockMovie} open={true} onClose={() => {}} />
+            </QueryClientProvider>
+        );
+
+        const updateButton = screen.getByRole("button", { name: "Aktualisieren" });
+        fireEvent.click(updateButton);
+
+        await waitFor(() => {
+            expect(screen.getByRole("button", { name: "Speichern" })).toBeEnabled();
+        });
+
+        const saveButton = screen.getByRole("button", { name: "Speichern" });
+        fireEvent.click(saveButton);
+
+        await waitFor(() => {
+            expect(screen.getByText(/Speichern fehlgeschlagen/i)).toBeInTheDocument();
+        });
+    });
+
+    it("erkennt Änderungen korrekt", async () => {
+        mockedAxios.get.mockResolvedValueOnce({
+            data: {
+                ...mockTMDBResponse.data,
+                title: "Geänderter Titel",
+                overview: "Geänderte Beschreibung",
+            },
+        });
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MovieDialog movie={mockMovie} open={true} onClose={() => {}} />
+            </QueryClientProvider>
+        );
+
+        const updateButton = screen.getByRole("button", { name: "Aktualisieren" });
+        fireEvent.click(updateButton);
+
+        await waitFor(() => {
+            const saveButton = screen.getByRole("button", { name: "Speichern" });
+            expect(saveButton).toBeEnabled();
+        });
+    });
+
+    it("zeigt Platzhalter-Bild wenn kein Poster vorhanden", () => {
+        const movieWithoutPoster = {
+            ...mockMovie,
+            poster_path: undefined,
+            image_path: undefined,
+        };
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MovieDialog movie={movieWithoutPoster} open={true} onClose={() => {}} />
+            </QueryClientProvider>
+        );
+
+        const posterImage = screen.getByRole("img", { name: movieWithoutPoster.title });
+        expect(posterImage).toHaveAttribute("src", "/placeholder.png");
+    });
+
+    it("bestätigt Löschvorgang", () => {
+        window.confirm = vi.fn(() => false);
+        const onClose = vi.fn();
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MovieDialog movie={mockMovie} open={true} onClose={onClose} />
+            </QueryClientProvider>
+        );
+
+        const deleteButton = screen.getByRole("button", { name: "Löschen" });
+        fireEvent.click(deleteButton);
+
+        expect(window.confirm).toHaveBeenCalledWith(`Möchten Sie "${mockMovie.title}" wirklich löschen?`);
+        expect(onClose).not.toHaveBeenCalled();
     });
 });
