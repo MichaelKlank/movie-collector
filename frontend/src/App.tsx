@@ -13,7 +13,7 @@ function App() {
                 <CssBaseline />
                 <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
                     <Header />
-                    <Box sx={{ p: 2 }}>
+                    <Box sx={{ p: 2, pt: 10 }}>
                         <MovieList />
                     </Box>
                 </Box>

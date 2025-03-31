@@ -8,7 +8,15 @@ export const Header = () => {
     const { toggleTheme } = useThemeContext();
 
     return (
-        <AppBar position='static' sx={{ marginBottom: 2 }}>
+        <AppBar
+            position='fixed'
+            color='primary'
+            sx={{
+                marginBottom: 2,
+                zIndex: theme.zIndex.drawer + 1,
+                boxShadow: theme.shadows[2],
+            }}
+        >
             <Toolbar>
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                     Meine DVD-Sammlung
