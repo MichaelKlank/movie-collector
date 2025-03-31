@@ -116,21 +116,23 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                 const encodedQuery = encodeURIComponent(searchQuery.trim());
                 console.log("Sending search request for query:", encodedQuery);
                 console.log("Search URL:", `${BACKEND_URL}/tmdb/search?query=${encodedQuery}`);
-                const response = await axios.get<{ results: TMDBMovie[] }>(
-                    `${BACKEND_URL}/tmdb/search?query=${encodedQuery}`
-                );
+                const response = await axios.get<TMDBMovie[]>(`${BACKEND_URL}/tmdb/search?query=${encodedQuery}`);
                 console.log("TMDB Suchergebnisse (vollständig):", JSON.stringify(response.data, null, 2));
-                console.log("Anzahl der gefundenen Filme:", response.data.results.length);
+
+                // Stelle sicher, dass response.data ein Array ist
+                const movies = Array.isArray(response.data) ? response.data : [];
+
+                console.log("Anzahl der gefundenen Filme:", movies.length);
                 console.log(
                     "TMDB Suchergebnisse (mit Overview):",
-                    response.data.results.map((movie: TMDBMovie) => ({
+                    movies.map((movie: TMDBMovie) => ({
                         title: movie.title,
                         overview: movie.overview || "Keine Beschreibung",
                         overviewLength: movie.overview ? movie.overview.length : 0,
                     }))
                 );
-                setDebugInfo(`Suche erfolgreich: ${JSON.stringify(response.data, null, 2)}`);
-                return response.data.results;
+                setDebugInfo(`Suche erfolgreich: ${JSON.stringify(movies, null, 2)}`);
+                return movies;
             } catch (error) {
                 console.error("TMDB Suchfehler:", error);
                 let errorMessage = "Ein unbekannter Fehler ist aufgetreten";
@@ -457,6 +459,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                     key={movie.id}
                                                     selected={selectedMovie?.id === movie.id}
                                                     onClick={() => handleMovieSelect(movie)}
+                                                    role='button'
+                                                    aria-label={movie.title}
                                                     sx={{
                                                         borderRadius: 2,
                                                         border: "1px solid",
