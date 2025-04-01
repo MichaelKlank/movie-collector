@@ -18,6 +18,7 @@ type Client struct {
 	baseURL    string
 	httpClient *http.Client
 	cache      *Cache
+	CacheTTL   time.Duration
 }
 
 type Cache struct {
@@ -58,6 +59,7 @@ func NewClient() *Client {
 		baseURL:    defaultBaseURL,
 		httpClient: &http.Client{},
 		cache:      &Cache{movies: make(map[int]*CacheEntry)},
+		CacheTTL:   24 * time.Hour,
 	}
 }
 
@@ -68,6 +70,7 @@ func NewClientWithBaseURL(baseURL string) *Client {
 		baseURL:    baseURL,
 		httpClient: &http.Client{},
 		cache:      &Cache{movies: make(map[int]*CacheEntry)},
+		CacheTTL:   24 * time.Hour,
 	}
 }
 
@@ -150,7 +153,7 @@ func (c *Client) GetMovieDetails(id int) (*Movie, error) {
 	c.cache.Lock()
 	c.cache.movies[id] = &CacheEntry{
 		movie:      &movie,
-		expiration: time.Now().Add(24 * time.Hour),
+		expiration: time.Now().Add(c.CacheTTL),
 	}
 	c.cache.Unlock()
 
@@ -183,8 +186,18 @@ func (c *Client) GetImageURL(path string) string {
 	if path == "" {
 		return ""
 	}
-	if path[:4] == "http" {
+	if len(path) >= 4 && path[:4] == "http" {
 		return path
 	}
 	return c.imageURL + path
+}
+
+// BaseURL gibt die Basis-URL des Clients zurück
+func (c *Client) BaseURL() string {
+	return c.baseURL
+}
+
+// HTTPClient gibt den HTTP-Client des Clients zurück
+func (c *Client) HTTPClient() *http.Client {
+	return c.httpClient
 } 
