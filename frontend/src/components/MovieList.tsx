@@ -104,7 +104,7 @@ export const MovieList = () => {
                     </Typography>
                     <Grid container spacing={3}>
                         {moviesInSection.map((movie) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={movie.id}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2.4 }} key={movie.id}>
                                 <MovieCard movie={movie} onClick={setSelectedMovie} />
                             </Grid>
                         ))}
