@@ -1,5 +1,9 @@
 # Movie Collector
 
+[![CI](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml/badge.svg)](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml)
+[![Backend Tests](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml/badge.svg?branch=main&label=backend)](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml)
+[![Frontend Tests](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml/badge.svg?branch=main&label=frontend)](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml)
+
 A modern web application for collecting and managing movies.
 
 ## 🚀 Features
