@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 interface ThemeContextType {
     toggleTheme: () => void;
@@ -7,3 +7,5 @@ interface ThemeContextType {
 export const ThemeContext = createContext<ThemeContextType>({
     toggleTheme: () => {},
 });
+
+export const useThemeContext = () => useContext(ThemeContext);

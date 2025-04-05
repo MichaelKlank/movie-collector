@@ -2,6 +2,8 @@ import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "../ThemeContext";
 import { Movie } from "../types";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material";
+import { darkTheme } from "../theme";
 
 interface RenderOptions {
     movies?: {
@@ -84,7 +86,9 @@ export const renderWithProviders = (ui: React.ReactElement, options: RenderOptio
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <ThemeProvider>{ui}</ThemeProvider>
+            <ThemeProvider>
+                <MuiThemeProvider theme={darkTheme}>{ui}</MuiThemeProvider>
+            </ThemeProvider>
         </QueryClientProvider>
     );
 };
