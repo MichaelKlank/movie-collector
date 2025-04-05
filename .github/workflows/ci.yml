@@ -54,6 +54,23 @@ jobs:
                   path: ./backend
                   retention-days: 5
 
+            - name: Generate Backend SBOM
+              run: |
+                  cd backend
+                  go mod tidy
+                  cyclonedx-gomod mod -json -licenses -assert-licenses -output sbom.json
+
+            - name: Commit and push Backend SBOM if changed
+              if: github.event_name == 'push'
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add backend/sbom.json
+                  if ! git diff --quiet && ! git diff --staged --quiet; then
+                      git commit -m "ci: update backend SBOM"
+                      git push
+                  fi
+
     frontend:
         runs-on: ubuntu-latest
         defaults:
@@ -98,3 +115,20 @@ jobs:
                   name: frontend-build
                   path: ./frontend/dist
                   retention-days: 5
+
+            - name: Generate Frontend SBOM
+              run: |
+                  cd frontend
+                  npm install
+                  npx @cyclonedx/cyclonedx-npm --output-file public/sbom.json
+
+            - name: Commit and push Frontend SBOM if changed
+              if: github.event_name == 'push'
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add frontend/public/sbom.json
+                  if ! git diff --quiet && ! git diff --staged --quiet; then
+                      git commit -m "ci: update frontend SBOM"
+                      git push
+                  fi

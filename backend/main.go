@@ -108,6 +108,20 @@ func main() {
 		c.JSON(http.StatusOK, movie)
 	})
 
+	// SBOM route
+	r.GET("/sbom", func(c *gin.Context) {
+		sbomData, err := os.ReadFile("sbom.json")
+		if err != nil {
+			log.Printf("Error reading SBOM file: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error":   "Failed to read SBOM file",
+				"details": err.Error(),
+			})
+			return
+		}
+		c.Data(http.StatusOK, "application/json", sbomData)
+	})
+
 	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {

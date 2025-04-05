@@ -25,6 +25,8 @@ WORKDIR /app
 
 # Kopiere das Binary aus dem Build-Stage
 COPY --from=builder /app/main .
+# Kopiere die SBOM-Datei
+COPY --from=builder /app/sbom.json .
 
 EXPOSE 8080
 
