@@ -52,6 +52,7 @@ export const AlphabetIndex = ({ currentLetter, availableLetters, onLetterClick }
                         opacity: availableLetters.includes(letter) ? 1 : 0.3,
                         pointerEvents: availableLetters.includes(letter) ? "auto" : "none",
                     }}
+                    data-testid={`letter-${letter}`}
                 >
                     {letter}
                 </IndexLetter>

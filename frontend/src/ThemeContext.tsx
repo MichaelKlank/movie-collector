@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "./theme";
 import { ThemeContext, useThemeContext } from "./context/themeContext";
@@ -10,8 +10,12 @@ interface ThemeProviderProps {
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const [isDarkMode, setIsDarkMode] = useState(true);
 
+    useEffect(() => {
+        document.documentElement.setAttribute("data-mui-color-scheme", isDarkMode ? "dark" : "light");
+    }, [isDarkMode]);
+
     const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
+        setIsDarkMode((prev) => !prev);
     };
 
     return (

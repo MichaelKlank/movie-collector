@@ -135,26 +135,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                 return movies;
             } catch (error) {
                 console.error("TMDB Suchfehler:", error);
-                let errorMessage = "Ein unbekannter Fehler ist aufgetreten";
-
-                if (axios.isAxiosError(error)) {
-                    const responseData = error.response?.data;
-                    errorMessage = `Fehler ${error.response?.status}: ${
-                        typeof responseData === "string" ? responseData : JSON.stringify(responseData, null, 2)
-                    }`;
-
-                    setDebugInfo(
-                        `Suchfehler:\nStatus: ${error.response?.status}\n` +
-                            `URL: ${error.config?.url}\n` +
-                            `Response: ${JSON.stringify(error.response?.data, null, 2)}\n` +
-                            `Headers: ${JSON.stringify(error.response?.headers, null, 2)}`
-                    );
-                } else if (error instanceof Error) {
-                    errorMessage = error.message;
-                }
-
-                setSearchError(errorMessage);
-                throw error;
+                setSearchError("Bei der Suche ist ein Fehler aufgetreten");
+                return [];
             }
         },
         enabled: true,
@@ -536,6 +518,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                                             e.stopPropagation();
                                                                             toggleMovieSeen(movie.id);
                                                                         }}
+                                                                        aria-label='Als gesehen markieren'
+                                                                        aria-pressed={metadata.seen}
                                                                     >
                                                                         {metadata.seen ? (
                                                                             <VisibilityIcon />
@@ -549,6 +533,8 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                                                                             e.stopPropagation();
                                                                             toggleMovieWatchlist(movie.id);
                                                                         }}
+                                                                        aria-label='Zur Merkliste hinzufügen'
+                                                                        aria-pressed={metadata.watchlist}
                                                                     >
                                                                         {metadata.watchlist ? (
                                                                             <BookmarkIcon />

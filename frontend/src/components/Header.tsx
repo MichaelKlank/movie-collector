@@ -26,10 +26,15 @@ export const Header = () => {
                     <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                         Meine DVD-Sammlung
                     </Typography>
-                    <IconButton onClick={() => setSbomOpen(true)} color='inherit' title='SBOM anzeigen'>
+                    <IconButton
+                        onClick={() => setSbomOpen(true)}
+                        color='inherit'
+                        title='SBOM anzeigen'
+                        data-testid='sbom-button'
+                    >
                         <InventoryIcon />
                     </IconButton>
-                    <IconButton onClick={toggleTheme} color='inherit'>
+                    <IconButton onClick={toggleTheme} color='inherit' data-testid='theme-toggle-button'>
                         {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
                     </IconButton>
                 </Toolbar>

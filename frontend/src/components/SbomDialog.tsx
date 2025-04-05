@@ -15,6 +15,7 @@ import {
     Tabs,
     Tab,
     Box,
+    Typography,
 } from "@mui/material";
 import { BACKEND_URL } from "../config";
 
@@ -47,44 +48,75 @@ const SbomDialog: React.FC<SbomDialogProps> = ({ open, onClose }) => {
     const [tabValue, setTabValue] = React.useState(0);
     const [frontendSbom, setFrontendSbom] = React.useState<SbomData | null>(null);
     const [backendSbom, setBackendSbom] = React.useState<SbomData | null>(null);
+    const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        // Frontend SBOM laden
-        fetch("/app/movie/sbom.json")
-            .then((response) => {
-                if (!response.ok) {
+        let mounted = true;
+
+        const loadSbom = async () => {
+            if (!open) return;
+
+            try {
+                setLoading(true);
+
+                // Frontend SBOM laden
+                const frontendResponse = await fetch(`${window.location.origin}/sbom.json`);
+                if (!frontendResponse.ok) {
                     throw new Error("Frontend SBOM konnte nicht geladen werden");
                 }
-                return response.json();
-            })
-            .then((data) => setFrontendSbom(data))
-            .catch((error) => {
-                console.error("Error loading frontend SBOM:", error);
-                setFrontendSbom({ components: [] });
-            });
+                const frontendData = await frontendResponse.json();
+                if (mounted) {
+                    setFrontendSbom(frontendData);
+                }
 
-        // Backend SBOM laden
-        fetch(`${BACKEND_URL}/sbom`)
-            .then((response) => {
-                if (!response.ok) {
+                // Backend SBOM laden
+                const backendResponse = await fetch(`${BACKEND_URL}/sbom`);
+                if (!backendResponse.ok) {
                     throw new Error("Backend SBOM konnte nicht geladen werden");
                 }
-                return response.json();
-            })
-            .then((data) => setBackendSbom(data))
-            .catch((error) => {
-                console.error("Error loading backend SBOM:", error);
-                setBackendSbom({ components: [] });
-            });
-    }, []);
+                const backendData = await backendResponse.json();
+                if (mounted) {
+                    setBackendSbom(backendData);
+                }
+            } catch (error) {
+                console.error("Error loading SBOM:", error);
+                if (mounted) {
+                    setFrontendSbom({ components: [] });
+                    setBackendSbom({ components: [] });
+                }
+            } finally {
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadSbom();
+
+        return () => {
+            mounted = false;
+        };
+    }, [open]);
 
     const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
     };
 
     const renderSbomTable = (sbom: SbomData | null) => {
-        if (!sbom) return <div>Lade SBOM...</div>;
-        if (sbom.components.length === 0) return <div>Keine SBOM-Daten verfügbar</div>;
+        if (loading) {
+            return (
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+                    <Typography data-testid='loading-state'>Lade SBOM...</Typography>
+                </Box>
+            );
+        }
+        if (!sbom || sbom.components.length === 0) {
+            return (
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+                    <Typography data-testid='no-data-state'>Keine SBOM-Daten verfügbar</Typography>
+                </Box>
+            );
+        }
 
         return (
             <TableContainer component={Paper}>

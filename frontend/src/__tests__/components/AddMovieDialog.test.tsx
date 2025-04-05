@@ -4,6 +4,7 @@ import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddMovieDialog } from "../../components/AddMovieDialog";
 import userEvent from "@testing-library/user-event";
+import { TMDBMovie } from "../../types/tmdb";
 
 // Mock axios
 vi.mock("axios");
@@ -19,8 +20,20 @@ const queryClient = new QueryClient({
     },
 });
 
-const renderWithProviders = (ui: React.ReactElement) => {
+const renderWithWrapper = (ui: React.ReactElement) => {
     return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
+const mockMovie: TMDBMovie = {
+    id: 1,
+    title: "Test Movie",
+    overview: "Test Overview",
+    release_date: "2024-01-01",
+    poster_path: "/test.jpg",
+    credits: {
+        cast: [],
+        crew: [],
+    },
 };
 
 describe("AddMovieDialog", () => {
@@ -32,32 +45,20 @@ describe("AddMovieDialog", () => {
     });
 
     it("rendert den Dialog korrekt", () => {
-        renderWithProviders(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
         expect(screen.getByText("Film hinzufügen")).toBeInTheDocument();
         expect(screen.getByLabelText("Film suchen")).toBeInTheDocument();
     });
 
     it("führt eine erfolgreiche Suche durch", async () => {
         const mockResponse = {
-            data: [
-                {
-                    id: 1,
-                    title: "Test Movie",
-                    overview: "Test Overview",
-                    release_date: "2024-01-01",
-                    poster_path: "/test.jpg",
-                    credits: {
-                        cast: [],
-                        crew: [],
-                    },
-                },
-            ],
+            data: [mockMovie],
         };
 
         mockedAxios.get.mockResolvedValueOnce(mockResponse);
 
-        renderWithProviders(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
-        const searchInput = screen.getByLabelText(/Film suchen/i);
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+        const searchInput = screen.getByLabelText("Film suchen");
         await userEvent.type(searchInput, "Test{enter}");
 
         await waitFor(() => {
@@ -71,60 +72,92 @@ describe("AddMovieDialog", () => {
     it("zeigt Fehlermeldung bei fehlgeschlagener Suche", async () => {
         mockedAxios.get.mockRejectedValueOnce(new Error("API Error"));
 
-        renderWithProviders(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
 
         const searchInput = screen.getByLabelText("Film suchen");
-        fireEvent.change(searchInput, { target: { value: "Test" } });
-        fireEvent.keyDown(searchInput, { key: "Enter" });
-
-        await waitFor(() => {
-            expect(screen.getByText(/API Error/)).toBeInTheDocument();
-        });
-    });
-
-    it("fügt einen Film erfolgreich hinzu", async () => {
-        const mockSearchResponse = {
-            data: [
-                {
-                    id: 1,
-                    title: "Test Movie",
-                    overview: "Test Overview",
-                    release_date: "2024-01-01",
-                    poster_path: "/test.jpg",
-                    credits: {
-                        cast: [],
-                        crew: [],
-                    },
-                },
-            ],
-        };
-
-        mockedAxios.get.mockResolvedValueOnce(mockSearchResponse);
-        mockedAxios.post.mockResolvedValueOnce({ data: { id: 1 } });
-
-        renderWithProviders(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
-        const searchInput = screen.getByLabelText(/Film suchen/i);
         await userEvent.type(searchInput, "Test{enter}");
 
         await waitFor(() => {
-            expect(screen.getByText("Test Movie")).toBeInTheDocument();
+            expect(screen.getByRole("alert")).toBeInTheDocument();
+        });
+    });
+
+    it("sollte einen Film hinzufügen können", async () => {
+        const mockMovie = {
+            id: 1,
+            title: "Test Movie",
+            overview: "Test Overview",
+            release_date: "2024-01-01",
+            poster_path: "/test.jpg",
+            credits: {
+                cast: [],
+                crew: [],
+            },
+        };
+
+        mockedAxios.get.mockResolvedValueOnce({ data: [mockMovie] });
+        mockedAxios.post.mockResolvedValueOnce({ data: { success: true } });
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+
+        // Film suchen
+        const searchInput = screen.getByLabelText("Film suchen");
+        await userEvent.type(searchInput, "Test{enter}");
+
+        // Warten auf die Suchergebnisse
+        await waitFor(() => {
+            const movieResults = screen.getAllByRole("button");
+            const movieResult = movieResults.find((button) => button.textContent?.includes("Test Movie"));
+            expect(movieResult).toBeInTheDocument();
         });
 
-        const movieTitle = screen.getByText("Test Movie").closest('[role="button"]');
-        await userEvent.click(movieTitle!);
+        // Film auswählen
+        const movieResults = screen.getAllByRole("button");
+        const movieResult = movieResults.find((button) => button.textContent?.includes("Test Movie"));
+        await userEvent.click(movieResult!);
 
-        const addButton = screen.getByRole("button", { name: /Hinzufügen/i });
+        // Film hinzufügen
+        const addButton = screen.getByRole("button", { name: "Hinzufügen" });
         await userEvent.click(addButton);
 
+        // Warten auf die erfolgreiche Mutation
         await waitFor(() => {
+            expect(mockedAxios.post).toHaveBeenCalledWith(
+                expect.stringContaining("/movies"),
+                expect.objectContaining({
+                    title: "Test Movie",
+                    overview: "Test Overview",
+                })
+            );
             expect(mockOnClose).toHaveBeenCalled();
         });
     });
 
-    it("schließt den Dialog beim Klick auf Abbrechen", () => {
-        renderWithProviders(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+    it("schließt den Dialog beim Klick auf Abbrechen", async () => {
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
         const cancelButton = screen.getByText("Abbrechen");
-        fireEvent.click(cancelButton);
+        await userEvent.click(cancelButton);
         expect(mockOnClose).toHaveBeenCalled();
+    });
+
+    it("verwaltet den Film-Metadaten-Status korrekt", async () => {
+        mockedAxios.get.mockResolvedValueOnce({ data: [mockMovie] });
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+
+        const searchInput = screen.getByLabelText("Film suchen");
+        await userEvent.type(searchInput, "Test{enter}");
+
+        await waitFor(() => {
+            const movieItem = screen.getByText("Test Movie");
+            fireEvent.click(movieItem);
+        });
+
+        const seenButton = screen.getByLabelText("Als gesehen markieren");
+        await userEvent.click(seenButton);
+
+        const watchlistButton = screen.getByLabelText("Zur Merkliste hinzufügen");
+        await userEvent.click(watchlistButton);
+
+        expect(seenButton).toHaveAttribute("aria-pressed", "true");
+        expect(watchlistButton).toHaveAttribute("aria-pressed", "true");
     });
 });
