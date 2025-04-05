@@ -64,6 +64,44 @@ func TestMovieCRUD(t *testing.T) {
 		assert.Equal(t, uint(1), movie.ID)
 	})
 
+	t.Run("Prevent Duplicate TMDB ID", func(t *testing.T) {
+		// Ersten Film erstellen
+		firstMovie := models.Movie{
+			Title:       "Test Movie 1",
+			Description: "Test Description 1",
+			Year:        2024,
+			TMDBId:      "12345",
+		}
+		jsonData, _ := json.Marshal(firstMovie)
+		req := httptest.NewRequest("POST", "/movies", bytes.NewBuffer(jsonData))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusCreated, w.Code)
+
+		// Versuch, einen zweiten Film mit der gleichen TMDB-ID zu erstellen
+		secondMovie := models.Movie{
+			Title:       "Test Movie 2",
+			Description: "Test Description 2",
+			Year:        2024,
+			TMDBId:      "12345",
+		}
+		jsonData, _ = json.Marshal(secondMovie)
+		req = httptest.NewRequest("POST", "/movies", bytes.NewBuffer(jsonData))
+		req.Header.Set("Content-Type", "application/json")
+		w = httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusConflict, w.Code)
+
+		var response map[string]interface{}
+		err := json.Unmarshal(w.Body.Bytes(), &response)
+		assert.NoError(t, err)
+		assert.Equal(t, "Ein Film mit dieser TMDB-ID existiert bereits", response["error"])
+		assert.NotNil(t, response["movie"])
+	})
+
 	t.Run("Update Movie", func(t *testing.T) {
 		movie := models.Movie{
 			Title:       "Updated Movie",

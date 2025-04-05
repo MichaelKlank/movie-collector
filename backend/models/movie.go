@@ -56,11 +56,11 @@ func CreateMovie(db *gorm.DB) gin.HandlerFunc {
 		var movie Movie
 		body, _ := io.ReadAll(c.Request.Body)
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
-		
+
 		if err := c.ShouldBindJSON(&movie); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "Validierungsfehler",
-				"details": err.Error(),
+				"error":         "Validierungsfehler",
+				"details":       err.Error(),
 				"received_data": string(body),
 				"required_fields": []string{
 					"title (string)",
@@ -68,6 +68,19 @@ func CreateMovie(db *gorm.DB) gin.HandlerFunc {
 				},
 			})
 			return
+		}
+
+		// Prüfe, ob ein Film mit der gleichen TMDB-ID bereits existiert
+		if movie.TMDBId != "" {
+			var existingMovie Movie
+			result := db.Where("tmdb_id = ?", movie.TMDBId).First(&existingMovie)
+			if result.Error == nil {
+				c.JSON(http.StatusConflict, gin.H{
+					"error": "Ein Film mit dieser TMDB-ID existiert bereits",
+					"movie": existingMovie,
+				})
+				return
+			}
 		}
 
 		result := db.Create(&movie)
@@ -217,4 +230,4 @@ func DeleteImage(db *gorm.DB) gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, gin.H{"message": "Image deleted successfully"})
 	}
-} 
+}

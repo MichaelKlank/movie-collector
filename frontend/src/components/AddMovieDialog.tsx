@@ -57,13 +57,13 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedMovie, setSelectedMovie] = useState<TMDBMovie | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [isSearching, setIsSearching] = useState(false);
     const [movieMetadata, setMovieMetadata] = useState<Record<number, MovieMetadata>>({});
     const [debugInfo, setDebugInfo] = useState<string>("");
     const [searchError, setSearchError] = useState<string>("");
-    const [isSearching, setIsSearching] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const queryClient = useQueryClient();
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -78,8 +78,13 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
             setMovieMetadata({});
             setDebugInfo("");
             setSearchError("");
+            setError(null);
         }
     }, [isOpen]);
+
+    useEffect(() => {
+        setError(null);
+    }, [searchQuery]);
 
     const testTMDBConnection = async () => {
         try {
@@ -168,12 +173,17 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
         },
         onError: (error) => {
             console.error("Fehler beim Hinzufügen des Films:", error);
-            setError(error instanceof Error ? error.message : "Ein Fehler ist aufgetreten");
+            if (axios.isAxiosError(error) && error.response?.status === 409) {
+                setError("Dieser Film existiert bereits in Ihrer Sammlung");
+            } else {
+                setError(error instanceof Error ? error.message : "Ein Fehler ist aufgetreten");
+            }
         },
     });
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
+        setError(null);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -215,6 +225,7 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
             overview: movie.overview ? `${movie.overview.substring(0, 100)}...` : "Keine Beschreibung",
         });
         setSelectedMovie(movie);
+        setError(null);
         if (!movieMetadata[movie.id]) {
             setMovieMetadata((prev) => ({
                 ...prev,
