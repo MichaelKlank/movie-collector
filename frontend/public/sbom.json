@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:6a51d7c4-4cff-4142-b795-361e7cf44767",
+  "serialNumber": "urn:uuid:901f7b1d-ce8a-4ada-a52e-666e1c28f3a8",
   "metadata": {
-    "timestamp": "2025-04-05T22:27:08.184Z",
+    "timestamp": "2025-04-05T23:29:57.062Z",
     "tools": {
       "components": [
         {
@@ -6940,281 +6940,6 @@
     },
     {
       "type": "library",
-      "name": "braces",
-      "version": "3.0.3",
-      "bom-ref": "braces@3.0.3",
-      "author": "Jon Schlinkert",
-      "description": "Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed.",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/braces@3.0.3",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/micromatch/braces.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/micromatch/braces",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/micromatch/braces/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "c906d780efce499543d88b222e5ae8fbb1dfe90d7c109aca484b1da0ccca78f29772dde0bc3f282dc390748cc6ba9af9163f840def203bf9717350737cca71bc"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/braces"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "fill-range",
-      "version": "7.1.1",
-      "bom-ref": "fill-range@7.1.1",
-      "author": "Jon Schlinkert",
-      "description": "Fill in a range of numbers or letters, optionally passing an increment or `step` to use, or create a regex-compatible range with `options.toRegex`",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/fill-range@7.1.1",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/jonschlinkert/fill-range.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/jonschlinkert/fill-range",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/jonschlinkert/fill-range/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "62c1a97b75872caf19622e2d583836272dde6d1cf6ad7a300f19e57786e4401d3471cff5670f405a70b48bdced0c98ad8afb50bda23d29a2f22ab73e8415b4ca"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/fill-range"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "to-regex-range",
-      "version": "5.0.1",
-      "bom-ref": "to-regex-range@5.0.1",
-      "author": "Jon Schlinkert",
-      "description": "Pass two numbers, get a regex-compatible source string for matching ranges. Validated against more than 2.78 million test assertions.",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/to-regex-range@5.0.1",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/micromatch/to-regex-range.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/micromatch/to-regex-range",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/micromatch/to-regex-range/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "eb93fb8b3e97e7212bd5cc1c82f4316db230ed493780ecb974876d678ac3bde2ea86b7493fe2e2fc7c7ab722b43446fed860b29de08c2621aaac00c248d93cb1"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/to-regex-range"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "is-number",
-      "version": "7.0.0",
-      "bom-ref": "is-number@7.0.0",
-      "author": "Jon Schlinkert",
-      "description": "Returns true if a number or string value is a finite number. Useful for regex matches, parsing, user input, etc.",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/is-number@7.0.0",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/jonschlinkert/is-number.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/jonschlinkert/is-number",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/jonschlinkert/is-number/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "e350a27e483a7bc4f2952a5db53a5e2d532abd20445734edb47bc4443ef8d7ea6767c00dbf4d34e0c44be3740a3c394af5c1af369e8d6566540656c65d8c719e"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/is-number"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "picomatch",
-      "version": "2.3.1",
-      "bom-ref": "picomatch@2.3.1",
-      "author": "Jon Schlinkert",
-      "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/picomatch@2.3.1",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/micromatch/picomatch.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/micromatch/picomatch",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/micromatch/picomatch/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "254ded7874cd8e6136542185cee63c117cc20d5c04a81d9af1fb08bf0692b4784058911e55dd68d500fcd0253af997445d748b6d2b2e2f0263902056a9141454"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/picomatch"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "slash",
       "version": "3.0.0",
       "bom-ref": "slash@3.0.0",
@@ -7481,6 +7206,61 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/ci-info"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "picomatch",
+      "version": "2.3.1",
+      "bom-ref": "picomatch@2.3.1",
+      "author": "Jon Schlinkert",
+      "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/picomatch@2.3.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/picomatch.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/picomatch",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/picomatch/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "254ded7874cd8e6136542185cee63c117cc20d5c04a81d9af1fb08bf0692b4784058911e55dd68d500fcd0253af997445d748b6d2b2e2f0263902056a9141454"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/picomatch"
         },
         {
           "name": "cdx:npm:package:development",
@@ -24436,6 +24216,61 @@
     },
     {
       "type": "library",
+      "name": "husky",
+      "version": "9.1.7",
+      "bom-ref": "husky@9.1.7",
+      "author": "typicode",
+      "description": "Modern native Git hooks",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/husky@9.1.7",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/typicode/husky.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/typicode/husky#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/typicode/husky/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/husky/-/husky-9.1.7.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "e60b39cad68d8c1ae1e4ec37cebbdd51463ed15c48b9654be22f62aede9fae257e06a7427e6575d4241358c8816161db5e1728f89d641df4ce52478f8420ef30"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/husky"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "jsdom",
       "version": "26.0.0",
       "bom-ref": "jsdom@26.0.0",
@@ -26423,6 +26258,2712 @@
     },
     {
       "type": "library",
+      "name": "lint-staged",
+      "version": "15.5.0",
+      "bom-ref": "lint-staged@15.5.0",
+      "author": "Andrey Okonetchnikov",
+      "description": "Lint files staged by git",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/lint-staged@15.5.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/lint-staged/lint-staged.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/lint-staged/lint-staged#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lint-staged/lint-staged/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/lint-staged/-/lint-staged-15.5.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "5b20b349b7d81a12bb714f94b830e4cd48b2b5b7db8b465d3f2da8af0b4cef93f7593b50073986e34702c486bc222dbe5e37f1ccb1fa05ee3ab547d64bce577e"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/lint-staged"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "chalk",
+          "version": "5.4.1",
+          "bom-ref": "lint-staged@15.5.0|chalk@5.4.1",
+          "description": "Terminal string styling done right",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/chalk@5.4.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/chalk.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/chalk#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/chalk/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/chalk/-/chalk-5.4.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "ce0559ba8d9671981f5049ac9fa78ede420d7b15bc44013899a890f1036cf02b693c24b232262c50b4771d06249b7c3c14803749b7abc8c24c4a5746b16f94df"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/lint-staged/node_modules/chalk"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "commander",
+      "version": "13.1.0",
+      "bom-ref": "commander@13.1.0",
+      "author": "TJ Holowaychuk",
+      "description": "the complete solution for node.js command-line programs",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/commander@13.1.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/tj/commander.js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/tj/commander.js#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/tj/commander.js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/commander/-/commander-13.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "feb15e0a934941b852663195c0ef51155df13ea6e71114bc326210cc2b43ff397a82926e57f6cc2ee37dda81b717b77ca031071d1aee8d25cd52bf1fa639ed2b"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/commander"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "execa",
+      "version": "8.0.1",
+      "bom-ref": "execa@8.0.1",
+      "author": "Sindre Sorhus",
+      "description": "Process execution for humans",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/execa@8.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/execa.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/execa#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/execa/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/execa/-/execa-8.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "57286779b5dc8855760c449cfa9e81fb2d0b8d29b492b5383a024de38a85021058d1327ed55eb5b580f6fb01eeb19e85f67e4afaf97c934b13cbb3c47d5e2aa6"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/execa"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "get-stream",
+      "version": "8.0.1",
+      "bom-ref": "get-stream@8.0.1",
+      "author": "Sindre Sorhus",
+      "description": "Get a stream as a string, Buffer, ArrayBuffer or array",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/get-stream@8.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/get-stream.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/get-stream#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/get-stream/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/get-stream/-/get-stream-8.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "55a509b2905f7e7fcb302255a0cbd201d9ac709c92d5aba3e59ba59e7e54a18718e77d545a67708515a47062a7194f779b91d25cff4b3f6bac3abcab06d428c0"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/get-stream"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "human-signals",
+      "version": "5.0.0",
+      "bom-ref": "human-signals@5.0.0",
+      "author": "ehmicky",
+      "description": "Human-friendly process signals",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/human-signals@5.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/ehmicky/human-signals.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://www.github.com/ehmicky/human-signals",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/ehmicky/human-signals/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/human-signals/-/human-signals-5.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "0177196fabf3ceb140504eb51e73789a92ea77f7122303508ed3564747ae3e6eb2d22ab1dc6e203976880ddb5d0f06668707bcd8b03afb38a7996e1405655e3d"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/human-signals"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-stream",
+      "version": "3.0.0",
+      "bom-ref": "is-stream@3.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Check if something is a Node.js stream",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/is-stream@3.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/is-stream.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/is-stream#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/is-stream/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/is-stream/-/is-stream-3.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "2e7411e1b67d2000c345292fa6a306bedfed10959c9739253604b0e3c57910068078377aa86bcdf1e8ba939a74b6fc52475ef55661b21ee4e200e7f101bafc90"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/is-stream"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "merge-stream",
+      "version": "2.0.0",
+      "bom-ref": "merge-stream@2.0.0",
+      "author": "Stephen Sugden",
+      "description": "Create a stream that emits events from multiple other streams",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/merge-stream@2.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/grncdr/merge-stream.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/grncdr/merge-stream#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/grncdr/merge-stream/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "69bbffa8e72e3df9375113df0f39995352ca9aec3c913fb49c81ef2ab2a016bc227e897f76859c740e19aac590f0436b14a91debb31fa68fcba2f6c852c6eddf"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/merge-stream"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "npm-run-path",
+      "version": "5.3.0",
+      "bom-ref": "npm-run-path@5.3.0",
+      "author": "Sindre Sorhus",
+      "description": "Get your PATH prepended with locally installed binaries",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/npm-run-path@5.3.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/npm-run-path.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/npm-run-path#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/npm-run-path/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/npm-run-path/-/npm-run-path-5.3.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "a69c13b62259ab43bf6a2d33ef27ee76d069588a3133cc84ea71e2d57e3b785476116391a9f6eee829cf94db2378debcdde4f4a86e87fcfc9ff5f09cbe39e79d"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/npm-run-path"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "path-key",
+          "version": "4.0.0",
+          "bom-ref": "npm-run-path@5.3.0|path-key@4.0.0",
+          "author": "Sindre Sorhus",
+          "description": "Get the PATH environment variable key cross-platform",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/path-key@4.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/path-key.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/path-key#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/path-key/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/path-key/-/path-key-4.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "85a444ca9abbc6433b12b7e0232034cfe063e0018a94c49d9501368ef268ea1b960f511d90a615f86fd3e27ab4604176be04d3f24a8c14aa35b879fde74af849"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/npm-run-path/node_modules/path-key"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "onetime",
+      "version": "6.0.0",
+      "bom-ref": "onetime@6.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Ensure a function is only called once",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/onetime@6.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/onetime.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/onetime#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/onetime/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/onetime/-/onetime-6.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "d45951fa08d72bb5fe02c007b28df9327c8de4aa86c09462ff7d5fb7ac74335f7886ded2fab580bddecf1ecb3dc5228ccc4d1ab2fd69c881da258abe05b69c01"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/onetime"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mimic-fn",
+      "version": "4.0.0",
+      "bom-ref": "mimic-fn@4.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Make a function mimic another one",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/mimic-fn@4.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/mimic-fn.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/mimic-fn#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/mimic-fn/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/mimic-fn/-/mimic-fn-4.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "bea882d3a0ae8414d47591fe45897cb05acbd3deaf038e4e9392123bab04fccaf58d16c61f80ac9e18bc7f7c0a565ef1f263b802eec8afd0f73b2bf555830527"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/mimic-fn"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "strip-final-newline",
+      "version": "3.0.0",
+      "bom-ref": "strip-final-newline@3.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Strip the final newline character from a string/buffer",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/strip-final-newline@3.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/strip-final-newline.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/strip-final-newline#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/strip-final-newline/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/strip-final-newline/-/strip-final-newline-3.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "74e112aa362bf7a89663294639bcdddfd12e3536b9549c72bd50049b926787b286a3be55e371e4d6874f424343c97366511ea4fa01220d55e78c1f0727772b5f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/strip-final-newline"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lilconfig",
+      "version": "3.1.3",
+      "bom-ref": "lilconfig@3.1.3",
+      "author": "antonk52",
+      "description": "A zero-dependency alternative to cosmiconfig",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/lilconfig@3.1.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/antonk52/lilconfig.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/antonk52/lilconfig#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/antonk52/lilconfig/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "fef945280a07e4282ddc87be24b8516f03ac09078f001894ded2757a01afc90fb7dd1fef730336665d9047f2f38ec05e22d3edde84955daa67fa6e27403be9cf"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/lilconfig"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "listr2",
+      "version": "8.2.5",
+      "bom-ref": "listr2@8.2.5",
+      "author": "Cenk Kilic",
+      "description": "Terminal task list reborn! Create beautiful CLI interfaces via easy and logical to implement task lists that feel alive and interactive.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/listr2@8.2.5",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/listr2/listr2.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/listr2/listr2#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/listr2/listr2/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/listr2/-/listr2-8.2.5.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "8b201909ec83f9cd603f213daa916ef1a7f463e311b6628e9dc746a00d92e4463c885abdf5d9a6be43671e25a8fa98f4b3bc87ee5dca3c881e7bbeed2a95cf59"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/listr2"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "wrap-ansi",
+          "version": "9.0.0",
+          "bom-ref": "listr2@8.2.5|wrap-ansi@9.0.0",
+          "author": "Sindre Sorhus",
+          "description": "Wordwrap a string with ANSI escape codes",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/wrap-ansi@9.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/wrap-ansi.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/wrap-ansi#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/wrap-ansi/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-9.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "1bcbab6b74bedd9d86fa6920351abc76a685640bb17ecc69041f0e0931914c2b69fa5feff676c53660943f505932db371b5d78d8cb197e7e9e7942abaf83c3d5"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/listr2/node_modules/wrap-ansi"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "ansi-styles",
+          "version": "6.2.1",
+          "bom-ref": "listr2@8.2.5|ansi-styles@6.2.1",
+          "author": "Sindre Sorhus",
+          "description": "ANSI escape codes for styling strings in the terminal",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/ansi-styles@6.2.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/ansi-styles.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/ansi-styles#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/ansi-styles/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "6cdefdf2015f417faf8b0dd1ef2ac6591aa7acdda84641245238e5e09367e04f06c716e3b46dc56eb108218de5f3f86bc14c0878266f8b842e3933f8304ad5ba"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/listr2/node_modules/ansi-styles"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "string-width",
+          "version": "7.2.0",
+          "bom-ref": "listr2@8.2.5|string-width@7.2.0",
+          "author": "Sindre Sorhus",
+          "description": "Get the visual width of a string - the number of columns required to display it",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/string-width@7.2.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/string-width.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/string-width#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/string-width/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "b6c693224296f5be0df80123f92540f96849cd5effccc85c4aeefc98b2964a4edc5cc3921ec04a15652cd1f5b0abc4322b73202414115fa19b8b89186ddbc691"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/listr2/node_modules/string-width"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "emoji-regex",
+          "version": "10.4.0",
+          "bom-ref": "listr2@8.2.5|emoji-regex@10.4.0",
+          "author": "Mathias Bynens",
+          "description": "A regular expression to match all Emoji-only symbols as per the Unicode Standard.",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/emoji-regex@10.4.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/mathiasbynens/emoji-regex.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://mths.be/emoji-regex",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/mathiasbynens/emoji-regex/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.4.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "102fb4a14318d51aa6e0ee8b2eb823b580ef715613cbb7210e733843bd37d2d3f82b08f7bbfa51ea03fdca09e9d8224c2b91aafbd436a2a9ab149033d350d78f"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/listr2/node_modules/emoji-regex"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "cli-truncate",
+      "version": "4.0.0",
+      "bom-ref": "cli-truncate@4.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Truncate a string to a specific width in the terminal",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/cli-truncate@4.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/cli-truncate.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/cli-truncate#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/cli-truncate/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/cli-truncate/-/cli-truncate-4.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "9cf75a15d43487f1848a06cf0a5cf5d43d2ffd9244c3199e55919e328dd9e52b4fb544e403da35943e90c288ab622483cdb7309f65dc8f0982a7af16d484b84c"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/cli-truncate"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "string-width",
+          "version": "7.2.0",
+          "bom-ref": "cli-truncate@4.0.0|string-width@7.2.0",
+          "author": "Sindre Sorhus",
+          "description": "Get the visual width of a string - the number of columns required to display it",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/string-width@7.2.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/string-width.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/string-width#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/string-width/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "b6c693224296f5be0df80123f92540f96849cd5effccc85c4aeefc98b2964a4edc5cc3921ec04a15652cd1f5b0abc4322b73202414115fa19b8b89186ddbc691"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/cli-truncate/node_modules/string-width"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "emoji-regex",
+          "version": "10.4.0",
+          "bom-ref": "cli-truncate@4.0.0|emoji-regex@10.4.0",
+          "author": "Mathias Bynens",
+          "description": "A regular expression to match all Emoji-only symbols as per the Unicode Standard.",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/emoji-regex@10.4.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/mathiasbynens/emoji-regex.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://mths.be/emoji-regex",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/mathiasbynens/emoji-regex/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.4.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "102fb4a14318d51aa6e0ee8b2eb823b580ef715613cbb7210e733843bd37d2d3f82b08f7bbfa51ea03fdca09e9d8224c2b91aafbd436a2a9ab149033d350d78f"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/cli-truncate/node_modules/emoji-regex"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "slice-ansi",
+      "version": "5.0.0",
+      "bom-ref": "slice-ansi@5.0.0",
+      "description": "Slice a string with ANSI escape codes",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/slice-ansi@5.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/chalk/slice-ansi.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/chalk/slice-ansi#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/chalk/slice-ansi/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/slice-ansi/-/slice-ansi-5.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "142fa5822cd53df89ed24921a9449cc11bb53bf945e8d3a026694280afbf2d8c4309393cb067a561a1c384570337e4a7dc2bfedd549ae01c9ea3e20c0b3a4c81"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/slice-ansi"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "ansi-styles",
+          "version": "6.2.1",
+          "bom-ref": "slice-ansi@5.0.0|ansi-styles@6.2.1",
+          "author": "Sindre Sorhus",
+          "description": "ANSI escape codes for styling strings in the terminal",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/ansi-styles@6.2.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/ansi-styles.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/ansi-styles#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/ansi-styles/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "6cdefdf2015f417faf8b0dd1ef2ac6591aa7acdda84641245238e5e09367e04f06c716e3b46dc56eb108218de5f3f86bc14c0878266f8b842e3933f8304ad5ba"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/slice-ansi/node_modules/ansi-styles"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "is-fullwidth-code-point",
+          "version": "4.0.0",
+          "bom-ref": "slice-ansi@5.0.0|is-fullwidth-code-point@4.0.0",
+          "author": "Sindre Sorhus",
+          "description": "Check if the character represented by a given Unicode code point is fullwidth",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/is-fullwidth-code-point@4.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/is-fullwidth-code-point.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/is-fullwidth-code-point#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/is-fullwidth-code-point/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/is-fullwidth-code-point/-/is-fullwidth-code-point-4.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "3b82f4f78376fdd67bc6a55dad7861f6bd4a3833c9a459acf01e6c19d24b3f2ebae0082f5ecade654c82410348b59443958ba0e314ad2e3369feccf71ef068c1"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/slice-ansi/node_modules/is-fullwidth-code-point"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "get-east-asian-width",
+      "version": "1.3.0",
+      "bom-ref": "get-east-asian-width@1.3.0",
+      "author": "Sindre Sorhus",
+      "description": "Determine the East Asian Width of a Unicode character",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/get-east-asian-width@1.3.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/get-east-asian-width.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/get-east-asian-width#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/get-east-asian-width/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/get-east-asian-width/-/get-east-asian-width-1.3.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "be978c2102b17334c3ff4b3609d1161dc6f479e25ee93163c5bf89e71817ee149cc6aac6bb28e6bf87350f803f81e94a7f2a31d20249c081c5f9f2e379a33c91"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/get-east-asian-width"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "colorette",
+      "version": "2.0.20",
+      "bom-ref": "colorette@2.0.20",
+      "author": "Jorge Bucaran",
+      "description": "🌈Easily set your terminal text color & styles.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/colorette@2.0.20",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jorgebucaran/colorette.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jorgebucaran/colorette#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jorgebucaran/colorette/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/colorette/-/colorette-2.0.20.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "21f103c70a1622391e5cbd5e5dc0e2a30e146ca8e12ddabafc4b92551f4630deca547debf6043cddeef786ccf535dd53de28dde71bf5c1c59160ef83ea4088db"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/colorette"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "eventemitter3",
+      "version": "5.0.1",
+      "bom-ref": "eventemitter3@5.0.1",
+      "author": "Arnout Kazemier",
+      "description": "EventEmitter3 focuses on performance while maintaining a Node.js AND browser compatible interface.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/eventemitter3@5.0.1",
+      "externalReferences": [
+        {
+          "url": "git://github.com/primus/eventemitter3.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/primus/eventemitter3#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/primus/eventemitter3/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "196901be389264af3b10bad839211251879521cf66bcb2dffe75da94c392e5d62b819abda3939591b64054cd3a095c58b02c07f410d914f9504e53c0d63e1a84"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/eventemitter3"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "log-update",
+      "version": "6.1.0",
+      "bom-ref": "log-update@6.1.0",
+      "author": "Sindre Sorhus",
+      "description": "Log by overwriting the previous output in the terminal. Useful for rendering progress bars, animations, etc.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/log-update@6.1.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/log-update.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/log-update#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/log-update/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/log-update/-/log-update-6.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "f627bc22d3d1ead8d8e6e60987c2bf66bbff44c67954e94e5afb597441d849314a65f2013d06bdb4e0047805a177e02722778b276db0e5f8ce62da2eb695aae7"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/log-update"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "slice-ansi",
+          "version": "7.1.0",
+          "bom-ref": "log-update@6.1.0|slice-ansi@7.1.0",
+          "description": "Slice a string with ANSI escape codes",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/slice-ansi@7.1.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/slice-ansi.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/slice-ansi#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/slice-ansi/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/slice-ansi/-/slice-ansi-7.1.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "6d28929e067f8d6797f7706a78801b226c936c48a18b3730363168454218fd3d70590b1fb26d95c356a03caca55ef41353b880486747872a9196a4337f3f87b6"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/log-update/node_modules/slice-ansi"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "ansi-styles",
+          "version": "6.2.1",
+          "bom-ref": "log-update@6.1.0|ansi-styles@6.2.1",
+          "author": "Sindre Sorhus",
+          "description": "ANSI escape codes for styling strings in the terminal",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/ansi-styles@6.2.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/ansi-styles.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/ansi-styles#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/ansi-styles/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "6cdefdf2015f417faf8b0dd1ef2ac6591aa7acdda84641245238e5e09367e04f06c716e3b46dc56eb108218de5f3f86bc14c0878266f8b842e3933f8304ad5ba"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/log-update/node_modules/ansi-styles"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "is-fullwidth-code-point",
+          "version": "5.0.0",
+          "bom-ref": "log-update@6.1.0|is-fullwidth-code-point@5.0.0",
+          "author": "Sindre Sorhus",
+          "description": "Check if the character represented by a given Unicode code point is fullwidth",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/is-fullwidth-code-point@5.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/is-fullwidth-code-point.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/is-fullwidth-code-point#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/is-fullwidth-code-point/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/is-fullwidth-code-point/-/is-fullwidth-code-point-5.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "3956b7bbd92405bc3b6fc5f0e45f4ff83fd3f57f99e3e26bb9854d6a94e33d86585339d0e587d678590e8fad3a5d8616f32ba04df0bc3e3d2162abe2e2bc8084"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/log-update/node_modules/is-fullwidth-code-point"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "wrap-ansi",
+          "version": "9.0.0",
+          "bom-ref": "log-update@6.1.0|wrap-ansi@9.0.0",
+          "author": "Sindre Sorhus",
+          "description": "Wordwrap a string with ANSI escape codes",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/wrap-ansi@9.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/wrap-ansi.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/wrap-ansi#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/wrap-ansi/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-9.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "1bcbab6b74bedd9d86fa6920351abc76a685640bb17ecc69041f0e0931914c2b69fa5feff676c53660943f505932db371b5d78d8cb197e7e9e7942abaf83c3d5"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/log-update/node_modules/wrap-ansi"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "string-width",
+          "version": "7.2.0",
+          "bom-ref": "log-update@6.1.0|string-width@7.2.0",
+          "author": "Sindre Sorhus",
+          "description": "Get the visual width of a string - the number of columns required to display it",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/string-width@7.2.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/string-width.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/string-width#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/string-width/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "b6c693224296f5be0df80123f92540f96849cd5effccc85c4aeefc98b2964a4edc5cc3921ec04a15652cd1f5b0abc4322b73202414115fa19b8b89186ddbc691"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/log-update/node_modules/string-width"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "emoji-regex",
+          "version": "10.4.0",
+          "bom-ref": "log-update@6.1.0|emoji-regex@10.4.0",
+          "author": "Mathias Bynens",
+          "description": "A regular expression to match all Emoji-only symbols as per the Unicode Standard.",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/emoji-regex@10.4.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/mathiasbynens/emoji-regex.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://mths.be/emoji-regex",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/mathiasbynens/emoji-regex/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.4.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "102fb4a14318d51aa6e0ee8b2eb823b580ef715613cbb7210e733843bd37d2d3f82b08f7bbfa51ea03fdca09e9d8224c2b91aafbd436a2a9ab149033d350d78f"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/log-update/node_modules/emoji-regex"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "ansi-escapes",
+      "version": "7.0.0",
+      "bom-ref": "ansi-escapes@7.0.0",
+      "author": "Sindre Sorhus",
+      "description": "ANSI escape codes for manipulating the terminal",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/ansi-escapes@7.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/ansi-escapes.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/ansi-escapes#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/ansi-escapes/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/ansi-escapes/-/ansi-escapes-7.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "19d60eedaeb5991d1f3a502cbc2f7fac81dfecbf7ab0173a7445b378ebbe28079ae5b6724113c8a688eb5682380171894bfc9cbbf7c14dd2eb524038383aef8f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/ansi-escapes"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "environment",
+      "version": "1.1.0",
+      "bom-ref": "environment@1.1.0",
+      "author": "Sindre Sorhus",
+      "description": "Check which JavaScript environment your code is running in at runtime: browser, Node.js, Bun, etc",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/environment@1.1.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/environment.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/environment#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/environment/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/environment/-/environment-1.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "c54b683e432081bcf430fc8f8885abd4aa7869e5898c367a48cbd44618a68dd660b11b83a65179fecf617201a1c97321b3eeafa67ba8899da4162bb714c9d2f1"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/environment"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "cli-cursor",
+      "version": "5.0.0",
+      "bom-ref": "cli-cursor@5.0.0",
+      "author": "Sindre Sorhus",
+      "description": "Toggle the CLI cursor",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/cli-cursor@5.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/cli-cursor.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/cli-cursor#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/cli-cursor/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/cli-cursor/-/cli-cursor-5.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "6828f83b9c0acacce33260d3e2d663f77931cb274dfcae733d64827baff4015fc0035a6a7b9641230d1ad997cf415ee52f9ff26f91ec52b789e94140175b4443"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/cli-cursor"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "restore-cursor",
+      "version": "5.1.0",
+      "bom-ref": "restore-cursor@5.1.0",
+      "author": "Sindre Sorhus",
+      "description": "Gracefully restore the CLI cursor on exit",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/restore-cursor@5.1.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/restore-cursor.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/restore-cursor#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/restore-cursor/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/restore-cursor/-/restore-cursor-5.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "a0c03675caf0eaed187f12505e6df8d9b14a5ff138b06f6b6d3ccef69b54711fdef00df7707baf4ad8983b01fb7ecce4665675cffb5af400283e4d85e2a20e1c"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/restore-cursor"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "onetime",
+          "version": "7.0.0",
+          "bom-ref": "restore-cursor@5.1.0|onetime@7.0.0",
+          "author": "Sindre Sorhus",
+          "description": "Ensure a function is only called once",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/onetime@7.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/sindresorhus/onetime.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/onetime#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/sindresorhus/onetime/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/onetime/-/onetime-7.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "55726373cec549c17cf2e69f4b726594382f026f9cfd295fcf4ea5a2b8f6b80637e2b954bb436dfaff30ade88899cae00238c81e9d6b5e94c394b386c36f56c1"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/restore-cursor/node_modules/onetime"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mimic-function",
+      "version": "5.0.1",
+      "bom-ref": "mimic-function@5.0.1",
+      "author": "Sindre Sorhus",
+      "description": "Make a function mimic another one",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/mimic-function@5.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/mimic-function.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/mimic-function#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/mimic-function/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/mimic-function/-/mimic-function-5.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "54fefd5d43f15760a28183f78d6c005054a4bb668aa811fbb9301aa4558206abadb1b983a3de8a639a3cba1e94fbf612227e4ec499d7a7bddb795929a8c20684"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/mimic-function"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rfdc",
+      "version": "1.4.1",
+      "bom-ref": "rfdc@1.4.1",
+      "author": "David Mark Clements",
+      "description": "Really Fast Deep Clone",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/rfdc@1.4.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/davidmarkclements/rfdc.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/davidmarkclements/rfdc#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/davidmarkclements/rfdc/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/rfdc/-/rfdc-1.4.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "ab56f737942445459497b8b2ca569a8f790ea484f43768bd32a2044173fbdc656c37d730ddf771f17eb77049968491a2d8f3c2176dc88e9ee4b66777f6b6b020"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/rfdc"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "braces",
+      "version": "3.0.3",
+      "bom-ref": "braces@3.0.3",
+      "author": "Jon Schlinkert",
+      "description": "Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/braces@3.0.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/braces.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/braces",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/braces/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "c906d780efce499543d88b222e5ae8fbb1dfe90d7c109aca484b1da0ccca78f29772dde0bc3f282dc390748cc6ba9af9163f840def203bf9717350737cca71bc"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/braces"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fill-range",
+      "version": "7.1.1",
+      "bom-ref": "fill-range@7.1.1",
+      "author": "Jon Schlinkert",
+      "description": "Fill in a range of numbers or letters, optionally passing an increment or `step` to use, or create a regex-compatible range with `options.toRegex`",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fill-range@7.1.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jonschlinkert/fill-range.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/fill-range",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/fill-range/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "62c1a97b75872caf19622e2d583836272dde6d1cf6ad7a300f19e57786e4401d3471cff5670f405a70b48bdced0c98ad8afb50bda23d29a2f22ab73e8415b4ca"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fill-range"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "to-regex-range",
+      "version": "5.0.1",
+      "bom-ref": "to-regex-range@5.0.1",
+      "author": "Jon Schlinkert",
+      "description": "Pass two numbers, get a regex-compatible source string for matching ranges. Validated against more than 2.78 million test assertions.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/to-regex-range@5.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/to-regex-range.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/to-regex-range",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/to-regex-range/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "eb93fb8b3e97e7212bd5cc1c82f4316db230ed493780ecb974876d678ac3bde2ea86b7493fe2e2fc7c7ab722b43446fed860b29de08c2621aaac00c248d93cb1"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/to-regex-range"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-number",
+      "version": "7.0.0",
+      "bom-ref": "is-number@7.0.0",
+      "author": "Jon Schlinkert",
+      "description": "Returns true if a number or string value is a finite number. Useful for regex matches, parsing, user input, etc.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/is-number@7.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jonschlinkert/is-number.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/is-number",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/is-number/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "e350a27e483a7bc4f2952a5db53a5e2d532abd20445734edb47bc4443ef8d7ea6767c00dbf4d34e0c44be3740a3c394af5c1af369e8d6566540656c65d8c719e"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/is-number"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "pidtree",
+      "version": "0.6.0",
+      "bom-ref": "pidtree@0.6.0",
+      "author": "Simone Primarosa",
+      "description": "Cross platform children list of a PID",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/pidtree@0.6.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/simonepri/pidtree.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "http://github.com/simonepri/pidtree#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/simonepri/pidtree/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/pidtree/-/pidtree-0.6.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "786d9d593570e5bcea191ced9c7131733371b79546b04e8ec137821b77dd51ff4a06c6733b7479388208cd647e89903436d67e44355d6a813674ad5c9fa8c7e2"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/pidtree"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "string-argv",
+      "version": "0.3.2",
+      "bom-ref": "string-argv@0.3.2",
+      "author": "Anthony McCormick",
+      "description": "string-argv parses a string into an argument array to mimic process.argv. This is useful when testing Command Line Utilities that you want to pass arguments to.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/string-argv@0.3.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mccormicka/string-argv.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mccormicka/string-argv",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mccormicka/string-argv/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/string-argv/-/string-argv-0.3.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "6aa0f6434d78e19fbf46a1b9d8d78712465ab930145893bc73ac937ed18928edd38dae6d52021f98897a904c6f86dc520cfedf5c1e83bf391f32909dfc5dc6f9"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/string-argv"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "yaml",
+      "version": "2.7.1",
+      "bom-ref": "yaml@2.7.1",
+      "author": "Eemeli Aro",
+      "description": "JavaScript parser and stringifier for YAML",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/yaml@2.7.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/eemeli/yaml.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://eemeli.org/yaml/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/eemeli/yaml/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/yaml/-/yaml-2.7.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "d7450bc699ce0905f126f060c6c9fda6d8eaeaebe21bf86d64a93dbde246865aa7df0fc3c50eb7d73145fa79505cbc26226792e5a991d9d97653cb20e94f63b1"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/yaml"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "scheduler",
       "version": "0.26.0",
       "bom-ref": "scheduler@0.26.0",
@@ -28293,62 +30834,6 @@
     },
     {
       "type": "library",
-      "name": "yaml",
-      "version": "2.7.1",
-      "bom-ref": "yaml@2.7.1",
-      "author": "Eemeli Aro",
-      "description": "JavaScript parser and stringifier for YAML",
-      "scope": "optional",
-      "licenses": [
-        {
-          "license": {
-            "id": "ISC",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/yaml@2.7.1",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/eemeli/yaml.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://eemeli.org/yaml/",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/eemeli/yaml/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/yaml/-/yaml-2.7.1.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "d7450bc699ce0905f126f060c6c9fda6d8eaeaebe21bf86d64a93dbde246865aa7df0fc3c50eb7d73145fa79505cbc26226792e5a991d9d97653cb20e94f63b1"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/yaml"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "expect",
       "group": "@vitest",
       "version": "3.1.1",
@@ -29578,7 +32063,9 @@
         "eslint-plugin-react@7.37.5",
         "eslint@9.24.0",
         "globals@16.0.0",
+        "husky@9.1.7",
         "jsdom@26.0.0",
+        "lint-staged@15.5.0",
         "react-dom@19.1.0",
         "react@19.1.0",
         "typescript-eslint@8.29.0",
@@ -30344,30 +32831,6 @@
       ]
     },
     {
-      "ref": "braces@3.0.3",
-      "dependsOn": [
-        "fill-range@7.1.1"
-      ]
-    },
-    {
-      "ref": "fill-range@7.1.1",
-      "dependsOn": [
-        "to-regex-range@5.0.1"
-      ]
-    },
-    {
-      "ref": "to-regex-range@5.0.1",
-      "dependsOn": [
-        "is-number@7.0.0"
-      ]
-    },
-    {
-      "ref": "is-number@7.0.0"
-    },
-    {
-      "ref": "picomatch@2.3.1"
-    },
-    {
       "ref": "slash@3.0.0"
     },
     {
@@ -30392,6 +32855,9 @@
     },
     {
       "ref": "ci-info@3.9.0"
+    },
+    {
+      "ref": "picomatch@2.3.1"
     },
     {
       "ref": "@sinclair/typebox@0.27.8"
@@ -32441,6 +34907,9 @@
       "ref": "globals@16.0.0"
     },
     {
+      "ref": "husky@9.1.7"
+    },
+    {
       "ref": "jsdom@26.0.0",
       "dependsOn": [
         "cssstyle@4.3.0",
@@ -32637,6 +35106,259 @@
     },
     {
       "ref": "ws@8.18.1"
+    },
+    {
+      "ref": "lint-staged@15.5.0",
+      "dependsOn": [
+        "lint-staged@15.5.0|chalk@5.4.1",
+        "commander@13.1.0",
+        "debug@4.4.0",
+        "execa@8.0.1",
+        "lilconfig@3.1.3",
+        "listr2@8.2.5",
+        "micromatch@4.0.8",
+        "pidtree@0.6.0",
+        "string-argv@0.3.2",
+        "yaml@2.7.1"
+      ]
+    },
+    {
+      "ref": "lint-staged@15.5.0|chalk@5.4.1"
+    },
+    {
+      "ref": "commander@13.1.0"
+    },
+    {
+      "ref": "execa@8.0.1",
+      "dependsOn": [
+        "cross-spawn@7.0.6",
+        "get-stream@8.0.1",
+        "human-signals@5.0.0",
+        "is-stream@3.0.0",
+        "merge-stream@2.0.0",
+        "npm-run-path@5.3.0",
+        "onetime@6.0.0",
+        "signal-exit@4.1.0",
+        "strip-final-newline@3.0.0"
+      ]
+    },
+    {
+      "ref": "get-stream@8.0.1"
+    },
+    {
+      "ref": "human-signals@5.0.0"
+    },
+    {
+      "ref": "is-stream@3.0.0"
+    },
+    {
+      "ref": "merge-stream@2.0.0"
+    },
+    {
+      "ref": "npm-run-path@5.3.0",
+      "dependsOn": [
+        "npm-run-path@5.3.0|path-key@4.0.0"
+      ]
+    },
+    {
+      "ref": "npm-run-path@5.3.0|path-key@4.0.0"
+    },
+    {
+      "ref": "onetime@6.0.0",
+      "dependsOn": [
+        "mimic-fn@4.0.0"
+      ]
+    },
+    {
+      "ref": "mimic-fn@4.0.0"
+    },
+    {
+      "ref": "strip-final-newline@3.0.0"
+    },
+    {
+      "ref": "lilconfig@3.1.3"
+    },
+    {
+      "ref": "listr2@8.2.5",
+      "dependsOn": [
+        "cli-truncate@4.0.0",
+        "colorette@2.0.20",
+        "eventemitter3@5.0.1",
+        "log-update@6.1.0",
+        "rfdc@1.4.1",
+        "listr2@8.2.5|wrap-ansi@9.0.0"
+      ]
+    },
+    {
+      "ref": "listr2@8.2.5|wrap-ansi@9.0.0",
+      "dependsOn": [
+        "listr2@8.2.5|ansi-styles@6.2.1",
+        "listr2@8.2.5|string-width@7.2.0",
+        "strip-ansi@7.1.0"
+      ]
+    },
+    {
+      "ref": "listr2@8.2.5|ansi-styles@6.2.1"
+    },
+    {
+      "ref": "listr2@8.2.5|string-width@7.2.0",
+      "dependsOn": [
+        "listr2@8.2.5|emoji-regex@10.4.0",
+        "get-east-asian-width@1.3.0",
+        "strip-ansi@7.1.0"
+      ]
+    },
+    {
+      "ref": "listr2@8.2.5|emoji-regex@10.4.0"
+    },
+    {
+      "ref": "cli-truncate@4.0.0",
+      "dependsOn": [
+        "slice-ansi@5.0.0",
+        "cli-truncate@4.0.0|string-width@7.2.0"
+      ]
+    },
+    {
+      "ref": "cli-truncate@4.0.0|string-width@7.2.0",
+      "dependsOn": [
+        "cli-truncate@4.0.0|emoji-regex@10.4.0",
+        "get-east-asian-width@1.3.0",
+        "strip-ansi@7.1.0"
+      ]
+    },
+    {
+      "ref": "cli-truncate@4.0.0|emoji-regex@10.4.0"
+    },
+    {
+      "ref": "slice-ansi@5.0.0",
+      "dependsOn": [
+        "slice-ansi@5.0.0|ansi-styles@6.2.1",
+        "slice-ansi@5.0.0|is-fullwidth-code-point@4.0.0"
+      ]
+    },
+    {
+      "ref": "slice-ansi@5.0.0|ansi-styles@6.2.1"
+    },
+    {
+      "ref": "slice-ansi@5.0.0|is-fullwidth-code-point@4.0.0"
+    },
+    {
+      "ref": "get-east-asian-width@1.3.0"
+    },
+    {
+      "ref": "colorette@2.0.20"
+    },
+    {
+      "ref": "eventemitter3@5.0.1"
+    },
+    {
+      "ref": "log-update@6.1.0",
+      "dependsOn": [
+        "ansi-escapes@7.0.0",
+        "cli-cursor@5.0.0",
+        "log-update@6.1.0|slice-ansi@7.1.0",
+        "strip-ansi@7.1.0",
+        "log-update@6.1.0|wrap-ansi@9.0.0"
+      ]
+    },
+    {
+      "ref": "log-update@6.1.0|slice-ansi@7.1.0",
+      "dependsOn": [
+        "log-update@6.1.0|ansi-styles@6.2.1",
+        "log-update@6.1.0|is-fullwidth-code-point@5.0.0"
+      ]
+    },
+    {
+      "ref": "log-update@6.1.0|ansi-styles@6.2.1"
+    },
+    {
+      "ref": "log-update@6.1.0|is-fullwidth-code-point@5.0.0",
+      "dependsOn": [
+        "get-east-asian-width@1.3.0"
+      ]
+    },
+    {
+      "ref": "log-update@6.1.0|wrap-ansi@9.0.0",
+      "dependsOn": [
+        "log-update@6.1.0|ansi-styles@6.2.1",
+        "log-update@6.1.0|string-width@7.2.0",
+        "strip-ansi@7.1.0"
+      ]
+    },
+    {
+      "ref": "log-update@6.1.0|string-width@7.2.0",
+      "dependsOn": [
+        "log-update@6.1.0|emoji-regex@10.4.0",
+        "get-east-asian-width@1.3.0",
+        "strip-ansi@7.1.0"
+      ]
+    },
+    {
+      "ref": "log-update@6.1.0|emoji-regex@10.4.0"
+    },
+    {
+      "ref": "ansi-escapes@7.0.0",
+      "dependsOn": [
+        "environment@1.1.0"
+      ]
+    },
+    {
+      "ref": "environment@1.1.0"
+    },
+    {
+      "ref": "cli-cursor@5.0.0",
+      "dependsOn": [
+        "restore-cursor@5.1.0"
+      ]
+    },
+    {
+      "ref": "restore-cursor@5.1.0",
+      "dependsOn": [
+        "restore-cursor@5.1.0|onetime@7.0.0",
+        "signal-exit@4.1.0"
+      ]
+    },
+    {
+      "ref": "restore-cursor@5.1.0|onetime@7.0.0",
+      "dependsOn": [
+        "mimic-function@5.0.1"
+      ]
+    },
+    {
+      "ref": "mimic-function@5.0.1"
+    },
+    {
+      "ref": "rfdc@1.4.1"
+    },
+    {
+      "ref": "braces@3.0.3",
+      "dependsOn": [
+        "fill-range@7.1.1"
+      ]
+    },
+    {
+      "ref": "fill-range@7.1.1",
+      "dependsOn": [
+        "to-regex-range@5.0.1"
+      ]
+    },
+    {
+      "ref": "to-regex-range@5.0.1",
+      "dependsOn": [
+        "is-number@7.0.0"
+      ]
+    },
+    {
+      "ref": "is-number@7.0.0"
+    },
+    {
+      "ref": "pidtree@0.6.0"
+    },
+    {
+      "ref": "string-argv@0.3.2"
+    },
+    {
+      "ref": "yaml@2.7.1"
     },
     {
       "ref": "scheduler@0.26.0"
@@ -32850,9 +35572,6 @@
     },
     {
       "ref": "@rollup/rollup-linux-x64-musl@4.39.0"
-    },
-    {
-      "ref": "yaml@2.7.1"
     },
     {
       "ref": "@vitest/expect@3.1.1",
