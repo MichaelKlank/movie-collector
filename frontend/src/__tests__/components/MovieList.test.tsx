@@ -4,10 +4,31 @@ import { MovieList } from "../../components/MovieList";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import userEvent from "@testing-library/user-event";
+import { AxiosResponse } from "axios";
 
 vi.mock("axios");
 
-const mockMovies = [
+interface Movie {
+    id: number;
+    title: string;
+    description: string;
+    year: number;
+    poster_path: string;
+    image_path?: string;
+    tmdb_id?: string;
+    created_at?: string;
+    updated_at?: string;
+    rating?: number;
+}
+
+type MockAxiosGet = ((url: string) => Promise<AxiosResponse>) & {
+    mockImplementation: (fn: () => Promise<AxiosResponse>) => void;
+    mockRejectedValue: (error: Error) => void;
+    mockResolvedValue: (value: { data: Movie[] }) => void;
+    mockResolvedValueOnce: (value: { data: Movie[] }) => void;
+};
+
+const mockMovies: Movie[] = [
     {
         id: 1,
         title: "Avatar",
@@ -18,6 +39,7 @@ const mockMovies = [
         tmdb_id: "1",
         created_at: "2024-01-01",
         updated_at: "2024-01-01",
+        rating: 4,
     },
     {
         id: 2,
@@ -29,6 +51,7 @@ const mockMovies = [
         tmdb_id: "2",
         created_at: "2024-01-01",
         updated_at: "2024-01-01",
+        rating: 5,
     },
 ];
 
@@ -51,13 +74,13 @@ describe("MovieList", () => {
     });
 
     it("sollte den Ladezustand anzeigen", () => {
-        (axios.get as any).mockImplementation(() => new Promise(() => {}));
+        (axios.get as MockAxiosGet).mockImplementation(() => new Promise(() => {}));
         render(<MovieList />, { wrapper });
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
     it("sollte den Fehlerzustand anzeigen", async () => {
-        (axios.get as any).mockRejectedValue(new Error("API Error"));
+        (axios.get as MockAxiosGet).mockRejectedValue(new Error("API Error"));
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -68,7 +91,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den leeren Zustand anzeigen", async () => {
-        (axios.get as any).mockResolvedValue({ data: [] });
+        (axios.get as MockAxiosGet).mockResolvedValue({ data: [] });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -79,7 +102,7 @@ describe("MovieList", () => {
     });
 
     it("sollte Filme nach Buchstaben gruppiert anzeigen", async () => {
-        (axios.get as any).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -93,7 +116,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den AddMovieDialog öffnen, wenn auf den FAB-Button geklickt wird", async () => {
-        (axios.get as any).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -104,7 +127,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den MovieDialog öffnen, wenn auf eine MovieCard geklickt wird", async () => {
-        (axios.get as any).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -115,7 +138,7 @@ describe("MovieList", () => {
     });
 
     it("sollte zum entsprechenden Abschnitt scrollen, wenn ein Buchstabe ausgewählt wird", async () => {
-        (axios.get as any).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -134,7 +157,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den MovieDialog schließen, wenn onClose aufgerufen wird", async () => {
-        const mockMovies = [
+        const mockMovies: Movie[] = [
             {
                 id: 1,
                 title: "Avatar",
@@ -145,7 +168,7 @@ describe("MovieList", () => {
             },
         ];
 
-        (axios.get as any).mockResolvedValueOnce({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: mockMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -162,7 +185,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den AddMovieDialog schließen, wenn onClose aufgerufen wird", async () => {
-        (axios.get as any).mockResolvedValueOnce({ data: [] });
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: [] });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -179,13 +202,20 @@ describe("MovieList", () => {
     });
 
     it("sollte die Filme korrekt nach Buchstaben sortieren", async () => {
-        const unsortedMovies = [
+        const unsortedMovies: Movie[] = [
             { ...mockMovies[1] }, // Batman
             { ...mockMovies[0] }, // Avatar
-            { id: 3, title: "Casablanca", description: "Test", year: 1942, rating: 0 },
+            {
+                id: 3,
+                title: "Casablanca",
+                description: "Test",
+                year: 1942,
+                poster_path: "/test3.jpg",
+                rating: 0,
+            },
         ];
 
-        (axios.get as any).mockResolvedValue({ data: unsortedMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({ data: unsortedMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -198,7 +228,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den AlphabetIndex mit den korrekten verfügbaren Buchstaben rendern", async () => {
-        const mockMovies = [
+        const mockMovies: Movie[] = [
             {
                 id: 1,
                 title: "Avatar",
@@ -217,7 +247,7 @@ describe("MovieList", () => {
             },
         ];
 
-        (axios.get as any).mockResolvedValueOnce({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: mockMovies });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -232,7 +262,7 @@ describe("MovieList", () => {
     });
 
     it("sollte den selectedLetter aktualisieren und zum Abschnitt scrollen", async () => {
-        const mockMovies = [
+        const mockMovies: Movie[] = [
             {
                 id: 1,
                 title: "Avatar",
@@ -243,7 +273,7 @@ describe("MovieList", () => {
             },
         ];
 
-        (axios.get as any).mockResolvedValueOnce({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: mockMovies });
 
         // Mock scrollIntoView
         const scrollIntoViewMock = vi.fn();
