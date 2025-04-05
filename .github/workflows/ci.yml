@@ -56,6 +56,9 @@ jobs:
                   path: ./backend
                   retention-days: 5
 
+            - name: Install cyclonedx-gomod
+              run: go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@latest
+
             - name: Generate Backend SBOM
               run: |
                   go mod tidy
