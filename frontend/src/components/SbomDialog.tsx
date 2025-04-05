@@ -16,6 +16,7 @@ import {
     Tab,
     Box,
     Typography,
+    CircularProgress,
 } from "@mui/material";
 import { BACKEND_URL } from "../config";
 
@@ -49,6 +50,7 @@ const SbomDialog: React.FC<SbomDialogProps> = ({ open, onClose }) => {
     const [frontendSbom, setFrontendSbom] = React.useState<SbomData | null>(null);
     const [backendSbom, setBackendSbom] = React.useState<SbomData | null>(null);
     const [loading, setLoading] = React.useState(true);
+    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
     React.useEffect(() => {
         let mounted = true;
@@ -56,13 +58,19 @@ const SbomDialog: React.FC<SbomDialogProps> = ({ open, onClose }) => {
         const loadSbom = async () => {
             if (!open) return;
 
+            setLoading(true);
+            setErrorMessage(null);
             try {
-                setLoading(true);
+                // Bestimme die korrekte URL basierend auf der Umgebung
+                const isTestEnv = process.env.NODE_ENV === "test";
+                const baseUrl = isTestEnv
+                    ? `${window.location.origin}/sbom.json`
+                    : `${window.location.origin}/app/movie/sbom.json`;
 
                 // Frontend SBOM laden
-                const frontendResponse = await fetch(`${window.location.origin}/sbom.json`);
+                const frontendResponse = await fetch(baseUrl);
                 if (!frontendResponse.ok) {
-                    throw new Error("Frontend SBOM konnte nicht geladen werden");
+                    throw new Error(`Frontend SBOM konnte nicht geladen werden: ${frontendResponse.statusText}`);
                 }
                 const frontendData = await frontendResponse.json();
                 if (mounted) {
@@ -78,8 +86,9 @@ const SbomDialog: React.FC<SbomDialogProps> = ({ open, onClose }) => {
                 if (mounted) {
                     setBackendSbom(backendData);
                 }
-            } catch (error) {
-                console.error("Error loading SBOM:", error);
+            } catch (err) {
+                const message = err instanceof Error ? err.message : "Ein unbekannter Fehler ist aufgetreten";
+                setErrorMessage(message);
                 if (mounted) {
                     setFrontendSbom({ components: [] });
                     setBackendSbom({ components: [] });
@@ -106,10 +115,20 @@ const SbomDialog: React.FC<SbomDialogProps> = ({ open, onClose }) => {
         if (loading) {
             return (
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
-                    <Typography data-testid='loading-state'>Lade SBOM...</Typography>
+                    <CircularProgress data-testid='loading-state' />
+                    <Typography sx={{ ml: 2 }}>Lade SBOM...</Typography>
                 </Box>
             );
         }
+
+        if (errorMessage) {
+            return (
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+                    <Typography color='error'>{errorMessage}</Typography>
+                </Box>
+            );
+        }
+
         if (!sbom || sbom.components.length === 0) {
             return (
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>

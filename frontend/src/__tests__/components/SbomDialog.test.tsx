@@ -1,4 +1,4 @@
-import { render, screen, waitFor, fireEvent, act } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import SbomDialog from "../../components/SbomDialog";
 import { BACKEND_URL } from "../../config";
@@ -19,40 +19,41 @@ const mockBackendSbom = {
         {
             name: "go",
             version: "1.21.0",
-            description: "The Go Programming Language",
+            description: "The Go programming language",
             licenses: [{ license: { id: "BSD-3-Clause" } }],
         },
     ],
 };
 
 describe("SbomDialog", () => {
-    beforeEach(() => {
-        // Mock window.location.origin
-        Object.defineProperty(window, "location", {
-            value: {
-                origin: "http://localhost",
-            },
-            writable: true,
-        });
+    const mockOnClose = vi.fn();
 
-        vi.spyOn(global, "fetch").mockImplementation((url) => {
-            if (url === "http://localhost/sbom.json") {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        // Mock fetch für die Testumgebung
+        global.fetch = vi.fn().mockImplementation((url) => {
+            if (url === `${window.location.origin}/sbom.json`) {
                 return Promise.resolve({
                     ok: true,
                     json: () => Promise.resolve(mockFrontendSbom),
-                } as Response);
-            } else if (url === `${BACKEND_URL}/sbom`) {
+                });
+            }
+            if (url === `${BACKEND_URL}/sbom`) {
                 return Promise.resolve({
                     ok: true,
                     json: () => Promise.resolve(mockBackendSbom),
-                } as Response);
+                });
             }
-            return Promise.reject(new Error(`Unbekannte URL: ${url}`));
+            return Promise.reject(new Error("Ungültige URL"));
         });
     });
 
-    afterEach(() => {
-        vi.restoreAllMocks();
+    it("lädt die SBOM korrekt in der Testumgebung", async () => {
+        render(<SbomDialog open={true} onClose={mockOnClose} />);
+
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith(`${window.location.origin}/sbom.json`);
+        });
     });
 
     it("should render loading state initially", async () => {
@@ -105,7 +106,7 @@ describe("SbomDialog", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText("Keine SBOM-Daten verfügbar")).toBeInTheDocument();
+            expect(screen.getByText("Frontend SBOM konnte nicht geladen werden")).toBeInTheDocument();
         });
     });
 
