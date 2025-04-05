@@ -56,13 +56,13 @@ jobs:
 
             - name: Generate Backend SBOM
               run: |
-                  cd backend
                   go mod tidy
                   cyclonedx-gomod mod -json -licenses -assert-licenses -output sbom.json
 
             - name: Commit and push Backend SBOM if changed
               if: github.event_name == 'push'
               run: |
+                  cd ${{ github.workspace }}
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
                   git add backend/sbom.json
@@ -118,13 +118,13 @@ jobs:
 
             - name: Generate Frontend SBOM
               run: |
-                  cd frontend
                   npm install
                   npx @cyclonedx/cyclonedx-npm --output-file public/sbom.json
 
             - name: Commit and push Frontend SBOM if changed
               if: github.event_name == 'push'
               run: |
+                  cd ${{ github.workspace }}
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
                   git add frontend/public/sbom.json
