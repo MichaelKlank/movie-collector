@@ -1,16 +1,17 @@
 # Movie Collector
 
-Ein modernes Web-Anwendung zum Sammeln und Verwalten von Filmen.
+A modern web application for collecting and managing movies.
 
 ## 🚀 Features
 
--   Film-Sammlung verwalten
--   Benutzerfreundliche Oberfläche
--   Responsive Design
--   Sichere Benutzerauthentifizierung
+-   Manage movie collection
+-   User-friendly interface
+-   Responsive design
+-   Secure user authentication
 -   RESTful API
+-   Integration with TMDB API for movie data
 
-## 🛠️ Technologien
+## 🛠️ Technologies
 
 ### Frontend
 
@@ -25,57 +26,72 @@ Ein modernes Web-Anwendung zum Sammeln und Verwalten von Filmen.
 -   RESTful API
 -   PostgreSQL
 -   JWT Authentication
+-   TMDB API Integration
 
-## 📋 Voraussetzungen
+## 📋 Prerequisites
 
 -   Go 1.23
 -   Node.js 20
 -   PostgreSQL
 -   Docker (optional)
+-   TMDB API Key (required for movie data)
+
+## 🔑 TMDB API Key
+
+This application uses the TMDB API to fetch movie data. To use this feature:
+
+1. Create an account at [The Movie Database (TMDB)](https://www.themoviedb.org/)
+2. Request an API key from your account settings
+3. Add the API key to your `.env` file:
+    ```
+    TMDB_API_KEY=your_api_key_here
+    ```
+
+⚠️ **Important**: Never commit your API key to version control. The `.env` file is already in `.gitignore` to prevent accidental commits.
 
 ## 🚀 Installation
 
-1. Repository klonen:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/yourusername/movie-collector.git
 cd movie-collector
 ```
 
-2. Backend einrichten:
+2. Set up the backend:
 
 ```bash
 cd backend
 go mod download
 ```
 
-3. Frontend einrichten:
+3. Set up the frontend:
 
 ```bash
 cd frontend
 npm install
 ```
 
-4. Umgebungsvariablen konfigurieren:
-   Kopieren Sie die `.env.example` Datei zu `.env` und passen Sie die Werte an.
+4. Configure environment variables:
+   Copy the `.env.example` file to `.env` and adjust the values, including your TMDB API key.
 
-## 🏃‍♂️ Entwicklung
+## 🏃‍♂️ Development
 
-### Backend starten
+### Start the backend
 
 ```bash
 cd backend
 go run main.go
 ```
 
-### Frontend starten
+### Start the frontend
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-### Mit Docker starten
+### Start with Docker
 
 ```bash
 docker-compose up
@@ -97,22 +113,22 @@ cd frontend
 npm test
 ```
 
-## 📝 Lizenz
+## 📝 License
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE.txt](LICENSE.txt) für Details.
+This project is licensed under the MIT License. See [LICENSE.txt](LICENSE.txt) for details.
 
-## 🤝 Beitragen
+## 🤝 Contributing
 
-1. Fork das Projekt
-2. Erstellen Sie einen Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Committen Sie Ihre Änderungen (`git commit -m 'Add some AmazingFeature'`)
-4. Pushen Sie den Branch (`git push origin feature/AmazingFeature`)
-5. Öffnen Sie einen Pull Request
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📫 Kontakt
+## 📫 Contact
 
-Bei Fragen oder Anregungen können Sie uns gerne kontaktieren.
+Feel free to contact us with any questions or suggestions.
 
-## 🙏 Danksagung
+## 🙏 Acknowledgments
 
-Vielen Dank an alle Mitwirkenden und die Open-Source-Community für ihre Unterstützung.
+Thank you to all contributors and the open-source community for their support.
