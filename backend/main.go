@@ -36,14 +36,17 @@ func main() {
 
 	// CORS configuration
 	config := cors.Config{
-		AllowOrigins:     []string{"http://localhost", "http://localhost:3000", "http://example.com"},
+		AllowOrigins:     []string{"http://localhost", "http://localhost:3000", "http://localhost:5173", "http://example.com"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Access-Control-Request-Method", "Access-Control-Request-Headers"},
 		ExposeHeaders:    []string{"Access-Control-Allow-Origin", "Access-Control-Allow-Methods"},
 		AllowCredentials: true,
 		MaxAge:           12 * 3600,
 		AllowOriginFunc: func(origin string) bool {
-			return origin == "http://localhost" || origin == "http://localhost:3000" || origin == "http://example.com"
+			return origin == "http://localhost" ||
+				origin == "http://localhost:3000" ||
+				origin == "http://localhost:5173" ||
+				origin == "http://example.com"
 		},
 	}
 	r.Use(cors.New(config))
@@ -113,4 +116,4 @@ func main() {
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
-} 
+}

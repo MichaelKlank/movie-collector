@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
     traefik:
         image: traefik:v2.10
@@ -36,6 +34,11 @@ services:
             - "traefik.http.services.backend.loadbalancer.server.port=8080"
             - "traefik.http.middlewares.backend-strip.stripprefix.prefixes=/api"
             - "traefik.http.routers.backend.middlewares=backend-strip"
+            - "traefik.http.middlewares.backend-cors.headers.accesscontrolallowmethods=GET,POST,PUT,DELETE,OPTIONS"
+            - "traefik.http.middlewares.backend-cors.headers.accesscontrolalloworiginlist=http://localhost:5173,http://localhost:3000,http://localhost"
+            - "traefik.http.middlewares.backend-cors.headers.accesscontrolallowheaders=Origin,Content-Type,Authorization,Access-Control-Request-Method,Access-Control-Request-Headers"
+            - "traefik.http.middlewares.backend-cors.headers.accesscontrolmaxage=43200"
+            - "traefik.http.routers.backend.middlewares=backend-strip,backend-cors"
         # ports:
         #     - "8082:8080"
     frontend:

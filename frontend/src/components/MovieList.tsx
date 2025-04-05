@@ -47,11 +47,28 @@ export const MovieList = () => {
 
     if (!movies || movies.length === 0) {
         return (
-            <Box sx={{ p: 4 }}>
-                <Alert severity='info' role='alert'>
-                    Keine Filme in der Sammlung
-                </Alert>
-            </Box>
+            <Container>
+                <Box sx={{ p: 4 }}>
+                    <Alert severity='info' role='alert'>
+                        Keine Filme in der Sammlung
+                    </Alert>
+                </Box>
+                <AlphabetIndex currentLetter={selectedLetter} availableLetters={[]} onLetterClick={() => {}} />
+                <AddMovieDialog isOpen={isAddDialogOpen} onClose={() => setIsAddDialogOpen(false)} />
+                <Fab
+                    color='primary'
+                    aria-label='Film hinzufügen'
+                    onClick={() => setIsAddDialogOpen(true)}
+                    sx={{
+                        position: "fixed",
+                        bottom: { xs: 90, sm: 32 },
+                        right: 32,
+                        zIndex: 1200,
+                    }}
+                >
+                    <AddIcon />
+                </Fab>
+            </Container>
         );
     }
 
