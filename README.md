@@ -3,6 +3,11 @@
 [![CI](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml/badge.svg)](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml)
 [![Backend Tests](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml/badge.svg?branch=main&label=backend)](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml)
 [![Frontend Tests](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml/badge.svg?branch=main&label=frontend)](https://github.com/MichaelKlank/movie-collector/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Version](https://img.shields.io/badge/Go-1.23-blue.svg)](https://golang.org/dl/)
+[![Node.js Version](https://img.shields.io/badge/Node.js-22-green.svg)](https://nodejs.org/)
+[![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supported-blue.svg)](https://www.postgresql.org/)
 
 A modern web application for collecting and managing movies.
 
