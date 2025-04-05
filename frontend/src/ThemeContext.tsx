@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "./theme";
-import { ThemeContext, useThemeContext } from "./context/themeContext";
+import { ThemeContext } from "./context/themeContext";
 
 interface ThemeProviderProps {
     children: ReactNode;
@@ -24,5 +24,3 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         </ThemeContext.Provider>
     );
 };
-// eslint-disable-next-line import/no-anonymous-default-export
-export { useThemeContext };
