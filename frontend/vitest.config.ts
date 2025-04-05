@@ -4,7 +4,6 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
     plugins: [react()],
-    // @ts-expect-error - Vitest test config is not included in Vite's UserConfig type
     test: {
         globals: true,
         environment: "jsdom",
@@ -15,7 +14,11 @@ export default defineConfig({
             reporter: ["text", "json", "html"],
         },
         deps: {
-            inline: [/@testing-library\/react/],
+            optimizer: {
+                web: {
+                    include: ["@testing-library/react"],
+                },
+            },
         },
         environmentOptions: {
             jsdom: {
