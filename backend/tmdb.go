@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -185,96 +184,5 @@ func (c *TMDBClient) GetImageURL(path string) string {
 	if path == "" {
 		return ""
 	}
-	if path[:4] == "http" {
-		return path
-	}
 	return c.imageURL + path
-}
-
-func searchTMDBMovies(query string) ([]TMDBMovie, error) {
-	apiKey := os.Getenv("TMDB_API_KEY")
-	if apiKey == "" {
-		return nil, fmt.Errorf("TMDB_API_KEY not set")
-	}
-
-	// URL-Encode die Suchanfrage
-	encodedQuery := url.QueryEscape(query)
-	url := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s&language=de-DE&include_adult=false", defaultBaseURL, apiKey, encodedQuery)
-	fmt.Printf("TMDB API URL: %s\n", url)
-	
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %v", err)
-	}
-
-	req.Header.Add("accept", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("error making request: %v", err)
-	}
-	defer resp.Body.Close()
-
-	// Lese den gesamten Response-Body für bessere Fehlerdiagnose
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %v", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("TMDB API Error Response: %s\n", string(body))
-		return nil, fmt.Errorf("TMDB API returned status code %d: %s", resp.StatusCode, string(body))
-	}
-
-	fmt.Printf("TMDB API Response: %s\n", string(body))
-
-	var searchResp TMDBResponse
-	if err := json.Unmarshal(body, &searchResp); err != nil {
-		return nil, fmt.Errorf("error decoding response: %v", err)
-	}
-
-	// Hole für jeden Film die Credits
-	for i := range searchResp.Results {
-		creditsURL := fmt.Sprintf("%s/movie/%d/credits?api_key=%s&language=de-DE", defaultBaseURL, searchResp.Results[i].ID, apiKey)
-		creditsReq, err := http.NewRequest("GET", creditsURL, nil)
-		if err != nil {
-			fmt.Printf("Error creating credits request for movie %d: %v\n", searchResp.Results[i].ID, err)
-			continue
-		}
-
-		creditsReq.Header.Add("accept", "application/json")
-
-		creditsResp, err := client.Do(creditsReq)
-		if err != nil {
-			fmt.Printf("Error getting credits for movie %d: %v\n", searchResp.Results[i].ID, err)
-			continue
-		}
-
-		var credits struct {
-			Cast []struct {
-				Name string `json:"name"`
-			} `json:"cast"`
-			Crew []struct {
-				Name string `json:"name"`
-				Job  string `json:"job"`
-			} `json:"crew"`
-		}
-
-		if err := json.NewDecoder(creditsResp.Body).Decode(&credits); err != nil {
-			fmt.Printf("Error decoding credits for movie %d: %v\n", searchResp.Results[i].ID, err)
-			creditsResp.Body.Close()
-			continue
-		}
-
-		searchResp.Results[i].Credits = credits
-		creditsResp.Body.Close()
-	}
-
-	// Debug-Ausgabe der gefundenen Filme
-	for _, movie := range searchResp.Results {
-		fmt.Printf("Movie: %s, Overview: %s\n", movie.Title, movie.Overview)
-	}
-
-	return searchResp.Results, nil
 } 

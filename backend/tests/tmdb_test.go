@@ -78,7 +78,10 @@ func setupTestServer(t *testing.T) (*httptest.Server, *tmdb.Client) {
 					},
 				},
 			}
-			json.NewEncoder(w).Encode(response)
+			if err := json.NewEncoder(w).Encode(response); err != nil {
+				http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+				return
+			}
 
 		case "/movie/1":
 			movie := tmdb.Movie{
@@ -109,7 +112,10 @@ func setupTestServer(t *testing.T) (*httptest.Server, *tmdb.Client) {
 					},
 				},
 			}
-			json.NewEncoder(w).Encode(movie)
+			if err := json.NewEncoder(w).Encode(movie); err != nil {
+				http.Error(w, "Failed to encode movie", http.StatusInternalServerError)
+				return
+			}
 
 		case "/configuration":
 			w.WriteHeader(http.StatusOK)
@@ -219,7 +225,9 @@ func TestTMDBClient(t *testing.T) {
 	t.Run("SearchMovies with invalid JSON response", func(t *testing.T) {
 		// Erstelle einen neuen Server mit ungültiger JSON-Antwort
 		invalidServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("invalid json"))
+			if _, err := w.Write([]byte("invalid json")); err != nil {
+				t.Errorf("Failed to write response: %v", err)
+			}
 		}))
 		defer invalidServer.Close()
 
@@ -232,7 +240,9 @@ func TestTMDBClient(t *testing.T) {
 	t.Run("GetMovieDetails with invalid JSON response", func(t *testing.T) {
 		// Erstelle einen neuen Server mit ungültiger JSON-Antwort
 		invalidServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("invalid json"))
+			if _, err := w.Write([]byte("invalid json")); err != nil {
+				t.Errorf("Failed to write response: %v", err)
+			}
 		}))
 		defer invalidServer.Close()
 
@@ -349,10 +359,12 @@ func TestTMDBClient(t *testing.T) {
 			if currentCount > 5 {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusTooManyRequests)
-				json.NewEncoder(w).Encode(map[string]interface{}{
+				if err := json.NewEncoder(w).Encode(map[string]interface{}{
 					"status_message": "Too many requests",
 					"status_code":    429,
-				})
+				}); err != nil {
+					t.Errorf("Failed to encode response: %v", err)
+				}
 				return
 			}
 			
@@ -362,7 +374,9 @@ func TestTMDBClient(t *testing.T) {
 				ID:    1,
 				Title: fmt.Sprintf("Test Movie %d", currentCount),
 			}
-			json.NewEncoder(w).Encode(movie)
+			if err := json.NewEncoder(w).Encode(movie); err != nil {
+				t.Errorf("Failed to encode movie: %v", err)
+			}
 		}))
 		defer rateLimitServer.Close()
 		
@@ -409,7 +423,9 @@ func TestTMDBClient(t *testing.T) {
 				ID:    1,
 				Title: "Test Movie",
 			}
-			json.NewEncoder(w).Encode(movie)
+			if err := json.NewEncoder(w).Encode(movie); err != nil {
+				t.Errorf("Failed to encode movie: %v", err)
+			}
 		}))
 		defer methodServer.Close()
 		
@@ -431,6 +447,75 @@ func TestTMDBClient(t *testing.T) {
 		defer resp.Body.Close()
 		assert.Equal(t, http.StatusMethodNotAllowed, resp.StatusCode)
 	})
+
+	// Test für ungültige JSON-Antwort
+	invalidServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"results": "invalid",
+		}); err != nil {
+			t.Errorf("Failed to encode response: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
+
+	// Test für ungültige JSON-Antwort
+	testMovie := tmdb.Movie{
+		ID:          1,
+		Title:       "Test Movie",
+		PosterPath:  "/test.jpg",
+		ReleaseDate: "2024-01-01",
+		Overview:    "Test Overview",
+	}
+	invalidServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(testMovie); err != nil {
+			t.Errorf("Failed to encode movie: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
+
+	// Test für ungültige JSON-Antwort
+	invalidServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(testMovie); err != nil {
+			t.Errorf("Failed to encode movie: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
+
+	// Test für ungültige JSON-Antwort
+	invalidServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"results": "invalid",
+		}); err != nil {
+			t.Errorf("Failed to encode response: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
+
+	// Test für ungültige JSON-Antwort
+	invalidServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(testMovie); err != nil {
+			t.Errorf("Failed to encode movie: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
+
+	// Test für ungültige JSON-Antwort
+	invalidServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"results": "invalid",
+		}); err != nil {
+			t.Errorf("Failed to encode response: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
+
+	// Test für ungültige JSON-Antwort
+	invalidServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewEncoder(w).Encode(testMovie); err != nil {
+			t.Errorf("Failed to encode movie: %v", err)
+		}
+	}))
+	defer invalidServer.Close()
 }
 
 func BenchmarkTMDB(b *testing.B) {
@@ -450,10 +535,12 @@ func BenchmarkTMDB(b *testing.B) {
 		apiKey := r.URL.Query().Get("api_key")
 		if apiKey != "test-api-key" {
 			w.WriteHeader(http.StatusUnauthorized)
-			json.NewEncoder(w).Encode(map[string]string{
+			if err := json.NewEncoder(w).Encode(map[string]string{
 				"status_message": "Invalid API key",
 				"status_code":    "401",
-			})
+			}); err != nil {
+				b.Errorf("Failed to encode error response: %v", err)
+			}
 			return
 		}
 
@@ -571,7 +658,9 @@ func handleSearchRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Failed to encode search response", http.StatusInternalServerError)
+	}
 }
 
 func handleMovieRequest(w http.ResponseWriter, r *http.Request) {
@@ -605,22 +694,28 @@ func handleMovieRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Failed to encode movie response", http.StatusInternalServerError)
+	}
 }
 
 func handleErrorRequest(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	json.NewEncoder(w).Encode(map[string]string{
+	if err := json.NewEncoder(w).Encode(map[string]string{
 		"status_message": "The resource you requested could not be found.",
 		"status_code":    "404",
-	})
+	}); err != nil {
+		http.Error(w, "Failed to encode error response", http.StatusInternalServerError)
+	}
 }
 
 func handleConfigurationRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{
 		"images": map[string]interface{}{
 			"base_url": "https://image.tmdb.org/t/p/",
 		},
-	})
+	}); err != nil {
+		http.Error(w, "Failed to encode configuration", http.StatusInternalServerError)
+	}
 }

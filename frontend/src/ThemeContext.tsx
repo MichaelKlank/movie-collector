@@ -1,16 +1,7 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material";
-import { lightTheme, darkTheme } from "./theme";
-
-interface ThemeContextType {
-    toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType>({
-    toggleTheme: () => {},
-});
-
-export const useThemeContext = () => useContext(ThemeContext);
+import { darkTheme, lightTheme } from "./theme";
+import { ThemeContext } from "./context/themeContext";
 
 interface ThemeProviderProps {
     children: ReactNode;
