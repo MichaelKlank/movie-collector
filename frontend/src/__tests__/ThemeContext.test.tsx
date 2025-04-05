@@ -1,5 +1,6 @@
 import { render, screen, act } from "@testing-library/react";
-import { ThemeProvider, useThemeContext } from "../ThemeContext";
+import { ThemeProvider } from "../ThemeContext";
+import { useThemeContext } from "../context/themeContext";
 import { Button } from "@mui/material";
 
 describe("ThemeProvider", () => {

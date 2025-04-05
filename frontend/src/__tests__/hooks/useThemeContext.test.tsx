@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { useThemeContext } from "../../hooks/useThemeContext";
-import { ThemeContext } from "../../context/themeContext";
+import { useThemeContext, ThemeContext } from "../../context/themeContext";
 
 describe("useThemeContext", () => {
     it("should return theme context values", () => {

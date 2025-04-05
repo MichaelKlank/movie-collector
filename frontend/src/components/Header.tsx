@@ -2,7 +2,7 @@ import { AppBar, IconButton, Toolbar, Typography, useTheme } from "@mui/material
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import { useThemeContext } from "../ThemeContext";
+import { useThemeContext } from "../context/themeContext";
 import { useState } from "react";
 import SbomDialog from "./SbomDialog";
 

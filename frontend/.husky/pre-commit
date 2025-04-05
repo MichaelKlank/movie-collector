@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Führe Linting und Tests aus..."
+
+cd frontend
+npm run lint
+npm test
+
+# Wenn der Exit-Code nicht 0 ist, wird der Commit abgebrochen
+if [ $? -ne 0 ]; then
+  echo "❌ Linting oder Tests fehlgeschlagen. Commit wird abgebrochen."
+  exit 1
+fi
+
+echo "✅ Linting und Tests erfolgreich durchgeführt!"
