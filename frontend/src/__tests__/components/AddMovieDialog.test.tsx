@@ -160,4 +160,11 @@ describe("AddMovieDialog", () => {
         expect(seenButton).toHaveAttribute("aria-pressed", "true");
         expect(watchlistButton).toHaveAttribute("aria-pressed", "true");
     });
+
+    it("schließt den Dialog beim Klick auf das Close-Icon", async () => {
+        renderWithWrapper(<AddMovieDialog isOpen={true} onClose={mockOnClose} />);
+        const closeButton = screen.getByRole("button", { name: /close/i });
+        await userEvent.click(closeButton);
+        expect(mockOnClose).toHaveBeenCalled();
+    });
 });

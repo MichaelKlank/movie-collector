@@ -1,5 +1,6 @@
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MovieIcon from "@mui/icons-material/Movie";
 import SearchIcon from "@mui/icons-material/Search";
@@ -289,9 +290,15 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                     pb: { xs: 1, sm: 2 },
                     fontSize: { xs: "1.2rem", sm: "1.5rem" },
                     px: { xs: 2, sm: 3 },
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                 }}
             >
                 Film hinzufügen
+                <IconButton aria-label='close' onClick={onClose} sx={{ color: "text.secondary" }}>
+                    <CloseIcon />
+                </IconButton>
             </DialogTitle>
             <DialogContent
                 sx={{

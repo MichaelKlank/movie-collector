@@ -17,8 +17,10 @@ import {
     Box,
     Typography,
     CircularProgress,
+    IconButton,
 } from "@mui/material";
 import { BACKEND_URL } from "../config";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface SbomDialogProps {
     open: boolean;
@@ -179,7 +181,12 @@ const SbomDialog: React.FC<SbomDialogProps> = ({ open, onClose }) => {
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth='lg' fullWidth>
-            <DialogTitle>Software Bill of Materials (SBOM)</DialogTitle>
+            <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                Software Bill of Materials (SBOM)
+                <IconButton aria-label='close' onClick={onClose} sx={{ color: "text.secondary" }}>
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
             <DialogContent>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs value={tabValue} onChange={handleTabChange}>

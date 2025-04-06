@@ -130,4 +130,11 @@ describe("SbomDialog", () => {
             expect(screen.getByText("BSD-3-Clause")).toBeInTheDocument();
         });
     });
+
+    it("schließt den Dialog beim Klick auf das Close-Icon", async () => {
+        render(<SbomDialog open={true} onClose={mockOnClose} />);
+        const closeButton = screen.getByRole("button", { name: /close/i });
+        fireEvent.click(closeButton);
+        expect(mockOnClose).toHaveBeenCalled();
+    });
 });
