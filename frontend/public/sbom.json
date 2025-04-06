@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:1c689406-a1a3-4d9c-b353-0c6526595403",
+  "serialNumber": "urn:uuid:5579656a-3303-4969-9e6b-0205c27e9b5b",
   "metadata": {
-    "timestamp": "2025-04-06T13:41:42.746Z",
+    "timestamp": "2025-04-06T14:17:14.810Z",
     "tools": {
       "components": [
         {
@@ -24217,10 +24217,10 @@
     {
       "type": "library",
       "name": "husky",
-      "version": "9.1.7",
-      "bom-ref": "husky@9.1.7",
-      "author": "typicode",
-      "description": "Modern native Git hooks",
+      "version": "8.0.3",
+      "bom-ref": "husky@8.0.3",
+      "author": "Typicode",
+      "description": "Modern native Git hooks made easy",
       "licenses": [
         {
           "license": {
@@ -24229,7 +24229,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/husky@9.1.7",
+      "purl": "pkg:npm/husky@8.0.3",
       "externalReferences": [
         {
           "url": "git+https://github.com/typicode/husky.git",
@@ -24237,7 +24237,7 @@
           "comment": "as detected from PackageJson property \"repository.url\""
         },
         {
-          "url": "https://github.com/typicode/husky#readme",
+          "url": "https://typicode.github.io/husky",
           "type": "website",
           "comment": "as detected from PackageJson property \"homepage\""
         },
@@ -24247,12 +24247,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/husky/-/husky-9.1.7.tgz",
+          "url": "https://registry.npmjs.org/husky/-/husky-8.0.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e60b39cad68d8c1ae1e4ec37cebbdd51463ed15c48b9654be22f62aede9fae257e06a7427e6575d4241358c8816161db5e1728f89d641df4ce52478f8420ef30"
+              "content": "f9d412caa3e1e31d6194ed6cc1706235bd87cd30cdd48d8818b431d46ac1ba2a8525fa0cae7656c1599ab6f4a23be233f1f0549dffa57a4c0da387362e55c8b6"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -32063,7 +32063,7 @@
         "eslint-plugin-react@7.37.5",
         "eslint@9.24.0",
         "globals@16.0.0",
-        "husky@9.1.7",
+        "husky@8.0.3",
         "jsdom@26.0.0",
         "lint-staged@15.5.0",
         "react-dom@19.1.0",
@@ -34907,7 +34907,7 @@
       "ref": "globals@16.0.0"
     },
     {
-      "ref": "husky@9.1.7"
+      "ref": "husky@8.0.3"
     },
     {
       "ref": "jsdom@26.0.0",
