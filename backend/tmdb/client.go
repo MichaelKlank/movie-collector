@@ -25,6 +25,12 @@ type Cache struct {
 	items map[string]struct{}
 }
 
+func NewCache() *Cache {
+	return &Cache{
+		items: make(map[string]struct{}),
+	}
+}
+
 func (c *Cache) Lock() {
 	c.mutex.Lock()
 }
@@ -79,7 +85,7 @@ func NewClient() *Client {
 		imageURL:   "https://image.tmdb.org/t/p/w500",
 		baseURL:    defaultBaseURL,
 		httpClient: &http.Client{},
-		cache:      &Cache{items: make(map[string]struct{})},
+		cache:      NewCache(),
 		CacheTTL:   24 * time.Hour,
 	}
 }
@@ -90,7 +96,7 @@ func NewClientWithBaseURL(baseURL string) *Client {
 		imageURL:   "https://image.tmdb.org/t/p/w500",
 		baseURL:    baseURL,
 		httpClient: &http.Client{},
-		cache:      &Cache{items: make(map[string]struct{})},
+		cache:      NewCache(),
 		CacheTTL:   24 * time.Hour,
 	}
 }
@@ -150,4 +156,8 @@ func (c *Client) TestConnection() error {
 	}
 
 	return nil
+}
+
+func (c *Client) GetBaseURL() string {
+	return c.baseURL
 }

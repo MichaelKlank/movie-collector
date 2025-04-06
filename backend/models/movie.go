@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -98,13 +99,44 @@ func UpdateMovie(db *gorm.DB) gin.HandlerFunc {
 		var movie Movie
 		result := db.First(&movie, c.Param("id"))
 		if result.Error != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+			if result.Error == gorm.ErrRecordNotFound || strings.Contains(result.Error.Error(), "no such column") {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+				return
+			}
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 			return
 		}
 
-		if err := c.ShouldBindJSON(&movie); err != nil {
+		var updatedMovie Movie
+		if err := c.ShouldBindJSON(&updatedMovie); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
+		}
+
+		// Validiere die erforderlichen Felder
+		if updatedMovie.Title == "" || updatedMovie.Year == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Title and year are required"})
+			return
+		}
+
+		// Aktualisiere nur die angegebenen Felder
+		movie.Title = updatedMovie.Title
+		movie.Year = updatedMovie.Year
+		movie.Description = updatedMovie.Description
+		if updatedMovie.PosterPath != "" {
+			movie.PosterPath = updatedMovie.PosterPath
+		}
+		if updatedMovie.TMDBId != "" {
+			movie.TMDBId = updatedMovie.TMDBId
+		}
+		if updatedMovie.Overview != "" {
+			movie.Overview = updatedMovie.Overview
+		}
+		if updatedMovie.ReleaseDate != "" {
+			movie.ReleaseDate = updatedMovie.ReleaseDate
+		}
+		if updatedMovie.Rating != 0 {
+			movie.Rating = updatedMovie.Rating
 		}
 
 		result = db.Save(&movie)
@@ -122,7 +154,11 @@ func DeleteMovie(db *gorm.DB) gin.HandlerFunc {
 		var movie Movie
 		result := db.First(&movie, c.Param("id"))
 		if result.Error != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+			if result.Error == gorm.ErrRecordNotFound || strings.Contains(result.Error.Error(), "no such column") {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+				return
+			}
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 			return
 		}
 
@@ -141,7 +177,11 @@ func UploadImage(db *gorm.DB) gin.HandlerFunc {
 		var movie Movie
 		result := db.First(&movie, c.Param("id"))
 		if result.Error != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+			if result.Error == gorm.ErrRecordNotFound {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+				return
+			}
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 			return
 		}
 
@@ -151,14 +191,46 @@ func UploadImage(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Create images directory if it doesn't exist
-		if err := os.MkdirAll("images", 0755); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create images directory"})
+		// Validiere Dateityp
+		ext := filepath.Ext(file.Filename)
+		validExts := map[string]bool{
+			".jpg":  true,
+			".jpeg": true,
+			".png":  true,
+			".gif":  true,
+		}
+		if !validExts[strings.ToLower(ext)] {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file type. Only jpg, jpeg, png, and gif are allowed"})
+			return
+		}
+
+		// Validiere Dateigröße
+		if file.Size == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Empty file"})
+			return
+		}
+
+		// Maximale Dateigröße: 5MB
+		const maxSize = 5 * 1024 * 1024
+		if file.Size > maxSize {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "File size exceeds maximum limit of 5MB"})
+			return
+		}
+
+		uploadPath := os.Getenv("UPLOAD_PATH")
+		if uploadPath == "" {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Upload path not configured"})
+			return
+		}
+
+		// Create upload directory if it doesn't exist
+		if err := os.MkdirAll(uploadPath, 0755); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create upload directory"})
 			return
 		}
 
 		// Generate unique filename
-		filename := filepath.Join("images", filepath.Base(file.Filename))
+		filename := filepath.Join(uploadPath, filepath.Base(file.Filename))
 
 		// Save the file
 		if err := c.SaveUploadedFile(file, filename); err != nil {
@@ -169,6 +241,8 @@ func UploadImage(db *gorm.DB) gin.HandlerFunc {
 		// Update movie with image path
 		movie.ImagePath = filename
 		if err := db.Save(&movie).Error; err != nil {
+			// Lösche die hochgeladene Datei bei einem Datenbankfehler
+			os.Remove(filename)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update movie with image path"})
 			return
 		}
