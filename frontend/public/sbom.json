@@ -30499,11 +30499,11 @@
     },
     {
       "type": "library",
-      "name": "darwin-arm64",
+      "name": "linux-x64",
       "group": "@esbuild",
       "version": "0.25.2",
-      "bom-ref": "@esbuild/darwin-arm64@0.25.2",
-      "description": "The macOS ARM 64-bit binary for esbuild, a JavaScript bundler.",
+      "bom-ref": "@esbuild/linux-x64@0.25.2",
+      "description": "The Linux 64-bit binary for esbuild, a JavaScript bundler.",
       "scope": "optional",
       "licenses": [
         {
@@ -30513,7 +30513,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.25.2",
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.25.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/evanw/esbuild.git",
@@ -30531,12 +30531,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.25.2.tgz",
+          "url": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "32933a2d45535c0ccebcde0a6e3cd4feae6c9b3af2ba836396b880231fb4e91a5e7300a42fd2697a7373a4a77660cccb24539d3ea069bae6fa79544fe4882248"
+              "content": "4089c711196aa534d9e05441d1f44e4165dc6110fae2502889e81ecc3ba72e96a564c8dc51c95ddd8cd99952761ff0a9d3025167c5ed8ed8f47041e161cfee52"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30545,62 +30545,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:path",
-          "value": "node_modules/@esbuild/darwin-arm64"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "fsevents",
-      "version": "2.3.3",
-      "bom-ref": "fsevents@2.3.3",
-      "description": "Native Access to MacOS FSEvents",
-      "scope": "optional",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/fsevents@2.3.3",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/fsevents/fsevents.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/fsevents/fsevents",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/fsevents/fsevents/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "e71a037d7f9f2fb7da0139da82658fa5b16dc21fd1efb5a630caaa1c64bae42defbc1d181eb805f81d58999df8e35b4c8f99fade4d36d765cda09c339617df43"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/fsevents"
+          "value": "node_modules/@esbuild/linux-x64"
         },
         {
           "name": "cdx:npm:package:development",
@@ -30775,10 +30720,10 @@
     },
     {
       "type": "library",
-      "name": "rollup-darwin-arm64",
+      "name": "rollup-linux-x64-gnu",
       "group": "@rollup",
       "version": "4.39.0",
-      "bom-ref": "@rollup/rollup-darwin-arm64@4.39.0",
+      "bom-ref": "@rollup/rollup-linux-x64-gnu@4.39.0",
       "author": "Lukas Taegert-Atkinson",
       "description": "Native bindings for Rollup",
       "scope": "optional",
@@ -30790,7 +30735,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.39.0",
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.39.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -30808,12 +30753,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.39.0.tgz",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.39.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "95742786914338a0d7886c6c53dfe5f1410618ceb97289ab42e67e943706531fbd610f5d2a9177ad21067a9c9e4790076746f94608a58a0b0185665f492421f1"
+              "content": "b7d8ea630dbb47a2f1d1729f1057b9bd4784279a45dd218833a8137ce35231bec3b86eb3eb07e3db28dca19c47835dbdbde4ea53bfb03a163a197f3099ff7474"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30822,7 +30767,64 @@
       "properties": [
         {
           "name": "cdx:npm:package:path",
-          "value": "node_modules/@rollup/rollup-darwin-arm64"
+          "value": "node_modules/@rollup/rollup-linux-x64-gnu"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rollup-linux-x64-musl",
+      "group": "@rollup",
+      "version": "4.39.0",
+      "bom-ref": "@rollup/rollup-linux-x64-musl@4.39.0",
+      "author": "Lukas Taegert-Atkinson",
+      "description": "Native bindings for Rollup",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.39.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/rollup/rollup.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://rollupjs.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/rollup/rollup/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.39.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "4e115d92b1433f9e4022c2190ca481584b7f25c5a50b3c9d6d91e29d9d05febd61f37a9b19e7a70adfc6ff01b63b4adeb843430f6b5ac1f023dacf152bb06e82"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@rollup/rollup-linux-x64-musl"
         },
         {
           "name": "cdx:npm:package:development",
@@ -33085,7 +33087,6 @@
       "dependsOn": [
         "@types/node@22.14.0",
         "esbuild@0.25.2",
-        "fsevents@2.3.3",
         "postcss@8.5.3",
         "rollup@4.39.0",
         "yaml@2.7.1"
@@ -35541,14 +35542,11 @@
     {
       "ref": "esbuild@0.25.2",
       "dependsOn": [
-        "@esbuild/darwin-arm64@0.25.2"
+        "@esbuild/linux-x64@0.25.2"
       ]
     },
     {
-      "ref": "@esbuild/darwin-arm64@0.25.2"
-    },
-    {
-      "ref": "fsevents@2.3.3"
+      "ref": "@esbuild/linux-x64@0.25.2"
     },
     {
       "ref": "postcss@8.5.3",
@@ -35564,13 +35562,16 @@
     {
       "ref": "rollup@4.39.0",
       "dependsOn": [
-        "@rollup/rollup-darwin-arm64@4.39.0",
-        "@types/estree@1.0.7",
-        "fsevents@2.3.3"
+        "@rollup/rollup-linux-x64-gnu@4.39.0",
+        "@rollup/rollup-linux-x64-musl@4.39.0",
+        "@types/estree@1.0.7"
       ]
     },
     {
-      "ref": "@rollup/rollup-darwin-arm64@4.39.0"
+      "ref": "@rollup/rollup-linux-x64-gnu@4.39.0"
+    },
+    {
+      "ref": "@rollup/rollup-linux-x64-musl@4.39.0"
     },
     {
       "ref": "@vitest/expect@3.1.1",
