@@ -3,6 +3,9 @@ echo Aktualisiere Frontend SBOM...
 cd frontend
 call npm install
 call npx @cyclonedx/cyclonedx-npm --output-file public/sbom.json
+rem Ersetze die sich ändernden Werte mit festen Werten
+call jq ".serialNumber = \"urn:uuid:00000000-0000-0000-0000-000000000000\" | .metadata.timestamp = \"2024-01-01T00:00:00.000Z\"" public/sbom.json > public/sbom.json.tmp
+move /Y public/sbom.json.tmp public/sbom.json
 cd ..
 
 echo Aktualisiere Backend SBOM...
