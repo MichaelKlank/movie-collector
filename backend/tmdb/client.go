@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 	"os"
 	"sync"
 	"time"
@@ -23,7 +22,7 @@ type Client struct {
 
 type Cache struct {
 	mutex sync.RWMutex
-	items map[string]CacheItem
+	items map[string]struct{}
 }
 
 func (c *Cache) Lock() {
@@ -42,26 +41,32 @@ func (c *Cache) RUnlock() {
 	c.mutex.RUnlock()
 }
 
-type CacheItem struct {
-	data      interface{}
-	timestamp time.Time
+func (c *Cache) Set(key string) {
+	c.Lock()
+	defer c.Unlock()
+	c.items[key] = struct{}{}
+}
+
+func (c *Cache) Get(key string) bool {
+	c.RLock()
+	defer c.RUnlock()
+	_, exists := c.items[key]
+	return exists
+}
+
+func (c *Cache) Delete(key string) {
+	c.Lock()
+	defer c.Unlock()
+	delete(c.items, key)
 }
 
 type Movie struct {
-	ID          int    `json:"id"`
-	Title       string `json:"title"`
-	PosterPath  string `json:"poster_path"`
-	ReleaseDate string `json:"release_date"`
-	Overview    string `json:"overview"`
-	Credits     struct {
-		Cast []struct {
-			Name string `json:"name"`
-		} `json:"cast"`
-		Crew []struct {
-			Name string `json:"name"`
-			Job  string `json:"job"`
-		} `json:"crew"`
-	} `json:"credits"`
+	ID          int     `json:"id"`
+	Title       string  `json:"title"`
+	Overview    string  `json:"overview"`
+	ReleaseDate string  `json:"release_date"`
+	PosterPath  string  `json:"poster_path"`
+	VoteAverage float32 `json:"vote_average"`
 }
 
 type Response struct {
@@ -74,7 +79,7 @@ func NewClient() *Client {
 		imageURL:   "https://image.tmdb.org/t/p/w500",
 		baseURL:    defaultBaseURL,
 		httpClient: &http.Client{},
-		cache:      &Cache{items: make(map[string]CacheItem)},
+		cache:      &Cache{items: make(map[string]struct{})},
 		CacheTTL:   24 * time.Hour,
 	}
 }
@@ -85,115 +90,41 @@ func NewClientWithBaseURL(baseURL string) *Client {
 		imageURL:   "https://image.tmdb.org/t/p/w500",
 		baseURL:    baseURL,
 		httpClient: &http.Client{},
-		cache:      &Cache{items: make(map[string]CacheItem)},
+		cache:      &Cache{items: make(map[string]struct{})},
 		CacheTTL:   24 * time.Hour,
 	}
 }
 
 func (c *Client) SearchMovies(query string) ([]Movie, error) {
-	if query == "" {
-		return []Movie{}, nil
-	}
-
-	if len(query) > 500 {
-		return nil, fmt.Errorf("suchanfrage zu lang")
-	}
-
-	searchURL := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s&language=de-DE&include_adult=false", c.baseURL, c.apiKey, url.QueryEscape(query))
-	req, err := http.NewRequest("GET", searchURL, nil)
+	url := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s", c.baseURL, c.apiKey, query)
+	resp, err := c.httpClient.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("fehler beim Erstellen der Anfrage: %v", err)
-	}
-
-	req.Header.Add("accept", "application/json")
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("fehler bei der TMDB-Suche: %v", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("TMDB-API-Fehler: %d", resp.StatusCode)
+	var result Response
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, err
 	}
 
-	var tmdbResp Response
-	if err := json.NewDecoder(resp.Body).Decode(&tmdbResp); err != nil {
-		return nil, fmt.Errorf("fehler beim Decodieren der TMDB-Antwort: %v", err)
-	}
-
-	return tmdbResp.Results, nil
+	return result.Results, nil
 }
 
 func (c *Client) GetMovieDetails(id int) (*Movie, error) {
-	if id <= 0 {
-		return nil, fmt.Errorf("ungültige Film-ID")
-	}
-
-	cacheKey := fmt.Sprintf("movie:%d", id)
-
-	// Prüfe Cache
-	c.cache.RLock()
-	if item, exists := c.cache.items[cacheKey]; exists {
-		if time.Since(item.timestamp) < c.CacheTTL {
-			c.cache.RUnlock()
-			return item.data.(*Movie), nil
-		}
-	}
-	c.cache.RUnlock()
-
-	// Hole Daten von API
 	url := fmt.Sprintf("%s/movie/%d?api_key=%s", c.baseURL, id, c.apiKey)
 	resp, err := c.httpClient.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("fehler bei der TMDB-Anfrage: %v", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode == http.StatusNotFound {
-		return nil, fmt.Errorf("film nicht gefunden")
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("TMDB-API-Fehler: %d", resp.StatusCode)
-	}
 
 	var movie Movie
 	if err := json.NewDecoder(resp.Body).Decode(&movie); err != nil {
-		return nil, fmt.Errorf("fehler beim Decodieren der TMDB-Antwort: %v", err)
+		return nil, err
 	}
-
-	// Speichere im Cache
-	c.cache.Lock()
-	c.cache.items[cacheKey] = CacheItem{
-		data:      &movie,
-		timestamp: time.Now(),
-	}
-	c.cache.Unlock()
 
 	return &movie, nil
-}
-
-func (c *Client) TestConnection() error {
-	testURL := fmt.Sprintf("%s/configuration?api_key=%s", c.baseURL, c.apiKey)
-	req, err := http.NewRequest("GET", testURL, nil)
-	if err != nil {
-		return fmt.Errorf("fehler beim Erstellen der Anfrage: %v", err)
-	}
-
-	req.Header.Add("accept", "application/json")
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return fmt.Errorf("fehler bei der TMDB-Verbindung: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("TMDB-API-Fehler: %d", resp.StatusCode)
-	}
-
-	return nil
 }
 
 func (c *Client) GetImageURL(path string) string {
@@ -206,12 +137,17 @@ func (c *Client) GetImageURL(path string) string {
 	return c.imageURL + path
 }
 
-// BaseURL gibt die Basis-URL des Clients zurück
-func (c *Client) BaseURL() string {
-	return c.baseURL
-}
+func (c *Client) TestConnection() error {
+	url := fmt.Sprintf("%s/configuration?api_key=%s", c.baseURL, c.apiKey)
+	resp, err := c.httpClient.Get(url)
+	if err != nil {
+		return fmt.Errorf("fehler bei der TMDB-Verbindung: %v", err)
+	}
+	defer resp.Body.Close()
 
-// HTTPClient gibt den HTTP-Client des Clients zurück
-func (c *Client) HTTPClient() *http.Client {
-	return c.httpClient
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("TMDB-API-Fehler: %d", resp.StatusCode)
+	}
+
+	return nil
 }

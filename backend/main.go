@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/MichaelKlank/movie-collector/backend/db"
 	"github.com/MichaelKlank/movie-collector/backend/handlers"
@@ -16,10 +18,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func waitForDB() error {
+	maxRetries := 10
+	for i := 0; i < maxRetries; i++ {
+		err := db.InitDB()
+		if err == nil {
+			return nil
+		}
+		log.Printf("Warte auf Datenbank... (Versuch %d/%d): %v", i+1, maxRetries, err)
+		time.Sleep(5 * time.Second)
+	}
+	return fmt.Errorf("Datenbank nicht erreichbar nach %d Versuchen", maxRetries)
+}
+
 func main() {
-	// Initialize database
-	if err := db.InitDB(); err != nil {
-		log.Fatal(err)
+	// Warte auf Datenbank
+	if err := waitForDB(); err != nil {
+		log.Fatal("Fehler beim Verbinden mit der Datenbank:", err)
 	}
 
 	// Migrate the schema
@@ -99,8 +114,8 @@ func main() {
 			return
 		}
 
-		var id int
-		if _, err := fmt.Sscanf(idStr, "%d", &id); err != nil {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid movie ID"})
 			return
 		}
@@ -136,7 +151,8 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	log.Printf("Server läuft auf Port %s", port)
 	if err := r.Run(":" + port); err != nil {
-		log.Fatal("Failed to start server:", err)
+		log.Fatal("Fehler beim Starten des Servers:", err)
 	}
 }
