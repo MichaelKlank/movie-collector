@@ -10,8 +10,7 @@
         "preview": "vite preview",
         "test": "vitest run",
         "test:watch": "vitest",
-        "test:coverage": "vitest run --coverage",
-        "prepare": "husky install"
+        "test:coverage": "vitest run --coverage"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -53,10 +52,5 @@
             "npm run lint",
             "npm test"
         ]
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
     }
 }
