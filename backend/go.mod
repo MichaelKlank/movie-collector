@@ -1,15 +1,17 @@
-module github.com/klank-cnv/go-test/backend
+module github.com/MichaelKlank/movie-collector/backend
 
 go 1.23.0
 
+toolchain go1.24.2
+
 require (
-	github.com/gin-contrib/cors v1.7.3
-	github.com/gin-gonic/gin v1.10.0
+	github.com/gin-contrib/cors v1.5.0
+	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/stretchr/testify v1.9.0
-	gorm.io/driver/postgres v1.5.7
+	gorm.io/driver/postgres v1.5.4
 	gorm.io/driver/sqlite v1.5.7
-	gorm.io/gorm v1.25.7
+	gorm.io/gorm v1.25.7-0.20240204074919-46816ad31dde
 )
 
 require (

@@ -5,10 +5,13 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/MichaelKlank/movie-collector/backend/handlers"
+	"github.com/MichaelKlank/movie-collector/backend/models"
+	"github.com/MichaelKlank/movie-collector/backend/repositories"
+	"github.com/MichaelKlank/movie-collector/backend/services"
+	"github.com/MichaelKlank/movie-collector/backend/tmdb"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/klank-cnv/go-test/backend/models"
-	"github.com/klank-cnv/go-test/backend/tmdb"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -31,6 +34,12 @@ func SetupTestDB(t *testing.T) *gorm.DB {
 func SetupRouter(db *gorm.DB) *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
+
+	// Initialize dependencies
+	movieRepo := repositories.NewMovieRepository(db)
+	movieService := services.NewMovieService(movieRepo)
+	movieHandler := handlers.NewMovieHandler(movieService)
+	imageHandler := handlers.NewImageHandler(movieService)
 
 	// CORS configuration
 	config := cors.Config{
@@ -62,19 +71,19 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		}
 		c.Next()
 	})
-	
+
 	// Movie routes
-	r.GET("/movies", models.GetMovies(db))
-	r.GET("/movies/:id", models.GetMovie(db))
-	r.POST("/movies", models.CreateMovie(db))
-	r.PUT("/movies/:id", models.UpdateMovie(db))
-	r.DELETE("/movies/:id", models.DeleteMovie(db))
+	r.GET("/movies", movieHandler.GetMovies)
+	r.GET("/movies/:id", movieHandler.GetMovie)
+	r.POST("/movies", movieHandler.CreateMovie)
+	r.PUT("/movies/:id", movieHandler.UpdateMovie)
+	r.DELETE("/movies/:id", movieHandler.DeleteMovie)
 
 	// Image routes
-	r.POST("/movies/:id/image", models.UploadImage(db))
-	r.GET("/movies/:id/image", models.GetImage(db))
-	r.DELETE("/movies/:id/image", models.DeleteImage(db))
-	
+	r.POST("/movies/:id/image", imageHandler.UploadImage)
+	r.GET("/movies/:id/image", imageHandler.GetImage)
+	r.DELETE("/movies/:id/image", imageHandler.DeleteImage)
+
 	// TMDB routes
 	r.GET("/tmdb/test", func(c *gin.Context) {
 		client := tmdb.NewClient()
@@ -124,6 +133,6 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 		c.JSON(http.StatusOK, movie)
 	})
-	
+
 	return r
-} 
+}

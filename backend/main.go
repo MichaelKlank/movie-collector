@@ -6,30 +6,32 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/MichaelKlank/movie-collector/backend/db"
+	"github.com/MichaelKlank/movie-collector/backend/handlers"
+	"github.com/MichaelKlank/movie-collector/backend/models"
+	"github.com/MichaelKlank/movie-collector/backend/repositories"
+	"github.com/MichaelKlank/movie-collector/backend/services"
+	"github.com/MichaelKlank/movie-collector/backend/tmdb"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/klank-cnv/go-test/backend/models"
-	"github.com/klank-cnv/go-test/backend/tmdb"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func main() {
-	dbURL := os.Getenv("DATABASE_URL")
-	if dbURL == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
-	}
-
-	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
-	if err != nil {
+	// Initialize database
+	if err := db.InitDB(); err != nil {
 		log.Fatal(err)
 	}
 
 	// Migrate the schema
-	err = db.AutoMigrate(&models.Movie{})
-	if err != nil {
+	if err := db.GetDB().AutoMigrate(&models.Movie{}); err != nil {
 		log.Fatal("Failed to migrate database:", err)
 	}
+
+	// Initialize dependencies
+	movieRepo := repositories.NewMovieRepository(db.GetDB())
+	movieService := services.NewMovieService(movieRepo)
+	movieHandler := handlers.NewMovieHandler(movieService)
+	imageHandler := handlers.NewImageHandler(movieService)
 
 	// Initialize router
 	r := gin.Default()
@@ -52,11 +54,16 @@ func main() {
 	r.Use(cors.New(config))
 
 	// Movie routes
-	r.POST("/movies", models.CreateMovie(db))
-	r.GET("/movies", models.GetMovies(db))
-	r.GET("/movies/:id", models.GetMovie(db))
-	r.PUT("/movies/:id", models.UpdateMovie(db))
-	r.DELETE("/movies/:id", models.DeleteMovie(db))
+	r.POST("/movies", movieHandler.CreateMovie)
+	r.GET("/movies", movieHandler.GetMovies)
+	r.GET("/movies/:id", movieHandler.GetMovie)
+	r.PUT("/movies/:id", movieHandler.UpdateMovie)
+	r.DELETE("/movies/:id", movieHandler.DeleteMovie)
+
+	// Image routes
+	r.POST("/movies/:id/image", imageHandler.UploadImage)
+	r.GET("/movies/:id/image", imageHandler.GetImage)
+	r.DELETE("/movies/:id/image", imageHandler.DeleteImage)
 
 	// TMDB routes
 	r.GET("/tmdb/test", func(c *gin.Context) {

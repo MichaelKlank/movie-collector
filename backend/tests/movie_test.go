@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/klank-cnv/go-test/backend/models"
-	"github.com/klank-cnv/go-test/backend/testutil"
+	"github.com/MichaelKlank/movie-collector/backend/models"
+	"github.com/MichaelKlank/movie-collector/backend/testutil"
 	"github.com/stretchr/testify/assert"
 )
 

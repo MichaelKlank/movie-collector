@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/MichaelKlank/movie-collector/backend/auth"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/klank-cnv/go-test/backend/auth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -71,7 +71,7 @@ func TestJWTConfig(t *testing.T) {
 		claims, ok := parsedToken.Claims.(jwt.MapClaims)
 		require.True(t, ok)
 		assert.Equal(t, float64(123), claims["user_id"])
-		
+
 		// Verify expiration
 		exp, ok := claims["exp"].(float64)
 		require.True(t, ok)
@@ -98,7 +98,7 @@ func TestJWTConfig(t *testing.T) {
 		require.True(t, ok)
 		assert.Equal(t, float64(123), claims["user_id"])
 		assert.Equal(t, "refresh", claims["type"])
-		
+
 		// Verify expiration
 		exp, ok := claims["exp"].(float64)
 		require.True(t, ok)
@@ -121,4 +121,4 @@ func TestJWTConfig(t *testing.T) {
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "unexpected signing method")
 	})
-} 
+}

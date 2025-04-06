@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/klank-cnv/go-test/backend/tmdb"
+	"github.com/MichaelKlank/movie-collector/backend/tmdb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -269,18 +269,18 @@ func TestTMDBClient(t *testing.T) {
 		// Erstelle einen Client mit sehr kurzer Cache-Ablaufzeit
 		shortCacheClient := tmdb.NewClientWithBaseURL(server.URL)
 		shortCacheClient.CacheTTL = 1 * time.Second
-		
+
 		// Erste Anfrage
 		movie1, err := shortCacheClient.GetMovieDetails(1)
 		require.NoError(t, err)
-		
+
 		// Warte, bis der Cache abläuft
 		time.Sleep(2 * time.Second)
-		
+
 		// Zweite Anfrage sollte den Server erneut kontaktieren
 		movie2, err := shortCacheClient.GetMovieDetails(1)
 		require.NoError(t, err)
-		
+
 		// Die Objekte sollten unterschiedlich sein
 		assert.NotSame(t, movie1, movie2)
 	})
@@ -294,11 +294,11 @@ func TestTMDBClient(t *testing.T) {
 		// Erstelle einen Client ohne API-Key
 		os.Unsetenv("TMDB_API_KEY")
 		noKeyClient := tmdb.NewClientWithBaseURL(server.URL)
-		
+
 		err := noKeyClient.TestConnection()
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "TMDB-API-Fehler: 401")
-		
+
 		// Stelle den API-Key wieder her
 		os.Setenv("TMDB_API_KEY", "test-api-key")
 	})
@@ -306,17 +306,17 @@ func TestTMDBClient(t *testing.T) {
 	t.Run("Network error", func(t *testing.T) {
 		// Erstelle einen Client mit einer nicht erreichbaren URL
 		errorClient := tmdb.NewClientWithBaseURL("http://nicht-erreichbar.local")
-		
+
 		// Test SearchMovies
 		_, err := errorClient.SearchMovies("test")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "fehler bei der TMDB-Suche")
-		
+
 		// Test GetMovieDetails
 		_, err = errorClient.GetMovieDetails(1)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "fehler bei der TMDB-Anfrage")
-		
+
 		// Test TestConnection
 		err = errorClient.TestConnection()
 		assert.Error(t, err)
@@ -327,7 +327,7 @@ func TestTMDBClient(t *testing.T) {
 		const goroutines = 10
 		var wg sync.WaitGroup
 		wg.Add(goroutines)
-		
+
 		for i := 0; i < goroutines; i++ {
 			go func() {
 				defer wg.Done()
@@ -336,7 +336,7 @@ func TestTMDBClient(t *testing.T) {
 				assert.NotNil(t, movie)
 			}()
 		}
-		
+
 		wg.Wait()
 	})
 
@@ -367,7 +367,7 @@ func TestTMDBClient(t *testing.T) {
 				}
 				return
 			}
-			
+
 			// Normal response
 			w.Header().Set("Content-Type", "application/json")
 			movie := tmdb.Movie{
@@ -379,12 +379,12 @@ func TestTMDBClient(t *testing.T) {
 			}
 		}))
 		defer rateLimitServer.Close()
-		
+
 		// Setze API-Key
 		os.Setenv("TMDB_API_KEY", "test-api-key")
 		rateLimitClient := tmdb.NewClientWithBaseURL(rateLimitServer.URL)
 		rateLimitClient.CacheTTL = 0 // Deaktiviere Cache für diesen Test
-		
+
 		// Erste 5 Anfragen sollten erfolgreich sein
 		for i := 0; i < 5; i++ {
 			movie, err := rateLimitClient.GetMovieDetails(1)
@@ -392,7 +392,7 @@ func TestTMDBClient(t *testing.T) {
 			require.NotNil(t, movie)
 			require.Equal(t, fmt.Sprintf("Test Movie %d", i+1), movie.Title)
 		}
-		
+
 		// 6. Anfrage sollte Rate-Limit-Fehler zurückgeben
 		_, err := rateLimitClient.GetMovieDetails(1)
 		require.Error(t, err)
@@ -417,7 +417,7 @@ func TestTMDBClient(t *testing.T) {
 				w.WriteHeader(http.StatusMethodNotAllowed)
 				return
 			}
-			
+
 			// Normal response
 			movie := tmdb.Movie{
 				ID:    1,
@@ -428,16 +428,16 @@ func TestTMDBClient(t *testing.T) {
 			}
 		}))
 		defer methodServer.Close()
-		
+
 		// Setze API-Key
 		os.Setenv("TMDB_API_KEY", "test-api-key")
 		methodClient := tmdb.NewClientWithBaseURL(methodServer.URL)
-		
+
 		// GET sollte funktionieren
 		movie, err := methodClient.GetMovieDetails(1)
 		assert.NoError(t, err)
 		assert.NotNil(t, movie)
-		
+
 		// POST-Anfrage simulieren (durch Manipulation des Clients)
 		req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/movie/1?api_key=test-api-key", methodServer.URL), nil)
 		resp, err := methodClient.HTTPClient().Do(req)
