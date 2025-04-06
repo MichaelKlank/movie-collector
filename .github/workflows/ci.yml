@@ -77,6 +77,7 @@ jobs:
                   git add backend/sbom.json
                   if ! git diff --quiet && ! git diff --staged --quiet; then
                       git commit -m "ci: update backend SBOM"
+                      git pull --rebase
                       git push
                   fi
 
@@ -138,5 +139,6 @@ jobs:
                   git add frontend/public/sbom.json
                   if ! git diff --quiet && ! git diff --staged --quiet; then
                       git commit -m "ci: update frontend SBOM"
+                      git pull --rebase
                       git push
                   fi
