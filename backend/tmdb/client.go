@@ -22,13 +22,29 @@ type Client struct {
 }
 
 type Cache struct {
-	sync.RWMutex
-	movies map[int]*CacheEntry
+	mutex sync.RWMutex
+	items map[string]CacheItem
 }
 
-type CacheEntry struct {
-	movie      *Movie
-	expiration time.Time
+func (c *Cache) Lock() {
+	c.mutex.Lock()
+}
+
+func (c *Cache) Unlock() {
+	c.mutex.Unlock()
+}
+
+func (c *Cache) RLock() {
+	c.mutex.RLock()
+}
+
+func (c *Cache) RUnlock() {
+	c.mutex.RUnlock()
+}
+
+type CacheItem struct {
+	data      interface{}
+	timestamp time.Time
 }
 
 type Movie struct {
@@ -58,7 +74,7 @@ func NewClient() *Client {
 		imageURL:   "https://image.tmdb.org/t/p/w500",
 		baseURL:    defaultBaseURL,
 		httpClient: &http.Client{},
-		cache:      &Cache{movies: make(map[int]*CacheEntry)},
+		cache:      &Cache{items: make(map[string]CacheItem)},
 		CacheTTL:   24 * time.Hour,
 	}
 }
@@ -69,7 +85,7 @@ func NewClientWithBaseURL(baseURL string) *Client {
 		imageURL:   "https://image.tmdb.org/t/p/w500",
 		baseURL:    baseURL,
 		httpClient: &http.Client{},
-		cache:      &Cache{movies: make(map[int]*CacheEntry)},
+		cache:      &Cache{items: make(map[string]CacheItem)},
 		CacheTTL:   24 * time.Hour,
 	}
 }
@@ -114,23 +130,21 @@ func (c *Client) GetMovieDetails(id int) (*Movie, error) {
 		return nil, fmt.Errorf("ungültige Film-ID")
 	}
 
+	cacheKey := fmt.Sprintf("movie:%d", id)
+
 	// Prüfe Cache
 	c.cache.RLock()
-	if entry, exists := c.cache.movies[id]; exists && time.Now().Before(entry.expiration) {
-		c.cache.RUnlock()
-		return entry.movie, nil
+	if item, exists := c.cache.items[cacheKey]; exists {
+		if time.Since(item.timestamp) < c.CacheTTL {
+			c.cache.RUnlock()
+			return item.data.(*Movie), nil
+		}
 	}
 	c.cache.RUnlock()
 
-	movieURL := fmt.Sprintf("%s/movie/%d?api_key=%s&language=de-DE&append_to_response=credits", c.baseURL, id, c.apiKey)
-	req, err := http.NewRequest("GET", movieURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("fehler beim Erstellen der Anfrage: %v", err)
-	}
-
-	req.Header.Add("accept", "application/json")
-
-	resp, err := c.httpClient.Do(req)
+	// Hole Daten von API
+	url := fmt.Sprintf("%s/movie/%d?api_key=%s", c.baseURL, id, c.apiKey)
+	resp, err := c.httpClient.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("fehler bei der TMDB-Anfrage: %v", err)
 	}
@@ -151,9 +165,9 @@ func (c *Client) GetMovieDetails(id int) (*Movie, error) {
 
 	// Speichere im Cache
 	c.cache.Lock()
-	c.cache.movies[id] = &CacheEntry{
-		movie:      &movie,
-		expiration: time.Now().Add(c.CacheTTL),
+	c.cache.items[cacheKey] = CacheItem{
+		data:      &movie,
+		timestamp: time.Now(),
 	}
 	c.cache.Unlock()
 
@@ -200,4 +214,4 @@ func (c *Client) BaseURL() string {
 // HTTPClient gibt den HTTP-Client des Clients zurück
 func (c *Client) HTTPClient() *http.Client {
 	return c.httpClient
-} 
+}

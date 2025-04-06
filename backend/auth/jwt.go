@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type JWTConfig struct {
@@ -71,4 +71,4 @@ func (c *JWTConfig) ValidateToken(tokenString string) (*jwt.Token, error) {
 		}
 		return c.Secret, nil
 	})
-} 
+}

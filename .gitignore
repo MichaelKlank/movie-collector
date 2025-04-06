@@ -46,3 +46,4 @@ coverage-report/
 # Temporäre Dateien
 tmp/
 temp/ 
+backend/coverage.html

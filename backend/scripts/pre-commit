@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Plattformerkennung
+case "$(uname -s)" in
+    Linux*)     PLATFORM=linux;;
+    Darwin*)    PLATFORM=mac;;
+    CYGWIN*)    PLATFORM=windows;;
+    MINGW*)     PLATFORM=windows;;
+    MSYS*)      PLATFORM=windows;;
+    *)          PLATFORM=unknown;;
+esac
+
+echo "Running pre-commit checks on $PLATFORM..."
+
+# Linter ausführen
+echo "Running golangci-lint..."
+if ! golangci-lint run; then
+    echo "❌ Linting failed. Please fix the issues before committing."
+    exit 1
+fi
+
+# Tests ausführen
+echo "Running tests..."
+if ! go test ./... -v; then
+    echo "❌ Tests failed. Please fix the failing tests before committing."
+    exit 1
+fi
+
+echo "✅ All checks passed!"
+exit 0 

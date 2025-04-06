@@ -129,6 +129,8 @@ func main() {
 		c.Data(http.StatusOK, "application/json", sbomData)
 	})
 
+	// Test für Pre-Commit-Hook
+
 	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
