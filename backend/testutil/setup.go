@@ -56,6 +56,15 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	}
 	r.Use(cors.New(config))
 
+	// Middleware für Cache-Control Header
+	r.Use(func(c *gin.Context) {
+		// Setze Cache-Control Header für alle Antworten
+		c.Writer.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0")
+		c.Writer.Header().Set("Pragma", "no-cache")
+		c.Writer.Header().Set("Expires", "0")
+		c.Next()
+	})
+
 	// Add a custom middleware to handle CORS preflight requests
 	r.Use(func(c *gin.Context) {
 		if c.Request.Method == "OPTIONS" {

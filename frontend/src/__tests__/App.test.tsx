@@ -69,15 +69,30 @@ const defaultQueryResult = {
     promise: Promise.resolve([] as Movie[]),
 };
 
+// Definiere den Typ für die paginierte Antwort
+interface PaginatedResponse<T> {
+    data: T[];
+    meta: {
+        page: number;
+        limit: number;
+        total: number;
+        total_pages: number;
+    };
+}
+
 vi.mock("@tanstack/react-query", async () => {
     const actual = await vi.importActual("@tanstack/react-query");
     return {
         ...actual,
-        useQuery: vi.fn().mockImplementation(({ queryKey }): QueryObserverResult<Movie[], Error> => {
-            if (queryKey[0] === "movies") {
+        useQuery: vi.fn().mockImplementation(({ queryKey }): QueryObserverResult<PaginatedResponse<Movie>, Error> => {
+            if (queryKey[0] === "movies" && !queryKey[1]) {
+                const response: PaginatedResponse<Movie> = {
+                    data: mockMovies,
+                    meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+                };
                 return {
                     ...defaultQueryResult,
-                    data: mockMovies,
+                    data: response,
                     isLoading: false,
                     isError: false,
                     error: null,
@@ -90,7 +105,7 @@ vi.mock("@tanstack/react-query", async () => {
                     isPlaceholderData: false,
                     fetchStatus: "idle" as const,
                     status: "success" as const,
-                    promise: Promise.resolve(mockMovies),
+                    promise: Promise.resolve(response),
                 };
             }
             return {
@@ -107,7 +122,7 @@ vi.mock("@tanstack/react-query", async () => {
                 isPlaceholderData: false,
                 fetchStatus: "idle" as const,
                 status: "pending" as const,
-                promise: Promise.resolve([] as Movie[]),
+                promise: Promise.resolve(undefined) as unknown as Promise<PaginatedResponse<Movie>>,
             };
         }),
         useMutation: vi.fn().mockImplementation(() => ({
@@ -240,10 +255,53 @@ describe("App", () => {
     });
 
     it("zeigt die Filme korrekt gruppiert nach Buchstaben an", async () => {
+        vi.mocked(useQuery).mockImplementation(({ queryKey }): QueryObserverResult<PaginatedResponse<Movie>, Error> => {
+            if (queryKey[0] === "movies" && !queryKey[1]) {
+                const response: PaginatedResponse<Movie> = {
+                    data: mockMovies,
+                    meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+                };
+                return {
+                    ...defaultQueryResult,
+                    data: response,
+                    isLoading: false,
+                    isError: false,
+                    error: null,
+                    isSuccess: true,
+                    isPending: false,
+                    isFetched: true,
+                    isFetchedAfterMount: true,
+                    isLoadingError: false,
+                    isRefetchError: false,
+                    isPlaceholderData: false,
+                    fetchStatus: "idle" as const,
+                    status: "success" as const,
+                    promise: Promise.resolve(response),
+                };
+            }
+            return {
+                ...defaultQueryResult,
+                data: undefined,
+                isLoading: false,
+                isError: false,
+                error: null,
+                isSuccess: false,
+                isPending: true,
+                isFetched: false,
+                isLoadingError: false,
+                isRefetchError: false,
+                isPlaceholderData: false,
+                fetchStatus: "idle" as const,
+                status: "pending" as const,
+                promise: Promise.resolve(undefined) as unknown as Promise<PaginatedResponse<Movie>>,
+            };
+        });
+
         renderWithProviders(<App />);
 
         await waitFor(() => {
             expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+            expect(screen.queryByText("Keine Filme in der Sammlung")).not.toBeInTheDocument();
         });
 
         const sectionA = screen.getByTestId("section-A");
@@ -252,11 +310,8 @@ describe("App", () => {
         expect(sectionA).toBeInTheDocument();
         expect(sectionB).toBeInTheDocument();
 
-        const movieCardsA = within(sectionA).getAllByRole("article");
-        const movieCardsB = within(sectionB).getAllByRole("article");
-
-        expect(movieCardsA[0]).toHaveTextContent("Andromeda");
-        expect(movieCardsB[0]).toHaveTextContent("Berta");
+        expect(within(sectionA).getByText("Andromeda")).toBeInTheDocument();
+        expect(within(sectionB).getByText("Berta")).toBeInTheDocument();
     });
 
     it("öffnet den AddMovieDialog beim Klick auf den FAB", async () => {
@@ -275,14 +330,61 @@ describe("App", () => {
     });
 
     it("zeigt den MovieDialog beim Klick auf einen Film", async () => {
+        vi.mocked(useQuery).mockImplementation(({ queryKey }): QueryObserverResult<PaginatedResponse<Movie>, Error> => {
+            if (queryKey[0] === "movies" && !queryKey[1]) {
+                const response: PaginatedResponse<Movie> = {
+                    data: mockMovies,
+                    meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+                };
+                return {
+                    ...defaultQueryResult,
+                    data: response,
+                    isLoading: false,
+                    isError: false,
+                    error: null,
+                    isSuccess: true,
+                    isPending: false,
+                    isFetched: true,
+                    isFetchedAfterMount: true,
+                    isLoadingError: false,
+                    isRefetchError: false,
+                    isPlaceholderData: false,
+                    fetchStatus: "idle" as const,
+                    status: "success" as const,
+                    promise: Promise.resolve(response),
+                };
+            }
+            return {
+                ...defaultQueryResult,
+                data: undefined,
+                isLoading: false,
+                isError: false,
+                error: null,
+                isSuccess: false,
+                isPending: true,
+                isFetched: false,
+                isLoadingError: false,
+                isRefetchError: false,
+                isPlaceholderData: false,
+                fetchStatus: "idle" as const,
+                status: "pending" as const,
+                promise: Promise.resolve(undefined) as unknown as Promise<PaginatedResponse<Movie>>,
+            };
+        });
+
         renderWithProviders(<App />);
         const user = userEvent.setup();
 
         await waitFor(() => {
             expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+            expect(screen.queryByText("Keine Filme in der Sammlung")).not.toBeInTheDocument();
         });
 
-        const movieCard = screen.getByRole("article", { name: /andromeda/i });
+        await waitFor(() => {
+            expect(screen.getByText("Andromeda")).toBeInTheDocument();
+        });
+
+        const movieCard = screen.getByRole("article", { name: "Andromeda" });
         await user.click(movieCard);
 
         const dialog = await screen.findByRole("dialog");

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"github.com/MichaelKlank/movie-collector/backend/models"
@@ -45,10 +46,26 @@ func TestMovieCRUD(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, w.Code)
 
-		var movies []models.Movie
-		err := json.Unmarshal(w.Body.Bytes(), &movies)
+		var response map[string]interface{}
+		err := json.Unmarshal(w.Body.Bytes(), &response)
 		assert.NoError(t, err)
-		assert.Greater(t, len(movies), 0)
+
+		// Prüfe, ob die Antwort die erwartete Struktur hat
+		assert.Contains(t, response, "data")
+		assert.Contains(t, response, "meta")
+
+		// Prüfe, ob Daten vorhanden sind
+		data, ok := response["data"].([]interface{})
+		assert.True(t, ok)
+		assert.Greater(t, len(data), 0)
+
+		// Prüfe Metadaten
+		meta, ok := response["meta"].(map[string]interface{})
+		assert.True(t, ok)
+		assert.Contains(t, meta, "page")
+		assert.Contains(t, meta, "limit")
+		assert.Contains(t, meta, "total")
+		assert.Contains(t, meta, "total_pages")
 	})
 
 	t.Run("Get Movie", func(t *testing.T) {
@@ -122,19 +139,95 @@ func TestMovieCRUD(t *testing.T) {
 		assert.Equal(t, movie.Title, response.Title)
 		assert.Equal(t, movie.Description, response.Description)
 		assert.Equal(t, movie.Year, response.Year)
+
+		// Stellen sicher, dass der Cache nach dem Update ungültig ist
+		// und die aktualisierten Daten zurückgegeben werden
+		req = httptest.NewRequest("GET", "/movies/1", nil)
+		w = httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+
+		var updatedMovie models.Movie
+		err = json.Unmarshal(w.Body.Bytes(), &updatedMovie)
+		assert.NoError(t, err)
+		assert.Equal(t, movie.Title, updatedMovie.Title)
+		assert.Equal(t, movie.Description, updatedMovie.Description)
 	})
 
-	t.Run("Delete Movie", func(t *testing.T) {
-		req := httptest.NewRequest("DELETE", "/movies/1", nil)
+	t.Run("Cache-Control Headers Test", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/movies", nil)
 		w := httptest.NewRecorder()
 		router.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
 
-		// Verify movie is deleted
-		req = httptest.NewRequest("GET", "/movies/1", nil)
+		// Prüfe, ob die Cache-Control Header korrekt gesetzt sind
+		cacheControl := w.Header().Get("Cache-Control")
+		pragma := w.Header().Get("Pragma")
+		expires := w.Header().Get("Expires")
+
+		assert.Contains(t, cacheControl, "no-store")
+		assert.Contains(t, cacheControl, "no-cache")
+		assert.Contains(t, cacheControl, "must-revalidate")
+		assert.Equal(t, "no-cache", pragma)
+		assert.Equal(t, "0", expires)
+	})
+
+	t.Run("Delete Movie", func(t *testing.T) {
+		// Erstelle einen neuen Film für den Löschtest
+		movie := models.Movie{
+			Title:       "Movie to Delete",
+			Description: "This movie will be deleted",
+			Year:        2024,
+		}
+		jsonData, _ := json.Marshal(movie)
+		req := httptest.NewRequest("POST", "/movies", bytes.NewBuffer(jsonData))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusCreated, w.Code)
+
+		var createdMovie models.Movie
+		err := json.Unmarshal(w.Body.Bytes(), &createdMovie)
+		assert.NoError(t, err)
+
+		// Lösche den Film
+		req = httptest.NewRequest("DELETE", "/movies/"+strconv.Itoa(int(createdMovie.ID)), nil)
+		w = httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+
+		// Verifiziere, dass der Film gelöscht wurde und nach dem Löschen nicht mehr im Cache ist
+		req = httptest.NewRequest("GET", "/movies/"+strconv.Itoa(int(createdMovie.ID)), nil)
 		w = httptest.NewRecorder()
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusNotFound, w.Code)
+
+		// Prüfe auch die Filmliste, um sicherzustellen, dass der Film dort nicht mehr erscheint
+		req = httptest.NewRequest("GET", "/movies", nil)
+		w = httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+
+		var listResponse map[string]interface{}
+		err = json.Unmarshal(w.Body.Bytes(), &listResponse)
+		assert.NoError(t, err)
+
+		// Prüfe, ob der gelöschte Film in der Liste fehlt
+		data, ok := listResponse["data"].([]interface{})
+		assert.True(t, ok)
+
+		for _, item := range data {
+			movieData, ok := item.(map[string]interface{})
+			assert.True(t, ok)
+
+			if id, ok := movieData["id"].(float64); ok {
+				assert.NotEqual(t, float64(createdMovie.ID), id, "Gelöschter Film sollte nicht in der Liste erscheinen")
+			}
+		}
 	})
 }

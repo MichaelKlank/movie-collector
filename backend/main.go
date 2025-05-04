@@ -10,13 +10,35 @@ import (
 
 	"github.com/MichaelKlank/movie-collector/backend/db"
 	"github.com/MichaelKlank/movie-collector/backend/handlers"
+	"github.com/MichaelKlank/movie-collector/backend/middleware"
 	"github.com/MichaelKlank/movie-collector/backend/models"
 	"github.com/MichaelKlank/movie-collector/backend/repositories"
 	"github.com/MichaelKlank/movie-collector/backend/services"
 	"github.com/MichaelKlank/movie-collector/backend/tmdb"
+	"github.com/gin-contrib/cache"
+	"github.com/gin-contrib/cache/persistence"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title           Movie Collector API
+// @version         1.0
+// @description     Eine API zur Verwaltung Ihrer Filmsammlung
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost
+// @BasePath  /api
+
+// @securityDefinitions.basic  BasicAuth
 
 func waitForDB() error {
 	maxRetries := 10
@@ -32,6 +54,9 @@ func waitForDB() error {
 }
 
 func main() {
+	// Setze GIN in den Release-Modus
+	gin.SetMode(gin.ReleaseMode)
+
 	// Warte auf Datenbank
 	if err := waitForDB(); err != nil {
 		log.Fatal("Fehler beim Verbinden mit der Datenbank:", err)
@@ -53,7 +78,7 @@ func main() {
 
 	// CORS configuration
 	config := cors.Config{
-		AllowOrigins:     []string{"http://localhost", "http://localhost:3000", "http://localhost:5173", "http://example.com"},
+		AllowOrigins:     []string{"http://localhost", "http://localhost:3000", "http://localhost:5173", "http://localhost:8080", "http://localhost:8082", "http://example.com"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Access-Control-Request-Method", "Access-Control-Request-Headers"},
 		ExposeHeaders:    []string{"Access-Control-Allow-Origin", "Access-Control-Allow-Methods"},
@@ -63,17 +88,79 @@ func main() {
 			return origin == "http://localhost" ||
 				origin == "http://localhost:3000" ||
 				origin == "http://localhost:5173" ||
+				origin == "http://localhost:8080" ||
+				origin == "http://localhost:8082" ||
 				origin == "http://example.com"
 		},
 	}
 	r.Use(cors.New(config))
 
-	// Movie routes
-	r.POST("/movies", movieHandler.CreateMovie)
-	r.GET("/movies", movieHandler.GetMovies)
-	r.GET("/movies/:id", movieHandler.GetMovie)
-	r.PUT("/movies/:id", movieHandler.UpdateMovie)
-	r.DELETE("/movies/:id", movieHandler.DeleteMovie)
+	// Rate Limiter konfigurieren (100 Anfragen pro Minute pro IP)
+	rateLimiter := middleware.NewRateLimiter(100, time.Minute)
+	r.Use(rateLimiter.Middleware())
+	// Starte Cleanup-Task für Rate Limiter (alle 5 Minuten)
+	rateLimiter.CleanupTask(5 * time.Minute)
+
+	// Cache-Speicher initialisieren (5 Minuten Ablaufzeit)
+	store := persistence.NewInMemoryStore(time.Minute * 5)
+
+	// Funktion zum Löschen aller Caches
+	clearAllCaches := func() {
+		// Direkte API-Pfade
+		if err := store.Delete("/api/movies"); err != nil {
+			log.Printf("Fehler beim Löschen des Caches /api/movies: %v", err)
+		}
+		if err := store.Delete("/api/movies/search"); err != nil {
+			log.Printf("Fehler beim Löschen des Caches /api/movies/search: %v", err)
+		}
+
+		// Interne Pfade
+		if err := store.Delete("/movies"); err != nil {
+			log.Printf("Fehler beim Löschen des Caches /movies: %v", err)
+		}
+		if err := store.Delete("/movies/search"); err != nil {
+			log.Printf("Fehler beim Löschen des Caches /movies/search: %v", err)
+		}
+
+		// Alle Cache-Einträge löschen (globaler Cache-Reset)
+		store.Flush()
+
+		log.Printf("Alle Caches wurden gelöscht")
+	}
+
+	// Middleware für Cache-Control Header
+	r.Use(func(c *gin.Context) {
+		// Setze Cache-Control Header für alle Antworten
+		c.Writer.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0")
+		c.Writer.Header().Set("Pragma", "no-cache")
+		c.Writer.Header().Set("Expires", "0")
+		c.Next()
+	})
+
+	// Movie routes mit Cache für GET-Anfragen
+	r.GET("/movies", cache.CachePage(store, time.Minute*2, movieHandler.GetMovies))
+	r.GET("/movies/search", cache.CachePage(store, time.Minute*1, movieHandler.SearchMovies))
+	r.GET("/movies/:id", cache.CachePage(store, time.Minute*5, movieHandler.GetMovie))
+	r.POST("/movies", func(c *gin.Context) {
+		movieHandler.CreateMovie(c)
+		// Cache nach Erstellung eines Films invalidieren
+		log.Printf("Cache wird nach Film-Erstellung invalidiert")
+		clearAllCaches()
+	})
+	r.PUT("/movies/:id", func(c *gin.Context) {
+		movieHandler.UpdateMovie(c)
+		// Cache nach Update eines Films invalidieren
+		id := c.Param("id")
+		log.Printf("Cache wird nach Film-Update invalidiert: id=%s", id)
+		clearAllCaches()
+	})
+	r.DELETE("/movies/:id", func(c *gin.Context) {
+		movieHandler.DeleteMovie(c)
+		// Cache nach Löschen eines Films invalidieren
+		id := c.Param("id")
+		log.Printf("Cache wird nach Film-Löschung invalidiert: id=%s", id)
+		clearAllCaches()
+	})
 
 	// Image routes
 	r.POST("/movies/:id/image", imageHandler.UploadImage)
@@ -90,7 +177,8 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
-	r.GET("/tmdb/search", func(c *gin.Context) {
+	// Cache für TMDB-Suche (kürzere Ablaufzeit von 1 Minute)
+	r.GET("/tmdb/search", cache.CachePage(store, time.Minute, func(c *gin.Context) {
 		query := c.Query("query")
 		if query == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "query parameter is required"})
@@ -105,9 +193,10 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, movies)
-	})
+	}))
 
-	r.GET("/tmdb/movie/:id", func(c *gin.Context) {
+	// Cache für TMDB-Filmdetails (längere Ablaufzeit von 1 Stunde)
+	r.GET("/tmdb/movie/:id", cache.CachePage(store, time.Hour, func(c *gin.Context) {
 		idStr := c.Param("id")
 		if idStr == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "movie ID is required"})
@@ -128,7 +217,7 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, movie)
-	})
+	}))
 
 	// SBOM route
 	r.GET("/sbom", func(c *gin.Context) {
@@ -144,7 +233,17 @@ func main() {
 		c.Data(http.StatusOK, "application/json", sbomData)
 	})
 
-	// Test für Pre-Commit-Hook
+	// Swagger documentation route
+	// Use an environment variable for the host, defaulting to the direct port access
+	host := os.Getenv("API_HOST")
+	if host == "" {
+		host = "localhost:8082"
+	}
+	url := ginSwagger.URL(fmt.Sprintf("http://%s/docs/swagger.json", host))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
+	// Serve the entire docs directory statically
+	r.Static("/docs", "./docs")
 
 	// Start server
 	port := os.Getenv("PORT")

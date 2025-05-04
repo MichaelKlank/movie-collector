@@ -18,6 +18,19 @@ func NewImageHandler(service *services.MovieService) *ImageHandler {
 	return &ImageHandler{service: service}
 }
 
+// UploadImage godoc
+// @Summary      Bild für einen Film hochladen
+// @Description  Lädt ein Bild für einen spezifischen Film hoch
+// @Tags         images
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        id    path      int   true  "Movie ID"
+// @Param        image formData  file  true  "Image file"
+// @Success      200   {object}  models.SwaggerResponse
+// @Failure      400   {object}  models.ErrorResponse
+// @Failure      404   {object}  models.ErrorResponse
+// @Failure      500   {object}  models.ErrorResponse
+// @Router       /movies/{id}/image [post]
 func (h *ImageHandler) UploadImage(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
@@ -62,6 +75,16 @@ func (h *ImageHandler) UploadImage(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully", "path": filename})
 }
 
+// GetImage godoc
+// @Summary      Bild eines Films abrufen
+// @Description  Gibt das Bild eines spezifischen Films zurück
+// @Tags         images
+// @Produce      image/jpeg,image/png,image/gif
+// @Param        id   path      int  true  "Movie ID"
+// @Success      200  {file}    binary
+// @Failure      400  {object}  models.ErrorResponse
+// @Failure      404  {object}  models.ErrorResponse
+// @Router       /movies/{id}/image [get]
 func (h *ImageHandler) GetImage(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
@@ -89,6 +112,17 @@ func (h *ImageHandler) GetImage(c *gin.Context) {
 	c.File(movie.ImagePath)
 }
 
+// DeleteImage godoc
+// @Summary      Bild eines Films löschen
+// @Description  Löscht das Bild eines spezifischen Films
+// @Tags         images
+// @Produce      json
+// @Param        id   path      int  true  "Movie ID"
+// @Success      200  {object}  models.SwaggerResponse
+// @Failure      400  {object}  models.ErrorResponse
+// @Failure      404  {object}  models.ErrorResponse
+// @Failure      500  {object}  models.ErrorResponse
+// @Router       /movies/{id}/image [delete]
 func (h *ImageHandler) DeleteImage(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {

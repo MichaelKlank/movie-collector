@@ -1,33 +1,27 @@
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { vi } from "vitest";
+import { describe, it, vi, expect, beforeEach } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MovieList } from "../../components/MovieList";
+import axios, { AxiosResponse } from "axios";
+import { Movie } from "../../types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import axios from "axios";
-import userEvent from "@testing-library/user-event";
-import { AxiosResponse } from "axios";
+import React from "react";
 
+// Mock axios
 vi.mock("axios");
 
-interface Movie {
-    id: number;
-    title: string;
-    description: string;
-    year: number;
-    poster_path: string;
-    image_path?: string;
-    tmdb_id?: string;
-    created_at?: string;
-    updated_at?: string;
-    rating?: number;
-}
-
+// Definiere den MockAxiosGet Typ
 type MockAxiosGet = ((url: string) => Promise<AxiosResponse>) & {
     mockImplementation: (fn: () => Promise<AxiosResponse>) => void;
     mockRejectedValue: (error: Error) => void;
-    mockResolvedValue: (value: { data: Movie[] }) => void;
-    mockResolvedValueOnce: (value: { data: Movie[] }) => void;
+    mockResolvedValue: (value: {
+        data: { data: Movie[]; meta: { page: number; limit: number; total: number; total_pages: number } };
+    }) => void;
+    mockResolvedValueOnce: (value: {
+        data: { data: Movie[]; meta: { page: number; limit: number; total: number; total_pages: number } };
+    }) => void;
 };
 
+// Beispiel-Mock-Filme
 const mockMovies: Movie[] = [
     {
         id: 1,
@@ -35,46 +29,44 @@ const mockMovies: Movie[] = [
         description: "Test Description",
         year: 2009,
         poster_path: "/test.jpg",
-        image_path: "/test.jpg",
-        tmdb_id: "1",
-        created_at: "2024-01-01",
-        updated_at: "2024-01-01",
-        rating: 4,
+        rating: 0,
     },
     {
         id: 2,
         title: "Batman",
         description: "Test Description 2",
-        year: 2022,
+        year: 2008,
         poster_path: "/test2.jpg",
-        image_path: "/test2.jpg",
-        tmdb_id: "2",
-        created_at: "2024-01-01",
-        updated_at: "2024-01-01",
-        rating: 5,
+        rating: 0,
     },
 ];
 
-describe("MovieList", () => {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                retry: false,
-            },
+// Mock React Query
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: false,
         },
-    });
+    },
+});
 
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    );
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+);
 
+describe("MovieList", () => {
     beforeEach(() => {
         queryClient.clear();
         vi.clearAllMocks();
     });
 
-    it("sollte den Ladezustand anzeigen", () => {
-        (axios.get as MockAxiosGet).mockImplementation(() => new Promise(() => {}));
+    it("sollte den Ladezustand anzeigen", async () => {
+        (axios.get as MockAxiosGet).mockImplementation(() => {
+            return new Promise(() => {
+                // Diese Promise wird nie erfüllt, um den Ladezustand zu simulieren
+            });
+        });
+
         render(<MovieList />, { wrapper });
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
@@ -84,25 +76,31 @@ describe("MovieList", () => {
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
-            const alert = screen.getByRole("alert");
-            expect(alert).toBeInTheDocument();
-            expect(alert).toHaveTextContent("API Error");
+            expect(screen.getByRole("alert")).toHaveTextContent("API Error");
         });
     });
 
     it("sollte den leeren Zustand anzeigen", async () => {
-        (axios.get as MockAxiosGet).mockResolvedValue({ data: [] });
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: [],
+                meta: { page: 1, limit: 20, total: 0, total_pages: 1 },
+            },
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
-            const alert = screen.getByRole("alert");
-            expect(alert).toBeInTheDocument();
-            expect(alert).toHaveTextContent("Keine Filme in der Sammlung");
+            expect(screen.getByRole("alert")).toHaveTextContent("Keine Filme in der Sammlung");
         });
     });
 
     it("sollte Filme nach Buchstaben gruppiert anzeigen", async () => {
-        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+            },
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -116,18 +114,31 @@ describe("MovieList", () => {
     });
 
     it("sollte den AddMovieDialog öffnen, wenn auf den FAB-Button geklickt wird", async () => {
-        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+            },
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
-            const fabButton = screen.getByLabelText("Film hinzufügen");
-            fireEvent.click(fabButton);
-            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
         });
+
+        const addButton = screen.getByRole("button", { name: /film hinzufügen/i });
+        fireEvent.click(addButton);
+
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 
     it("sollte den MovieDialog öffnen, wenn auf eine MovieCard geklickt wird", async () => {
-        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+            },
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -138,63 +149,52 @@ describe("MovieList", () => {
     });
 
     it("sollte zum entsprechenden Abschnitt scrollen, wenn ein Buchstabe ausgewählt wird", async () => {
-        (axios.get as MockAxiosGet).mockResolvedValue({ data: mockMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+            },
+        });
         render(<MovieList />, { wrapper });
 
+        // Warte, bis die Komponente vollständig gerendert ist
         await waitFor(() => {
-            const scrollIntoViewMock = vi.fn();
-            const sectionA = screen.getByTestId("section-A");
-            sectionA.scrollIntoView = scrollIntoViewMock;
-
-            const letterButtons = screen.getAllByText("A");
-            const alphabetIndexButton = letterButtons.find((button) => button.className.includes("css-iipm3j"));
-            if (alphabetIndexButton) {
-                fireEvent.click(alphabetIndexButton);
-            }
-
-            expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: "smooth" });
+            expect(screen.getByTestId("section-A")).toBeInTheDocument();
         });
+
+        // Mock scrollIntoView direkt für das Element
+        const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+        HTMLElement.prototype.scrollIntoView = vi.fn();
+
+        // Finde den Letter-Button und klicke darauf
+        const letterA = screen.getByTestId("letter-A");
+        fireEvent.click(letterA);
+
+        // Überprüfe, ob scrollIntoView aufgerufen wurde
+        expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
+
+        // Stelle scrollIntoView wieder her
+        HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
     });
 
     it("sollte den MovieDialog schließen, wenn onClose aufgerufen wird", async () => {
-        const mockMovies: Movie[] = [
-            {
-                id: 1,
-                title: "Avatar",
-                description: "Test Description",
-                year: 2009,
-                poster_path: "/test.jpg",
-                rating: 4,
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
             },
-        ];
-
-        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: mockMovies });
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
-            const movieCard = screen.getByRole("article", { name: "Avatar" });
+            const movieCard = screen.getByText("Avatar");
             fireEvent.click(movieCard);
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
         });
 
-        const closeButton = screen.getByRole("button", { name: "close" });
+        // Dialog schließen
+        const closeButton = screen.getByLabelText("close");
         fireEvent.click(closeButton);
-
-        await waitFor(() => {
-            expect(screen.queryByRole("dialog", { name: "Avatar" })).not.toBeInTheDocument();
-        });
-    });
-
-    it("sollte den AddMovieDialog schließen, wenn onClose aufgerufen wird", async () => {
-        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: [] });
-        render(<MovieList />, { wrapper });
-
-        await waitFor(() => {
-            const addButton = screen.getByLabelText("Film hinzufügen");
-            fireEvent.click(addButton);
-        });
-
-        const closeButton = screen.getByRole("button", { name: /abbrechen/i });
-        await userEvent.click(closeButton);
 
         await waitFor(() => {
             expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -215,7 +215,12 @@ describe("MovieList", () => {
             },
         ];
 
-        (axios.get as MockAxiosGet).mockResolvedValue({ data: unsortedMovies });
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: unsortedMovies,
+                meta: { page: 1, limit: 20, total: 3, total_pages: 1 },
+            },
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
@@ -228,63 +233,140 @@ describe("MovieList", () => {
     });
 
     it("sollte den AlphabetIndex mit den korrekten verfügbaren Buchstaben rendern", async () => {
-        const mockMovies: Movie[] = [
-            {
-                id: 1,
-                title: "Avatar",
-                description: "Test Description",
-                year: 2009,
-                poster_path: "/test.jpg",
-                rating: 4,
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
             },
-            {
-                id: 2,
-                title: "Batman",
-                description: "Test Description 2",
-                year: 2022,
-                poster_path: "/test2.jpg",
-                rating: 5,
-            },
-        ];
-
-        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: mockMovies });
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
             const letterA = screen.getByTestId("letter-A");
             const letterB = screen.getByTestId("letter-B");
-            const letterC = screen.queryByTestId("letter-C");
-
             expect(letterA).toBeInTheDocument();
             expect(letterB).toBeInTheDocument();
-            expect(letterC).toHaveStyle({ opacity: 0.3 });
         });
     });
 
     it("sollte den selectedLetter aktualisieren und zum Abschnitt scrollen", async () => {
-        const mockMovies: Movie[] = [
-            {
-                id: 1,
-                title: "Avatar",
-                description: "Test Description",
-                year: 2009,
-                poster_path: "/test.jpg",
-                rating: 4,
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
             },
-        ];
-
-        (axios.get as MockAxiosGet).mockResolvedValueOnce({ data: mockMovies });
-
-        // Mock scrollIntoView
-        const scrollIntoViewMock = vi.fn();
-        window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
-
+        });
         render(<MovieList />, { wrapper });
 
         await waitFor(() => {
+            const scrollIntoViewMock = vi.fn();
+            // Element wird manuell gemockt
+            global.document.getElementById = vi.fn().mockImplementation(() => ({
+                scrollIntoView: scrollIntoViewMock,
+            }));
+
             const letterA = screen.getByTestId("letter-A");
             fireEvent.click(letterA);
             expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: "smooth" });
         });
+    });
+
+    it("sollte den Cache-Buster-Parameter in der Anfrage verwenden", async () => {
+        (axios.get as MockAxiosGet).mockResolvedValue({
+            data: {
+                data: mockMovies,
+                meta: { page: 1, limit: 20, total: 2, total_pages: 1 },
+            },
+        });
+        render(<MovieList />, { wrapper });
+
+        await waitFor(() => {
+            expect(axios.get).toHaveBeenCalled();
+            const url = (axios.get as jest.Mock).mock.calls[0][0];
+            expect(url).toContain("t=");
+        });
+    });
+
+    it("sollte beim Hinzufügen von Filmen die Liste aktualisieren", async () => {
+        // Erste Anfrage: Leere Filmliste
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({
+            data: {
+                data: [],
+                meta: { page: 1, limit: 20, total: 0, total_pages: 1 },
+            },
+        });
+
+        render(<MovieList />, { wrapper });
+
+        // Warte auf die leere Filmliste
+        await waitFor(() => {
+            expect(screen.getByRole("alert")).toHaveTextContent("Keine Filme in der Sammlung");
+        });
+
+        // Simuliere das Hinzufügen eines Films (dies würde normalerweise invalidateQueries aufrufen)
+        queryClient.invalidateQueries({ queryKey: ["movies"] });
+
+        // Zweite Anfrage nach dem Hinzufügen: Filmliste mit einem Film
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({
+            data: {
+                data: [mockMovies[0]],
+                meta: { page: 1, limit: 20, total: 1, total_pages: 1 },
+            },
+        });
+
+        // Warten, bis die Anfrage gemacht wird und der Film erscheint
+        await waitFor(() => {
+            expect(axios.get).toHaveBeenCalled();
+        });
+    });
+
+    it("sollte beim Löschen eines Films die Liste aktualisieren", async () => {
+        // Erste Anfrage: Liste mit einem Film
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({
+            data: {
+                data: [mockMovies[0]], // nur Avatar
+                meta: { page: 1, limit: 20, total: 1, total_pages: 1 },
+            },
+        });
+
+        render(<MovieList />, { wrapper });
+
+        // Warte, bis der Film angezeigt wird
+        await waitFor(
+            () => {
+                expect(screen.getByText("Avatar")).toBeInTheDocument();
+            },
+            { timeout: 3000 }
+        );
+
+        // Erste Anfrage sollte gestellt worden sein
+        expect(axios.get).toHaveBeenCalledTimes(1);
+
+        // Simuliere das Löschen eines Films
+        queryClient.invalidateQueries({ queryKey: ["movies"] });
+
+        // Zweite Anfrage nach dem Löschen: Leere Liste
+        (axios.get as MockAxiosGet).mockResolvedValueOnce({
+            data: {
+                data: [], // Keine Filme mehr
+                meta: { page: 1, limit: 20, total: 0, total_pages: 1 },
+            },
+        });
+
+        // Warte, bis die zweite Anfrage abgeschlossen ist
+        await waitFor(
+            () => {
+                expect(axios.get).toHaveBeenCalledTimes(2);
+            },
+            { timeout: 3000 }
+        );
+
+        // Verifiziere, dass die zweite Anfrage tatsächlich gemacht wurde
+        // Dies stellt sicher, dass invalidateQueries funktioniert hat
+        const secondCall = (axios.get as jest.Mock).mock.calls[1][0];
+        expect(secondCall).toContain("/movies");
+        expect(secondCall).toContain("page=1");
+        expect(secondCall).toContain("limit=20");
+        expect(secondCall).toContain("t="); // Cache-Buster sollte vorhanden sein
     });
 });

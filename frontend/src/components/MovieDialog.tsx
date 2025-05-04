@@ -67,12 +67,17 @@ export const MovieDialog = ({ movie, open, onClose }: MovieDialogProps) => {
     }, [movie]);
 
     const deleteMovieMutation = useMutation({
-        mutationFn: async (movieId: number) => {
-            await axios.delete(`${BACKEND_URL}/movies/${movieId}`);
+        mutationFn: async (id: number) => {
+            const response = await axios.delete(`${BACKEND_URL}/movies/${id}`);
+            return response.data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["movies"] });
             onClose();
+        },
+        onError: (error) => {
+            console.error("Error deleting movie:", error);
+            setError("Löschen fehlgeschlagen");
         },
     });
 

@@ -27,6 +27,8 @@ WORKDIR /app
 COPY --from=builder /app/main .
 # Kopiere die SBOM-Datei
 COPY --from=builder /app/sbom.json .
+# Kopiere die Swagger-Dateien
+COPY --from=builder /app/docs ./docs
 
 EXPOSE 8080
 

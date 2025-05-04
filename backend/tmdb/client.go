@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"sync"
 	"time"
@@ -102,7 +103,8 @@ func NewClientWithBaseURL(baseURL string) *Client {
 }
 
 func (c *Client) SearchMovies(query string) ([]Movie, error) {
-	url := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s", c.baseURL, c.apiKey, query)
+	escapedQuery := url.QueryEscape(query)
+	url := fmt.Sprintf("%s/search/movie?api_key=%s&query=%s", c.baseURL, c.apiKey, escapedQuery)
 	resp, err := c.httpClient.Get(url)
 	if err != nil {
 		return nil, err

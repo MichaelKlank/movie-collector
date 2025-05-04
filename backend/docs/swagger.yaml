@@ -1,0 +1,308 @@
+basePath: /api
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
+  models.Movie:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_path:
+        type: string
+      overview:
+        type: string
+      poster_path:
+        type: string
+      rating:
+        type: number
+      release_date:
+        type: string
+      title:
+        type: string
+      tmdb_id:
+        type: string
+      updated_at:
+        type: string
+      year:
+        type: integer
+    required:
+    - title
+    - year
+    type: object
+  models.SwaggerResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+host: localhost
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Eine API zur Verwaltung Ihrer Filmsammlung
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Movie Collector API
+  version: "1.0"
+paths:
+  /movies:
+    get:
+      consumes:
+      - application/json
+      description: Gibt eine Liste aller gespeicherten Filme zurück
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Movie'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Liste aller Filme abrufen
+      tags:
+      - movies
+    post:
+      consumes:
+      - application/json
+      description: Erstellt einen neuen Film in der Datenbank
+      parameters:
+      - description: Movie Information
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/models.Movie'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Movie'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Neuen Film erstellen
+      tags:
+      - movies
+  /movies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Löscht einen Film aus der Datenbank
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SwaggerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Film löschen
+      tags:
+      - movies
+    get:
+      consumes:
+      - application/json
+      description: Gibt einen spezifischen Film anhand seiner ID zurück
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Movie'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Einzelnen Film abrufen
+      tags:
+      - movies
+    put:
+      consumes:
+      - application/json
+      description: Aktualisiert einen bestehenden Film
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Movie Information
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/models.Movie'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Movie'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Film aktualisieren
+      tags:
+      - movies
+  /movies/{id}/image:
+    delete:
+      description: Löscht das Bild eines spezifischen Films
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SwaggerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Bild eines Films löschen
+      tags:
+      - images
+    get:
+      description: Gibt das Bild eines spezifischen Films zurück
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - image/jpeg
+      - image/png
+      - image/gif
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Bild eines Films abrufen
+      tags:
+      - images
+    post:
+      consumes:
+      - multipart/form-data
+      description: Lädt ein Bild für einen spezifischen Film hoch
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Image file
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SwaggerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Bild für einen Film hochladen
+      tags:
+      - images
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

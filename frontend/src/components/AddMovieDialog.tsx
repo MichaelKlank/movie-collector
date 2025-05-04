@@ -1,17 +1,6 @@
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import CloseIcon from "@mui/icons-material/Close";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MovieIcon from "@mui/icons-material/Movie";
-import SearchIcon from "@mui/icons-material/Search";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useState, useRef, useEffect } from "react";
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
     Alert,
-    Avatar,
     Box,
     Button,
     CircularProgress,
@@ -21,26 +10,24 @@ import {
     DialogTitle,
     IconButton,
     InputAdornment,
-    ListItemAvatar,
-    ListItemButton,
-    ListItemText,
-    Stack,
     TextField,
     Typography,
+    Grid,
+    Card,
+    CardMedia,
+    CardContent,
+    Tooltip,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { LoadingButton } from "@mui/lab";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BACKEND_URL } from "../config";
 import { TMDBMovie } from "../types/tmdb";
-
-const MoviePoster = styled(Avatar)(({ theme }) => ({
-    width: 120,
-    height: 180,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[2],
-}));
+import CheckIcon from "@mui/icons-material/Check";
+import AddIcon from "@mui/icons-material/Add";
 
 interface MovieMetadata {
     seen: boolean;
@@ -57,25 +44,27 @@ interface AddMovieDialogProps {
 export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedMovie, setSelectedMovie] = useState<TMDBMovie | null>(null);
+    const [selectedMovies, setSelectedMovies] = useState<TMDBMovie[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isSearching, setIsSearching] = useState(false);
     const [movieMetadata, setMovieMetadata] = useState<Record<number, MovieMetadata>>({});
-    const [debugInfo, setDebugInfo] = useState<string>("");
+    const [, setDebugInfo] = useState<string>("");
     const [searchError, setSearchError] = useState<string>("");
     const searchInputRef = useRef<HTMLInputElement>(null);
     const queryClient = useQueryClient();
+    const [existingMovies, setExistingMovies] = useState<string[]>([]);
 
     useEffect(() => {
         if (isOpen) {
             setTimeout(() => {
                 searchInputRef.current?.focus();
             }, 100);
+            fetchExistingMovies();
         } else {
             // Reset all state when dialog is closed
             setSearchTerm("");
             setSearchQuery("");
-            setSelectedMovie(null);
+            setSelectedMovies([]);
             setMovieMetadata({});
             setDebugInfo("");
             setSearchError("");
@@ -87,25 +76,17 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
         setError(null);
     }, [searchQuery]);
 
-    const testTMDBConnection = async () => {
+    const fetchExistingMovies = async () => {
         try {
-            setDebugInfo("Starte TMDB Test...");
-            const response = await axios.get(`${BACKEND_URL}/tmdb/test`);
-            setDebugInfo(`TMDB Test erfolgreich: ${JSON.stringify(response.data, null, 2)}`);
-        } catch (error) {
-            console.error("TMDB Test Error:", error);
-            if (axios.isAxiosError(error)) {
-                setDebugInfo(
-                    `TMDB Test fehlgeschlagen:\nError: ${error.message}\n` +
-                        `Status: ${error.response?.status}\n` +
-                        `Response: ${JSON.stringify(error.response?.data, null, 2)}\n` +
-                        `Request URL: ${error.config?.url}`
-                );
-            } else {
-                setDebugInfo(
-                    `TMDB Test fehlgeschlagen: ${error instanceof Error ? error.message : "Unbekannter Fehler"}`
-                );
+            const response = await axios.get(`${BACKEND_URL}/movies`);
+            if (response.data && response.data.data) {
+                const tmdbIds = response.data.data
+                    .filter((movie: { tmdb_id?: string }) => movie.tmdb_id)
+                    .map((movie: { tmdb_id: string }) => movie.tmdb_id);
+                setExistingMovies(tmdbIds);
             }
+        } catch (error) {
+            console.error("Fehler beim Laden bestehender Filme:", error);
         }
     };
 
@@ -221,12 +202,20 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
     };
 
     const handleMovieSelect = (movie: TMDBMovie) => {
-        console.log("Selected movie:", {
-            ...movie,
-            overview: movie.overview ? `${movie.overview.substring(0, 100)}...` : "Keine Beschreibung",
-        });
-        setSelectedMovie(movie);
+        // Überprüfen, ob der Film bereits ausgewählt ist
+        const isSelected = selectedMovies.some((m) => m.id === movie.id);
+
+        if (isSelected) {
+            // Film aus der Auswahl entfernen
+            setSelectedMovies((prev) => prev.filter((m) => m.id !== movie.id));
+        } else {
+            // Film zur Auswahl hinzufügen
+            setSelectedMovies((prev) => [...prev, movie]);
+        }
+
         setError(null);
+
+        // Metadaten hinzufügen, falls noch nicht vorhanden
         if (!movieMetadata[movie.id]) {
             setMovieMetadata((prev) => ({
                 ...prev,
@@ -240,34 +229,42 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
         }
     };
 
-    const toggleMovieSeen = (movieId: number) => {
-        setMovieMetadata((prev) => ({
-            ...prev,
-            [movieId]: {
-                ...prev[movieId],
-                seen: !prev[movieId].seen,
-            },
-        }));
-    };
+    const handleAddMovies = async () => {
+        if (selectedMovies.length === 0) return;
 
-    const toggleMovieWatchlist = (movieId: number) => {
-        setMovieMetadata((prev) => ({
-            ...prev,
-            [movieId]: {
-                ...prev[movieId],
-                watchlist: !prev[movieId].watchlist,
-            },
-        }));
-    };
+        setError(null);
 
-    const handleAddMovie = () => {
-        if (!selectedMovie) return;
-        addMovieMutation.mutate(selectedMovie);
+        try {
+            // Nacheinander alle ausgewählten Filme hinzufügen
+            for (const movie of selectedMovies) {
+                await addMovieMutation.mutateAsync(movie);
+            }
+
+            // Nach erfolgreichem Hinzufügen den Dialog schließen
+            queryClient.invalidateQueries({ queryKey: ["movies"] });
+            onClose();
+        } catch (error) {
+            console.error("Fehler beim Hinzufügen der Filme:", error);
+            if (axios.isAxiosError(error) && error.response?.status === 409) {
+                setError("Mindestens ein Film existiert bereits in Ihrer Sammlung");
+            } else {
+                setError(error instanceof Error ? error.message : "Ein Fehler ist aufgetreten");
+            }
+        }
     };
 
     const isAddButtonDisabled = () => {
-        if (!selectedMovie) return true;
-        return !selectedMovie.title || !selectedMovie.overview || !selectedMovie.release_date;
+        return selectedMovies.length === 0;
+    };
+
+    // Funktion zur Prüfung, ob ein Film bereits ausgewählt ist
+    const isMovieSelected = (movie: TMDBMovie) => {
+        return selectedMovies.some((m) => m.id === movie.id);
+    };
+
+    // Funktion zur Prüfung, ob ein Film bereits in der Sammlung existiert
+    const isMovieInCollection = (movie: TMDBMovie) => {
+        return existingMovies.includes(movie.id.toString());
     };
 
     return (
@@ -295,7 +292,9 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                     alignItems: "center",
                 }}
             >
-                Film hinzufügen
+                {selectedMovies.length > 0
+                    ? `Filme hinzufügen (${selectedMovies.length} ausgewählt)`
+                    : "Filme hinzufügen"}
                 <IconButton aria-label='close' onClick={onClose} sx={{ color: "text.secondary" }}>
                     <CloseIcon />
                 </IconButton>
@@ -306,371 +305,209 @@ export function AddMovieDialog({ isOpen, onClose }: AddMovieDialogProps) {
                     py: { xs: 1, sm: 2 },
                 }}
             >
-                <Accordion sx={{ mb: 2, "&.MuiAccordion-root": { borderRadius: 1, "&:before": { display: "none" } } }}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        sx={{ bgcolor: (theme) => (theme.palette.mode === "dark" ? "grey.800" : "grey.100") }}
-                    >
-                        <Typography variant='body2' color='text.secondary'>
-                            Debug Informationen
+                <Box sx={{ mb: 2, borderRadius: 1 }}>
+                    <Box sx={{ p: 2 }}>
+                        <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600 }}>
+                            Nach Filmen suchen
                         </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Button
-                            variant='outlined'
-                            size='small'
-                            color='primary'
-                            onClick={testTMDBConnection}
-                            sx={{ mb: 2 }}
-                        >
-                            TMDB Verbindung testen
-                        </Button>
-                        {debugInfo && (
-                            <Box
-                                sx={{
-                                    p: 1,
-                                    bgcolor: (theme) => (theme.palette.mode === "dark" ? "grey.800" : "grey.100"),
-                                    borderRadius: 1,
-                                    maxHeight: "200px",
-                                    overflow: "auto",
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                            <TextField
+                                fullWidth
+                                placeholder='Filmtitel eingeben...'
+                                value={searchTerm}
+                                onChange={handleSearch}
+                                onKeyDown={handleKeyDown}
+                                inputRef={searchInputRef}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    ),
                                 }}
+                                sx={{ mb: 1 }}
+                            />
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                onClick={handleSearchClick}
+                                disabled={isSearching || !searchTerm.trim()}
+                                sx={{ height: "fit-content", minWidth: "120px", whiteSpace: "nowrap" }}
                             >
-                                <pre
-                                    style={{
-                                        margin: 0,
-                                        fontSize: "0.8rem",
-                                        whiteSpace: "pre-wrap",
-                                        wordBreak: "break-word",
-                                    }}
-                                >
-                                    {debugInfo}
-                                </pre>
-                            </Box>
+                                {isSearching ? <CircularProgress size={24} /> : "Suchen"}
+                            </Button>
+                        </Box>
+
+                        {searchError && (
+                            <Alert severity='error' sx={{ mt: 2 }}>
+                                {searchError}
+                            </Alert>
                         )}
-                    </AccordionDetails>
-                </Accordion>
 
-                {searchError && (
-                    <Alert severity='error' sx={{ mb: 2 }}>
-                        {searchError}
-                    </Alert>
-                )}
-
-                {error && (
-                    <Alert severity='error' sx={{ mb: 2 }}>
-                        {error}
-                    </Alert>
-                )}
-
-                <TextField
-                    inputRef={searchInputRef}
-                    autoFocus
-                    margin='dense'
-                    label='Film suchen'
-                    type='text'
-                    fullWidth
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    onKeyDown={handleKeyDown}
-                    sx={{
-                        mb: { xs: 2, sm: 2 },
-                        "& .MuiInputBase-root": {
-                            height: { xs: "48px", sm: "56px" },
-                            bgcolor: (theme) => (theme.palette.mode === "dark" ? "grey.800" : "background.paper"),
-                        },
-                        "& .MuiInputLabel-root": {
-                            fontSize: { xs: "0.875rem", sm: "1rem" },
-                            color: (theme) => (theme.palette.mode === "dark" ? "grey.400" : "grey.600"),
-                        },
-                        "& .MuiOutlinedInput-root": {
-                            "& fieldset": {
-                                borderColor: (theme) => (theme.palette.mode === "dark" ? "grey.700" : "grey.300"),
-                            },
-                            "&:hover fieldset": {
-                                borderColor: (theme) => (theme.palette.mode === "dark" ? "grey.600" : "grey.400"),
-                            },
-                        },
-                    }}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position='end'>
-                                <Button
-                                    variant='contained'
-                                    onClick={handleSearchClick}
-                                    startIcon={<SearchIcon />}
-                                    type='submit'
-                                    sx={{
-                                        minWidth: { xs: "auto", sm: "100px" },
-                                        px: { xs: 1, sm: 2 },
-                                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                                    }}
-                                >
-                                    {window.innerWidth < 600 ? <SearchIcon /> : "Suchen"}
-                                </Button>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                {searchQuery && (
-                    <>
-                        {isSearching || isFetching ? (
-                            <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
+                        {isFetching && !isSearching && (
+                            <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
                                 <CircularProgress />
                             </Box>
-                        ) : (
-                            <>
-                                {(!searchResults || searchResults.length === 0) && (
-                                    <Box
-                                        sx={{
-                                            mt: 2,
-                                            p: 2,
-                                            textAlign: "center",
-                                            bgcolor: "background.paper",
-                                            borderRadius: 1,
-                                        }}
-                                    >
-                                        <Typography variant='body1' color='text.secondary'>
-                                            Keine Filme gefunden für "{searchQuery}"
-                                        </Typography>
-                                    </Box>
-                                )}
-                                {searchResults && searchResults.length > 0 && (
-                                    <Stack spacing={2} sx={{ mt: 2 }}>
-                                        {searchResults.map((movie: TMDBMovie) => {
-                                            const metadata = movieMetadata[movie.id] || {
-                                                seen: false,
-                                                watchlist: false,
-                                                rating: 0,
-                                                mediaType: "Blu-ray",
-                                            };
-                                            return (
-                                                <ListItemButton
-                                                    key={movie.id}
-                                                    selected={selectedMovie?.id === movie.id}
-                                                    onClick={() => handleMovieSelect(movie)}
-                                                    role='button'
-                                                    aria-label={movie.title}
-                                                    sx={{
-                                                        borderRadius: 2,
-                                                        border: "1px solid",
-                                                        borderColor: (theme) =>
-                                                            theme.palette.mode === "dark" ? "grey.700" : "grey.300",
-                                                        p: { xs: 2, sm: 3 },
-                                                        display: "flex",
-                                                        flexDirection: "row",
-                                                        alignItems: "flex-start",
-                                                        width: "100%",
-                                                        maxWidth: "100%",
-                                                        bgcolor: (theme) =>
-                                                            theme.palette.mode === "dark"
-                                                                ? "grey.800"
-                                                                : "background.paper",
-                                                        "&:hover": {
-                                                            borderColor: "primary.main",
-                                                            bgcolor: (theme) =>
-                                                                theme.palette.mode === "dark" ? "grey.700" : "grey.100",
-                                                        },
-                                                        "&.Mui-selected": {
-                                                            borderColor: "primary.main",
-                                                            bgcolor: (theme) =>
-                                                                theme.palette.mode === "dark"
-                                                                    ? "primary.dark"
-                                                                    : "primary.light",
-                                                        },
-                                                    }}
-                                                >
-                                                    <ListItemAvatar
+                        )}
+
+                        {searchResults && searchResults.length > 0 && (
+                            <Box sx={{ mt: 2 }}>
+                                <Typography variant='subtitle1' sx={{ mb: 1, fontWeight: 600 }}>
+                                    Gefundene Filme ({searchResults.length})
+                                </Typography>
+                                <Grid container spacing={2}>
+                                    {searchResults.map((movie) => (
+                                        <Grid
+                                            key={movie.id}
+                                            sx={{
+                                                flexBasis: {
+                                                    xs: "100%",
+                                                    sm: "50%",
+                                                    md: "33.33%",
+                                                    lg: "25%",
+                                                    xl: "20%",
+                                                },
+                                            }}
+                                        >
+                                            <Card
+                                                sx={{
+                                                    height: "100%",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    border: isMovieSelected(movie)
+                                                        ? "2px solid"
+                                                        : isMovieInCollection(movie)
+                                                        ? "2px dashed"
+                                                        : "none",
+                                                    borderColor: isMovieInCollection(movie)
+                                                        ? "success.main"
+                                                        : "primary.main",
+                                                    position: "relative",
+                                                    cursor: isMovieInCollection(movie) ? "default" : "pointer",
+                                                    opacity: isMovieInCollection(movie) ? 0.8 : 1,
+                                                    m: 1,
+                                                }}
+                                                onClick={() => {
+                                                    if (!isMovieInCollection(movie)) {
+                                                        handleMovieSelect(movie);
+                                                    }
+                                                }}
+                                            >
+                                                {isMovieSelected(movie) && (
+                                                    <Box
                                                         sx={{
-                                                            mb: 0,
-                                                            mr: 3,
-                                                            minWidth: "auto",
-                                                            alignSelf: "flex-start",
+                                                            position: "absolute",
+                                                            top: 8,
+                                                            right: 8,
+                                                            zIndex: 2,
+                                                            bgcolor: "primary.main",
+                                                            borderRadius: "50%",
+                                                            width: 24,
+                                                            height: 24,
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
                                                         }}
                                                     >
-                                                        <MoviePoster
-                                                            variant='rounded'
-                                                            src={
-                                                                movie.poster_path
-                                                                    ? `https://image.tmdb.org/t/p/w185${movie.poster_path}`
-                                                                    : undefined
-                                                            }
-                                                            alt={movie.title}
+                                                        <CheckIcon sx={{ color: "white", fontSize: 16 }} />
+                                                    </Box>
+                                                )}
+
+                                                {isMovieInCollection(movie) && (
+                                                    <Tooltip title='Film bereits in Ihrer Sammlung'>
+                                                        <Box
+                                                            sx={{
+                                                                position: "absolute",
+                                                                top: 8,
+                                                                right: 8,
+                                                                zIndex: 2,
+                                                                bgcolor: "success.main",
+                                                                borderRadius: "50%",
+                                                                width: 24,
+                                                                height: 24,
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                            }}
                                                         >
-                                                            {!movie.poster_path && (
-                                                                <MovieIcon sx={{ width: 40, height: 40 }} />
-                                                            )}
-                                                        </MoviePoster>
-                                                    </ListItemAvatar>
-                                                    <ListItemText
-                                                        primary={
-                                                            <Typography
-                                                                component='div'
-                                                                variant='body2'
-                                                                sx={{
-                                                                    display: "flex",
-                                                                    flexDirection: "row",
-                                                                    alignItems: "center",
-                                                                    gap: 2,
-                                                                    mb: 1,
-                                                                    flexWrap: "wrap",
-                                                                    width: "100%",
-                                                                    maxWidth: "600px",
-                                                                }}
-                                                            >
-                                                                <Typography
-                                                                    component='div'
-                                                                    variant='h6'
-                                                                    sx={{
-                                                                        fontSize: "1.25rem",
-                                                                        fontWeight: 500,
-                                                                        flex: "1 1 auto",
-                                                                        minWidth: "200px",
-                                                                    }}
-                                                                >
-                                                                    {movie.title}
-                                                                </Typography>
-                                                                <Box sx={{ display: "flex", gap: 1 }}>
-                                                                    <IconButton
-                                                                        size='small'
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            toggleMovieSeen(movie.id);
-                                                                        }}
-                                                                        aria-label='Als gesehen markieren'
-                                                                        aria-pressed={metadata.seen}
-                                                                    >
-                                                                        {metadata.seen ? (
-                                                                            <VisibilityIcon />
-                                                                        ) : (
-                                                                            <VisibilityOffIcon />
-                                                                        )}
-                                                                    </IconButton>
-                                                                    <IconButton
-                                                                        size='small'
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            toggleMovieWatchlist(movie.id);
-                                                                        }}
-                                                                        aria-label='Zur Merkliste hinzufügen'
-                                                                        aria-pressed={metadata.watchlist}
-                                                                    >
-                                                                        {metadata.watchlist ? (
-                                                                            <BookmarkIcon />
-                                                                        ) : (
-                                                                            <BookmarkBorderIcon />
-                                                                        )}
-                                                                    </IconButton>
-                                                                </Box>
-                                                            </Typography>
-                                                        }
-                                                        secondary={
-                                                            <Typography
-                                                                component='div'
-                                                                variant='body2'
-                                                                color='text.secondary'
-                                                            >
-                                                                <Typography
-                                                                    component='div'
-                                                                    variant='body2'
-                                                                    sx={{
-                                                                        fontSize: {
-                                                                            xs: "0.875rem",
-                                                                            sm: "0.875rem",
-                                                                        },
-                                                                    }}
-                                                                >
-                                                                    {movie.overview
-                                                                        ? movie.overview.length > 150
-                                                                            ? `${movie.overview.substring(0, 150)}...`
-                                                                            : movie.overview
-                                                                        : "Keine Beschreibung verfügbar"}
-                                                                </Typography>
-                                                                {movie.credits?.cast &&
-                                                                    movie.credits.cast.length > 0 && (
-                                                                        <Typography
-                                                                            component='div'
-                                                                            variant='body2'
-                                                                            sx={{
-                                                                                fontSize: {
-                                                                                    xs: "0.875rem",
-                                                                                    sm: "0.875rem",
-                                                                                },
-                                                                            }}
-                                                                        >
-                                                                            Mit:{" "}
-                                                                            {movie.credits.cast
-                                                                                .slice(0, 3)
-                                                                                .map((actor) => actor.name)
-                                                                                .join(", ")}
-                                                                        </Typography>
-                                                                    )}
-                                                                {movie.credits?.crew &&
-                                                                    movie.credits.crew.length > 0 &&
-                                                                    movie.credits.crew.find(
-                                                                        (c) => c.job === "Director"
-                                                                    ) && (
-                                                                        <Typography
-                                                                            component='div'
-                                                                            variant='body2'
-                                                                            sx={{
-                                                                                fontSize: {
-                                                                                    xs: "0.875rem",
-                                                                                    sm: "0.875rem",
-                                                                                },
-                                                                            }}
-                                                                        >
-                                                                            Regie:{" "}
-                                                                            {
-                                                                                movie.credits.crew.find(
-                                                                                    (c) => c.job === "Director"
-                                                                                )?.name
-                                                                            }
-                                                                        </Typography>
-                                                                    )}
-                                                            </Typography>
-                                                        }
-                                                    />
-                                                </ListItemButton>
-                                            );
-                                        })}
-                                    </Stack>
-                                )}
-                            </>
+                                                            <BookmarkIcon sx={{ color: "white", fontSize: 16 }} />
+                                                        </Box>
+                                                    </Tooltip>
+                                                )}
+
+                                                <CardMedia
+                                                    component='img'
+                                                    alt={movie.title}
+                                                    height='240'
+                                                    image={
+                                                        movie.poster_path
+                                                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                                            : "/placeholders/movie-placeholder.png"
+                                                    }
+                                                    sx={{ objectFit: "cover" }}
+                                                />
+                                                <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+                                                    <Typography variant='subtitle1' component='h3' noWrap>
+                                                        {movie.title}
+                                                    </Typography>
+                                                    <Typography
+                                                        variant='body2'
+                                                        color='text.secondary'
+                                                        sx={{
+                                                            display: "-webkit-box",
+                                                            WebkitLineClamp: 3,
+                                                            WebkitBoxOrient: "vertical",
+                                                            overflow: "hidden",
+                                                            mt: 1,
+                                                            mb: 2,
+                                                        }}
+                                                    >
+                                                        {movie.overview || "Keine Beschreibung verfügbar."}
+                                                    </Typography>
+                                                    <Typography variant='body2' color='text.secondary'>
+                                                        {movie.release_date
+                                                            ? new Date(movie.release_date).getFullYear()
+                                                            : "Unbekanntes Jahr"}
+                                                    </Typography>
+                                                </CardContent>
+                                            </Card>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Box>
                         )}
-                    </>
-                )}
+                    </Box>
+                </Box>
             </DialogContent>
             <DialogActions
                 sx={{
-                    px: { xs: 1, sm: 3 },
-                    py: { xs: 1, sm: 2 },
-                    borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+                    px: { xs: 2, sm: 3 },
+                    pb: { xs: 2, sm: 3 },
+                    justifyContent: "space-between",
                 }}
             >
-                <Button
-                    onClick={onClose}
-                    sx={{
-                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                        color: (theme) => (theme.palette.mode === "dark" ? "grey.300" : "grey.700"),
-                    }}
-                >
-                    Abbrechen
-                </Button>
-                <Button
-                    onClick={handleAddMovie}
-                    disabled={isAddButtonDisabled()}
-                    variant='contained'
-                    color='primary'
-                    sx={{
-                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                        bgcolor: (theme) => (theme.palette.mode === "dark" ? "primary.dark" : "primary.main"),
-                        "&:hover": {
-                            bgcolor: (theme) => (theme.palette.mode === "dark" ? "primary.main" : "primary.dark"),
-                        },
-                    }}
-                >
-                    Hinzufügen
-                </Button>
+                <Box>
+                    {error && (
+                        <Typography variant='body2' color='error' sx={{ mb: 1 }}>
+                            {error}
+                        </Typography>
+                    )}
+                </Box>
+                <Box>
+                    <Button onClick={onClose} color='inherit' sx={{ mr: 1 }}>
+                        Abbrechen
+                    </Button>
+                    <LoadingButton
+                        onClick={handleAddMovies}
+                        disabled={isAddButtonDisabled()}
+                        loading={addMovieMutation.isPending}
+                        variant='contained'
+                        color='primary'
+                        startIcon={<AddIcon />}
+                    >
+                        {selectedMovies.length > 1 ? `${selectedMovies.length} Filme hinzufügen` : "Film hinzufügen"}
+                    </LoadingButton>
+                </Box>
             </DialogActions>
         </Dialog>
     );

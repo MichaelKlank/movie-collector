@@ -13,14 +13,33 @@ export interface Movie {
     title: string;
     description: string;
     year: number;
-    image_path?: string;
     poster_path?: string;
+    image_path?: string;
+    created_at?: string;
+    updated_at?: string;
     tmdb_id?: string;
     overview?: string;
     release_date?: string;
-    rating: number;
-    created_at?: string;
-    updated_at?: string;
+    [key: string]: string | number | boolean | undefined | null | Genre[] | ProductionCompany[];
     genres?: Genre[];
     production_companies?: ProductionCompany[];
+}
+
+// API Response Types
+export interface PaginationMeta {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+}
+
+export interface PaginatedResponse<T> {
+    data: T[];
+    meta: PaginationMeta;
+}
+
+// User Types
+export interface UserPreferences {
+    theme: "light" | "dark";
+    language: string;
 }
