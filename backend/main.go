@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/MichaelKlank/movie-collector/backend/cache"
 	"github.com/MichaelKlank/movie-collector/backend/db"
 	"github.com/MichaelKlank/movie-collector/backend/handlers"
 	"github.com/MichaelKlank/movie-collector/backend/middleware"
@@ -15,8 +16,7 @@ import (
 	"github.com/MichaelKlank/movie-collector/backend/repositories"
 	"github.com/MichaelKlank/movie-collector/backend/services"
 	"github.com/MichaelKlank/movie-collector/backend/tmdb"
-	"github.com/gin-contrib/cache"
-	"github.com/gin-contrib/cache/persistence"
+	gincache "github.com/gin-contrib/cache"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -67,6 +67,9 @@ func main() {
 		log.Fatal("Failed to migrate database:", err)
 	}
 
+	// Initialisiere den Redis-Cache
+	cache.InitRedisCache()
+
 	// Initialize dependencies
 	movieRepo := repositories.NewMovieRepository(db.GetDB())
 	movieService := services.NewMovieService(movieRepo)
@@ -101,33 +104,6 @@ func main() {
 	// Starte Cleanup-Task für Rate Limiter (alle 5 Minuten)
 	rateLimiter.CleanupTask(5 * time.Minute)
 
-	// Cache-Speicher initialisieren (5 Minuten Ablaufzeit)
-	store := persistence.NewInMemoryStore(time.Minute * 5)
-
-	// Funktion zum Löschen aller Caches
-	clearAllCaches := func() {
-		// Direkte API-Pfade
-		if err := store.Delete("/api/movies"); err != nil {
-			log.Printf("Fehler beim Löschen des Caches /api/movies: %v", err)
-		}
-		if err := store.Delete("/api/movies/search"); err != nil {
-			log.Printf("Fehler beim Löschen des Caches /api/movies/search: %v", err)
-		}
-
-		// Interne Pfade
-		if err := store.Delete("/movies"); err != nil {
-			log.Printf("Fehler beim Löschen des Caches /movies: %v", err)
-		}
-		if err := store.Delete("/movies/search"); err != nil {
-			log.Printf("Fehler beim Löschen des Caches /movies/search: %v", err)
-		}
-
-		// Alle Cache-Einträge löschen (globaler Cache-Reset)
-		store.Flush()
-
-		log.Printf("Alle Caches wurden gelöscht")
-	}
-
 	// Middleware für Cache-Control Header
 	r.Use(func(c *gin.Context) {
 		// Setze Cache-Control Header für alle Antworten
@@ -138,28 +114,28 @@ func main() {
 	})
 
 	// Movie routes mit Cache für GET-Anfragen
-	r.GET("/movies", cache.CachePage(store, time.Minute*2, movieHandler.GetMovies))
-	r.GET("/movies/search", cache.CachePage(store, time.Minute*1, movieHandler.SearchMovies))
-	r.GET("/movies/:id", cache.CachePage(store, time.Minute*5, movieHandler.GetMovie))
+	r.GET("/movies", gincache.CachePage(cache.RedisStore, 2*time.Minute, movieHandler.GetMovies))
+	r.GET("/movies/search", gincache.CachePage(cache.RedisStore, 1*time.Minute, movieHandler.SearchMovies))
+	r.GET("/movies/:id", gincache.CachePage(cache.RedisStore, 5*time.Minute, movieHandler.GetMovie))
 	r.POST("/movies", func(c *gin.Context) {
 		movieHandler.CreateMovie(c)
 		// Cache nach Erstellung eines Films invalidieren
 		log.Printf("Cache wird nach Film-Erstellung invalidiert")
-		clearAllCaches()
+		cache.ClearAllCaches()
 	})
 	r.PUT("/movies/:id", func(c *gin.Context) {
 		movieHandler.UpdateMovie(c)
 		// Cache nach Update eines Films invalidieren
 		id := c.Param("id")
 		log.Printf("Cache wird nach Film-Update invalidiert: id=%s", id)
-		clearAllCaches()
+		cache.ClearAllCaches()
 	})
 	r.DELETE("/movies/:id", func(c *gin.Context) {
 		movieHandler.DeleteMovie(c)
 		// Cache nach Löschen eines Films invalidieren
 		id := c.Param("id")
 		log.Printf("Cache wird nach Film-Löschung invalidiert: id=%s", id)
-		clearAllCaches()
+		cache.ClearAllCaches()
 	})
 
 	// Image routes
@@ -178,7 +154,7 @@ func main() {
 	})
 
 	// Cache für TMDB-Suche (kürzere Ablaufzeit von 1 Minute)
-	r.GET("/tmdb/search", cache.CachePage(store, time.Minute, func(c *gin.Context) {
+	r.GET("/tmdb/search", gincache.CachePage(cache.RedisStore, time.Minute, func(c *gin.Context) {
 		query := c.Query("query")
 		if query == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "query parameter is required"})
@@ -196,7 +172,7 @@ func main() {
 	}))
 
 	// Cache für TMDB-Filmdetails (längere Ablaufzeit von 1 Stunde)
-	r.GET("/tmdb/movie/:id", cache.CachePage(store, time.Hour, func(c *gin.Context) {
+	r.GET("/tmdb/movie/:id", gincache.CachePage(cache.RedisStore, time.Hour, func(c *gin.Context) {
 		idStr := c.Param("id")
 		if idStr == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "movie ID is required"})

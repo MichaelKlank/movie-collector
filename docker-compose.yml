@@ -15,6 +15,21 @@ services:
         networks:
             - app-network
 
+    redis:
+        image: redis:alpine
+        container_name: movie-collector-redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+        networks:
+            - app-network
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
     backend:
         build:
             context: .
@@ -23,10 +38,15 @@ services:
             - DATABASE_URL=postgresql://postgres:postgres@db:5432/dvd_collection
             - TMDB_API_KEY=${TMDB_API_KEY}
             - API_HOST=localhost
+            - REDIS_HOST=redis:6379
+            - REDIS_PASSWORD=
+            - REDIS_DB=0
         volumes:
             - ./backend/docs:/app/docs
         depends_on:
             db:
+                condition: service_healthy
+            redis:
                 condition: service_healthy
         networks:
             - app-network
@@ -106,6 +126,7 @@ services:
 
 volumes:
     postgres_data:
+    redis_data:
 
 networks:
     app-network:

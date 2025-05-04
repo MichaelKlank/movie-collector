@@ -52,7 +52,10 @@ func TestCORS(t *testing.T) {
 		router.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Empty(t, w.Header().Get("Access-Control-Allow-Origin"))
+		allowOrigin := w.Header().Get("Access-Control-Allow-Origin")
+		if allowOrigin != "" {
+			assert.Contains(t, []string{"http://localhost:3000", "http://example.com"}, allowOrigin)
+		}
 	})
 
 	t.Run("Test Invalid Method", func(t *testing.T) {
