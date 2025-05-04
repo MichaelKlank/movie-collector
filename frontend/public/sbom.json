@@ -17,7 +17,7 @@
           "type": "application",
           "name": "cyclonedx-npm",
           "group": "@cyclonedx",
-          "version": "2.1.0",
+          "version": "3.0.0",
           "author": "Jan Kowalleck",
           "description": "Create CycloneDX Software Bill of Materials (SBOM) from NPM projects.",
           "licenses": [
@@ -49,7 +49,7 @@
           "type": "library",
           "name": "cyclonedx-library",
           "group": "@cyclonedx",
-          "version": "7.1.0",
+          "version": "8.0.0",
           "author": "Jan Kowalleck",
           "description": "Core functionality of CycloneDX for JavaScript (Node.js or WebBrowser).",
           "licenses": [
@@ -2309,8 +2309,8 @@
       "type": "library",
       "name": "material",
       "group": "@mui",
-      "version": "7.0.1",
-      "bom-ref": "@mui/material@7.0.1",
+      "version": "7.0.2",
+      "bom-ref": "@mui/material@7.0.2",
       "author": "MUI Team",
       "description": "Material UI is an open-source React component library that implements Google's Material Design. It's comprehensive and can be used in production out of the box.",
       "licenses": [
@@ -2321,7 +2321,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/material@7.0.1#packages/mui-material",
+      "purl": "pkg:npm/%40mui/material@7.0.2#packages/mui-material",
       "externalReferences": [
         {
           "url": "git+https://github.com/mui/material-ui.git#packages/mui-material",
@@ -2339,12 +2339,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/material/-/material-7.0.1.tgz",
+          "url": "https://registry.npmjs.org/@mui/material/-/material-7.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b50c23208b27fd4512087a0221056400db8bb9aebb87b468f4cf60207a0659a15b245b85e9c48ee0e75ada894356a22ce12586f8f6830a1baee929e0c6c6a8c9"
+              "content": "ae3265275dfedcb74b7e86d1a659176e3205108927e8b8297ad814fc2b375ddf2a20d08240af6a5d02238d0e8fd055c54cf173115323d1580147598df8584e70"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2410,12 +2410,12 @@
     },
     {
       "type": "library",
-      "name": "core-downloads-tracker",
+      "name": "lab",
       "group": "@mui",
-      "version": "7.0.1",
-      "bom-ref": "@mui/core-downloads-tracker@7.0.1",
+      "version": "7.0.0-beta.11",
+      "bom-ref": "@mui/lab@7.0.0-beta.11",
       "author": "MUI Team",
-      "description": "Internal package to track number of downloads of our design system libraries",
+      "description": "Laboratory for new MUI modules.",
       "licenses": [
         {
           "license": {
@@ -2424,15 +2424,15 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/core-downloads-tracker@7.0.1#packages/core-downloads-tracker",
+      "purl": "pkg:npm/%40mui/lab@7.0.0-beta.11#packages/mui-lab",
       "externalReferences": [
         {
-          "url": "git+https://github.com/mui/material-ui.git#packages/core-downloads-tracker",
+          "url": "git+https://github.com/mui/material-ui.git#packages/mui-lab",
           "type": "vcs",
           "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
         },
         {
-          "url": "https://mui.com/",
+          "url": "https://mui.com/material-ui/about-the-lab/",
           "type": "website",
           "comment": "as detected from PackageJson property \"homepage\""
         },
@@ -2442,12 +2442,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-7.0.1.tgz",
+          "url": "https://registry.npmjs.org/@mui/lab/-/lab-7.0.0-beta.11.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4f90cd567483f6931b8f8264fd4a61cfecaf8fd75fa65dbe12ab0eb89b46d761f112284d1b9a5ddeacd7e7233521de1d0f0291bccddd3d5731cb36af4c584978"
+              "content": "5490c4520891b23a3c576c43bc1104f427ecd5c4a5c33a7d505983dcacc883a7a614cab3f417d887ef5c148e224166a8cf70209b7aba6d52a58655fac70eac55"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2456,7 +2456,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:path",
-          "value": "node_modules/@mui/core-downloads-tracker"
+          "value": "node_modules/@mui/lab"
         }
       ]
     },
@@ -2464,8 +2464,8 @@
       "type": "library",
       "name": "system",
       "group": "@mui",
-      "version": "7.0.1",
-      "bom-ref": "@mui/system@7.0.1",
+      "version": "7.0.2",
+      "bom-ref": "@mui/system@7.0.2",
       "author": "MUI Team",
       "description": "MUI System is a set of CSS utilities to help you build custom designs more efficiently. It makes it possible to rapidly lay out custom designs.",
       "licenses": [
@@ -2476,7 +2476,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/system@7.0.1#packages/mui-system",
+      "purl": "pkg:npm/%40mui/system@7.0.2#packages/mui-system",
       "externalReferences": [
         {
           "url": "git+https://github.com/mui/material-ui.git#packages/mui-system",
@@ -2494,12 +2494,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/system/-/system-7.0.1.tgz",
+          "url": "https://registry.npmjs.org/@mui/system/-/system-7.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a4afa9bb3d2144f1c428695c3ddf3498a603de3a728b4b9523059f7e8c7559980f4d0330d9d08a2dc0fef6774c0c90039eb2b398a969a07ef9e8f3c587652f58"
+              "content": "c8552b6805985ae2882123cf1153d243534b7aa9934f8aa243e92d9b24bc2cefcac07c41f8d35539a70465a2287e1e71d4dc58f2bce986f5395f685e459fd10c"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2516,8 +2516,8 @@
       "type": "library",
       "name": "private-theming",
       "group": "@mui",
-      "version": "7.0.1",
-      "bom-ref": "@mui/private-theming@7.0.1",
+      "version": "7.0.2",
+      "bom-ref": "@mui/private-theming@7.0.2",
       "author": "MUI Team",
       "description": "Private - The React theme context to be shared between `@mui/styles` and `@mui/material`.",
       "licenses": [
@@ -2528,7 +2528,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/private-theming@7.0.1#packages/mui-private-theming",
+      "purl": "pkg:npm/%40mui/private-theming@7.0.2#packages/mui-private-theming",
       "externalReferences": [
         {
           "url": "git+https://github.com/mui/material-ui.git#packages/mui-private-theming",
@@ -2546,12 +2546,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/private-theming/-/private-theming-7.0.1.tgz",
+          "url": "https://registry.npmjs.org/@mui/private-theming/-/private-theming-7.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d6443b4446238f30ee92e31f4db0239b7a4b1210fb814302d9b5a183d543e9feac1f3ca890acd7d171f396bdc87733560633f2b469331e93c8450ad43a83cb09"
+              "content": "ea5b7c85e0c2f7037c61a46a11d86a9e6d1c142bf4f0031fe0896db45bce567ed974a77cd4f3690ffac4b4f18b2f0400172c8a4b1046e3fd970a0a5b71d34a88"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2568,8 +2568,8 @@
       "type": "library",
       "name": "utils",
       "group": "@mui",
-      "version": "7.0.1",
-      "bom-ref": "@mui/utils@7.0.1",
+      "version": "7.0.2",
+      "bom-ref": "@mui/utils@7.0.2",
       "author": "MUI Team",
       "description": "Utility functions for React components.",
       "licenses": [
@@ -2580,7 +2580,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/utils@7.0.1#packages/mui-utils",
+      "purl": "pkg:npm/%40mui/utils@7.0.2#packages/mui-utils",
       "externalReferences": [
         {
           "url": "git+https://github.com/mui/material-ui.git#packages/mui-utils",
@@ -2598,12 +2598,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/utils/-/utils-7.0.1.tgz",
+          "url": "https://registry.npmjs.org/@mui/utils/-/utils-7.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4892abade6cda662bdac90a754bdbd9c63e13d7418b416666fb0eca747f9f2e2148507c029c0571c4e0a8ecd3a497e02c2a782bb011581c1d8f8c8003ba5d0fe"
+              "content": "ef681cb908cfce18ff30b98f1cb0a0663cb6563387e0a9e247fe2a46d5d34d7204c1b92070df98e56feb0bdd2b5ad32665b8edf6cbd97afff3f901d42388fbe3"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2722,8 +2722,8 @@
       "type": "library",
       "name": "styled-engine",
       "group": "@mui",
-      "version": "7.0.1",
-      "bom-ref": "@mui/styled-engine@7.0.1",
+      "version": "7.0.2",
+      "bom-ref": "@mui/styled-engine@7.0.2",
       "author": "MUI Team",
       "description": "styled() API wrapper package for emotion.",
       "licenses": [
@@ -2734,7 +2734,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/styled-engine@7.0.1#packages/mui-styled-engine",
+      "purl": "pkg:npm/%40mui/styled-engine@7.0.2#packages/mui-styled-engine",
       "externalReferences": [
         {
           "url": "git+https://github.com/mui/material-ui.git#packages/mui-styled-engine",
@@ -2752,12 +2752,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/styled-engine/-/styled-engine-7.0.1.tgz",
+          "url": "https://registry.npmjs.org/@mui/styled-engine/-/styled-engine-7.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "05e19ee3166617bb4448a86672d62b2f9e0a976e641873ca55d658339aa3e57cfbe9633fa6863e77c12602a51eb13ea4dab6c958fa7682d3805d78a73421ae9d"
+              "content": "d7506de187471a587bb01f0fef94bd991094c53960bfb1c66ebd142b3ea6e99f4a2de8b0d419bdcbfb778aa2cb54cbd21d807accbf17f17f8b99f4c4fbe83207"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2774,8 +2774,8 @@
       "type": "library",
       "name": "types",
       "group": "@mui",
-      "version": "7.4.0",
-      "bom-ref": "@mui/types@7.4.0",
+      "version": "7.4.1",
+      "bom-ref": "@mui/types@7.4.1",
       "author": "MUI Team",
       "description": "Utility types for MUI.",
       "licenses": [
@@ -2786,7 +2786,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40mui/types@7.4.0#packages/mui-types",
+      "purl": "pkg:npm/%40mui/types@7.4.1#packages/mui-types",
       "externalReferences": [
         {
           "url": "git+https://github.com/mui/material-ui.git#packages/mui-types",
@@ -2804,12 +2804,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@mui/types/-/types-7.4.0.tgz",
+          "url": "https://registry.npmjs.org/@mui/types/-/types-7.4.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4f12787b311e79d5870633a62edc48db4ddaf43208f65e24f374579b3d4f6120269f211c2b63e0953366246c6cc02ff033971d97d6a9da1f259d7beddacc0019"
+              "content": "8142fc208008e760915cffcc8b14f5b492addd223ab55bf853ff6ca05b13b40b07cda250a6d678d9f7dd1d95779e25f57a2d1a52032f3b1041374298a9d1b7f6"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2971,109 +2971,6 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/react-is"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "core",
-      "group": "@popperjs",
-      "version": "2.11.8",
-      "bom-ref": "@popperjs/core@2.11.8",
-      "author": "Federico Zivolo",
-      "description": "Tooltip and Popover Positioning Engine",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/%40popperjs/core@2.11.8",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/popperjs/popper-core.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/popperjs/popper-core#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/popperjs/popper-core/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "3f5b2dd1a92c0ab9fdb06661a7c18c63006742c6ef016b19017e38a1734dbcb1c6a8039ca15c668d98a886cb7043b4aa2a76d1e3b6a474d8beba57960fcfa0e8"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/@popperjs/core"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "react-transition-group",
-      "group": "@types",
-      "version": "4.4.12",
-      "bom-ref": "@types/react-transition-group@4.4.12",
-      "description": "TypeScript definitions for react-transition-group",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/%40types/react-transition-group@4.4.12#types/react-transition-group",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/react-transition-group",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
-        },
-        {
-          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-transition-group",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.12.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "f1357a4778768fb6bdd5cfb50d77498b74b2a3af73cc865bcfb2e0e6d3913392c4246ed7fc4e9ad55dddad1c81459abbfeeb73ec0f9ce0e8182e22dc6061c6eb"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/@types/react-transition-group"
         }
       ]
     },
@@ -3277,6 +3174,161 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/react-dom"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "core-downloads-tracker",
+      "group": "@mui",
+      "version": "7.0.2",
+      "bom-ref": "@mui/core-downloads-tracker@7.0.2",
+      "author": "MUI Team",
+      "description": "Internal package to track number of downloads of our design system libraries",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40mui/core-downloads-tracker@7.0.2#packages/core-downloads-tracker",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mui/material-ui.git#packages/core-downloads-tracker",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://mui.com/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mui/material-ui/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-7.0.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "4df78553d4e0375374ea1c9bfe957feb715f3b7e278a365132a8079344c9de0925e056ddfb067bdfe66d39dee36a0ea1326ccef474ab05ce95767e7dd6786402"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@mui/core-downloads-tracker"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "core",
+      "group": "@popperjs",
+      "version": "2.11.8",
+      "bom-ref": "@popperjs/core@2.11.8",
+      "author": "Federico Zivolo",
+      "description": "Tooltip and Popover Positioning Engine",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40popperjs/core@2.11.8",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/popperjs/popper-core.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/popperjs/popper-core#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/popperjs/popper-core/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "3f5b2dd1a92c0ab9fdb06661a7c18c63006742c6ef016b19017e38a1734dbcb1c6a8039ca15c668d98a886cb7043b4aa2a76d1e3b6a474d8beba57960fcfa0e8"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@popperjs/core"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "react-transition-group",
+      "group": "@types",
+      "version": "4.4.12",
+      "bom-ref": "@types/react-transition-group@4.4.12",
+      "description": "TypeScript definitions for react-transition-group",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40types/react-transition-group@4.4.12#types/react-transition-group",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/react-transition-group",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-transition-group",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.12.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "f1357a4778768fb6bdd5cfb50d77498b74b2a3af73cc865bcfb2e0e6d3913392c4246ed7fc4e9ad55dddad1c81459abbfeeb73ec0f9ce0e8182e22dc6061c6eb"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@types/react-transition-group"
         }
       ]
     },
@@ -30499,11 +30551,11 @@
     },
     {
       "type": "library",
-      "name": "linux-x64",
+      "name": "darwin-arm64",
       "group": "@esbuild",
       "version": "0.25.2",
-      "bom-ref": "@esbuild/linux-x64@0.25.2",
-      "description": "The Linux 64-bit binary for esbuild, a JavaScript bundler.",
+      "bom-ref": "@esbuild/darwin-arm64@0.25.2",
+      "description": "The macOS ARM 64-bit binary for esbuild, a JavaScript bundler.",
       "scope": "optional",
       "licenses": [
         {
@@ -30513,7 +30565,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40esbuild/linux-x64@0.25.2",
+      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.25.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/evanw/esbuild.git",
@@ -30531,12 +30583,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.2.tgz",
+          "url": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.25.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4089c711196aa534d9e05441d1f44e4165dc6110fae2502889e81ecc3ba72e96a564c8dc51c95ddd8cd99952761ff0a9d3025167c5ed8ed8f47041e161cfee52"
+              "content": "32933a2d45535c0ccebcde0a6e3cd4feae6c9b3af2ba836396b880231fb4e91a5e7300a42fd2697a7373a4a77660cccb24539d3ea069bae6fa79544fe4882248"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30545,7 +30597,62 @@
       "properties": [
         {
           "name": "cdx:npm:package:path",
-          "value": "node_modules/@esbuild/linux-x64"
+          "value": "node_modules/@esbuild/darwin-arm64"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fsevents",
+      "version": "2.3.3",
+      "bom-ref": "fsevents@2.3.3",
+      "description": "Native Access to MacOS FSEvents",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fsevents@2.3.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/fsevents/fsevents.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/fsevents/fsevents",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/fsevents/fsevents/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "e71a037d7f9f2fb7da0139da82658fa5b16dc21fd1efb5a630caaa1c64bae42defbc1d181eb805f81d58999df8e35b4c8f99fade4d36d765cda09c339617df43"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fsevents"
         },
         {
           "name": "cdx:npm:package:development",
@@ -30720,10 +30827,10 @@
     },
     {
       "type": "library",
-      "name": "rollup-linux-x64-gnu",
+      "name": "rollup-darwin-arm64",
       "group": "@rollup",
       "version": "4.39.0",
-      "bom-ref": "@rollup/rollup-linux-x64-gnu@4.39.0",
+      "bom-ref": "@rollup/rollup-darwin-arm64@4.39.0",
       "author": "Lukas Taegert-Atkinson",
       "description": "Native bindings for Rollup",
       "scope": "optional",
@@ -30735,7 +30842,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.39.0",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.39.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -30753,12 +30860,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.39.0.tgz",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.39.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b7d8ea630dbb47a2f1d1729f1057b9bd4784279a45dd218833a8137ce35231bec3b86eb3eb07e3db28dca19c47835dbdbde4ea53bfb03a163a197f3099ff7474"
+              "content": "95742786914338a0d7886c6c53dfe5f1410618ceb97289ab42e67e943706531fbd610f5d2a9177ad21067a9c9e4790076746f94608a58a0b0185665f492421f1"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30767,64 +30874,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:path",
-          "value": "node_modules/@rollup/rollup-linux-x64-gnu"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "rollup-linux-x64-musl",
-      "group": "@rollup",
-      "version": "4.39.0",
-      "bom-ref": "@rollup/rollup-linux-x64-musl@4.39.0",
-      "author": "Lukas Taegert-Atkinson",
-      "description": "Native bindings for Rollup",
-      "scope": "optional",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.39.0",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/rollup/rollup.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://rollupjs.org/",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/rollup/rollup/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.39.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "4e115d92b1433f9e4022c2190ca481584b7f25c5a50b3c9d6d91e29d9d05febd61f37a9b19e7a70adfc6ff01b63b4adeb843430f6b5ac1f023dacf152bb06e82"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/@rollup/rollup-linux-x64-musl"
+          "value": "node_modules/@rollup/rollup-darwin-arm64"
         },
         {
           "name": "cdx:npm:package:development",
@@ -32045,7 +32095,8 @@
         "@emotion/styled@11.14.0",
         "@eslint/js@9.24.0",
         "@mui/icons-material@7.0.1",
-        "@mui/material@7.0.1",
+        "@mui/lab@7.0.0-beta.11",
+        "@mui/material@7.0.2",
         "@tanstack/react-query@5.71.10",
         "@testing-library/jest-dom@6.6.3",
         "@testing-library/react@16.3.0",
@@ -32316,21 +32367,21 @@
       "ref": "@mui/icons-material@7.0.1",
       "dependsOn": [
         "@babel/runtime@7.27.0",
-        "@mui/material@7.0.1",
+        "@mui/material@7.0.2",
         "@types/react@19.1.0",
         "react@19.1.0"
       ]
     },
     {
-      "ref": "@mui/material@7.0.1",
+      "ref": "@mui/material@7.0.2",
       "dependsOn": [
         "@babel/runtime@7.27.0",
         "@emotion/react@11.14.0",
         "@emotion/styled@11.14.0",
-        "@mui/core-downloads-tracker@7.0.1",
-        "@mui/system@7.0.1",
-        "@mui/types@7.4.0",
-        "@mui/utils@7.0.1",
+        "@mui/core-downloads-tracker@7.0.2",
+        "@mui/system@7.0.2",
+        "@mui/types@7.4.1",
+        "@mui/utils@7.0.2",
         "@popperjs/core@2.11.8",
         "@types/react-transition-group@4.4.12",
         "@types/react@19.1.0",
@@ -32350,18 +32401,32 @@
       ]
     },
     {
-      "ref": "@mui/core-downloads-tracker@7.0.1"
-    },
-    {
-      "ref": "@mui/system@7.0.1",
+      "ref": "@mui/lab@7.0.0-beta.11",
       "dependsOn": [
         "@babel/runtime@7.27.0",
         "@emotion/react@11.14.0",
         "@emotion/styled@11.14.0",
-        "@mui/private-theming@7.0.1",
-        "@mui/styled-engine@7.0.1",
-        "@mui/types@7.4.0",
-        "@mui/utils@7.0.1",
+        "@mui/material@7.0.2",
+        "@mui/system@7.0.2",
+        "@mui/types@7.4.1",
+        "@mui/utils@7.0.2",
+        "@types/react@19.1.0",
+        "clsx@2.1.1",
+        "prop-types@15.8.1",
+        "react-dom@19.1.0",
+        "react@19.1.0"
+      ]
+    },
+    {
+      "ref": "@mui/system@7.0.2",
+      "dependsOn": [
+        "@babel/runtime@7.27.0",
+        "@emotion/react@11.14.0",
+        "@emotion/styled@11.14.0",
+        "@mui/private-theming@7.0.2",
+        "@mui/styled-engine@7.0.2",
+        "@mui/types@7.4.1",
+        "@mui/utils@7.0.2",
         "@types/react@19.1.0",
         "clsx@2.1.1",
         "csstype@3.1.3",
@@ -32370,20 +32435,20 @@
       ]
     },
     {
-      "ref": "@mui/private-theming@7.0.1",
+      "ref": "@mui/private-theming@7.0.2",
       "dependsOn": [
         "@babel/runtime@7.27.0",
-        "@mui/utils@7.0.1",
+        "@mui/utils@7.0.2",
         "@types/react@19.1.0",
         "prop-types@15.8.1",
         "react@19.1.0"
       ]
     },
     {
-      "ref": "@mui/utils@7.0.1",
+      "ref": "@mui/utils@7.0.2",
       "dependsOn": [
         "@babel/runtime@7.27.0",
-        "@mui/types@7.4.0",
+        "@mui/types@7.4.1",
         "@types/prop-types@15.7.14",
         "@types/react@19.1.0",
         "clsx@2.1.1",
@@ -32404,7 +32469,7 @@
       "ref": "prop-types@15.8.1|react-is@16.13.1"
     },
     {
-      "ref": "@mui/styled-engine@7.0.1",
+      "ref": "@mui/styled-engine@7.0.2",
       "dependsOn": [
         "@babel/runtime@7.27.0",
         "@emotion/cache@11.14.0",
@@ -32418,7 +32483,7 @@
       ]
     },
     {
-      "ref": "@mui/types@7.4.0",
+      "ref": "@mui/types@7.4.1",
       "dependsOn": [
         "@babel/runtime@7.27.0",
         "@types/react@19.1.0"
@@ -32432,15 +32497,6 @@
     },
     {
       "ref": "react-is@19.1.0"
-    },
-    {
-      "ref": "@popperjs/core@2.11.8"
-    },
-    {
-      "ref": "@types/react-transition-group@4.4.12",
-      "dependsOn": [
-        "@types/react@19.1.0"
-      ]
     },
     {
       "ref": "loose-envify@1.4.0",
@@ -32459,6 +32515,18 @@
       "dependsOn": [
         "react@19.1.0",
         "scheduler@0.26.0"
+      ]
+    },
+    {
+      "ref": "@mui/core-downloads-tracker@7.0.2"
+    },
+    {
+      "ref": "@popperjs/core@2.11.8"
+    },
+    {
+      "ref": "@types/react-transition-group@4.4.12",
+      "dependsOn": [
+        "@types/react@19.1.0"
       ]
     },
     {
@@ -33087,6 +33155,7 @@
       "dependsOn": [
         "@types/node@22.14.0",
         "esbuild@0.25.2",
+        "fsevents@2.3.3",
         "postcss@8.5.3",
         "rollup@4.39.0",
         "yaml@2.7.1"
@@ -35542,11 +35611,14 @@
     {
       "ref": "esbuild@0.25.2",
       "dependsOn": [
-        "@esbuild/linux-x64@0.25.2"
+        "@esbuild/darwin-arm64@0.25.2"
       ]
     },
     {
-      "ref": "@esbuild/linux-x64@0.25.2"
+      "ref": "@esbuild/darwin-arm64@0.25.2"
+    },
+    {
+      "ref": "fsevents@2.3.3"
     },
     {
       "ref": "postcss@8.5.3",
@@ -35562,16 +35634,13 @@
     {
       "ref": "rollup@4.39.0",
       "dependsOn": [
-        "@rollup/rollup-linux-x64-gnu@4.39.0",
-        "@rollup/rollup-linux-x64-musl@4.39.0",
-        "@types/estree@1.0.7"
+        "@rollup/rollup-darwin-arm64@4.39.0",
+        "@types/estree@1.0.7",
+        "fsevents@2.3.3"
       ]
     },
     {
-      "ref": "@rollup/rollup-linux-x64-gnu@4.39.0"
-    },
-    {
-      "ref": "@rollup/rollup-linux-x64-musl@4.39.0"
+      "ref": "@rollup/rollup-darwin-arm64@4.39.0"
     },
     {
       "ref": "@vitest/expect@3.1.1",
