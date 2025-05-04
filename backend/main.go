@@ -16,6 +16,7 @@ import (
 	"github.com/MichaelKlank/movie-collector/backend/repositories"
 	"github.com/MichaelKlank/movie-collector/backend/services"
 	"github.com/MichaelKlank/movie-collector/backend/tmdb"
+	"github.com/MichaelKlank/movie-collector/backend/version"
 	gincache "github.com/gin-contrib/cache"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -75,6 +76,7 @@ func main() {
 	movieService := services.NewMovieService(movieRepo)
 	movieHandler := handlers.NewMovieHandler(movieService)
 	imageHandler := handlers.NewImageHandler(movieService)
+	versionHandler := handlers.NewVersionHandler()
 
 	// Initialize router
 	r := gin.Default()
@@ -112,6 +114,9 @@ func main() {
 		c.Writer.Header().Set("Expires", "0")
 		c.Next()
 	})
+
+	// Version route
+	r.GET("/version", versionHandler.GetVersion)
 
 	// Movie routes mit Cache für GET-Anfragen
 	r.GET("/movies", gincache.CachePage(cache.RedisStore, 2*time.Minute, movieHandler.GetMovies))
@@ -226,7 +231,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	log.Printf("Server läuft auf Port %s", port)
+	log.Printf("Server läuft auf Port %s (Version %s)", port, version.Version())
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal("Fehler beim Starten des Servers:", err)
 	}

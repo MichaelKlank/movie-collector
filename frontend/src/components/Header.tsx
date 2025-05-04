@@ -5,6 +5,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import { useThemeContext } from "../context/themeContext";
 import { useState } from "react";
 import SbomDialog from "./SbomDialog";
+import { VersionInfo } from "./VersionInfo";
 
 export const Header = () => {
     const theme = useTheme();
@@ -26,6 +27,7 @@ export const Header = () => {
                     <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                         Meine DVD-Sammlung
                     </Typography>
+                    <VersionInfo />
                     <IconButton
                         onClick={() => setSbomOpen(true)}
                         color='inherit'

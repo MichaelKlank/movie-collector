@@ -52,6 +52,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	movieService := services.NewMovieService(movieRepo)
 	movieHandler := handlers.NewMovieHandler(movieService)
 	imageHandler := handlers.NewImageHandler(movieService)
+	versionHandler := handlers.NewVersionHandler()
 
 	// CORS configuration
 	config := cors.Config{
@@ -92,6 +93,9 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		}
 		c.Next()
 	})
+
+	// Version route
+	r.GET("/version", versionHandler.GetVersion)
 
 	// Movie routes mit Cache für GET-Anfragen
 	r.GET("/movies", gincache.CachePage(cache.RedisStore, 2*time.Minute, movieHandler.GetMovies))

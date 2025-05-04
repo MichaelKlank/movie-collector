@@ -11,8 +11,27 @@ permissions:
     pull-requests: write
 
 jobs:
+    version:
+        runs-on: ubuntu-latest
+        outputs:
+            major_version: ${{ steps.set_version.outputs.major_version }}
+            minor_version: ${{ steps.set_version.outputs.minor_version }}
+            patch_version: ${{ steps.set_version.outputs.patch_version }}
+            build_hash: ${{ steps.set_version.outputs.build_hash }}
+            version_string: ${{ steps.set_version.outputs.version_string }}
+
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Generate Version
+              id: set_version
+              run: ./scripts/generate-version.sh
+
     backend:
         runs-on: ubuntu-latest
+        needs: version
         defaults:
             run:
                 working-directory: ./backend
@@ -26,6 +45,41 @@ jobs:
               uses: actions/setup-go@v4
               with:
                   go-version: "1.24"
+
+            - name: Update Version Constants
+              run: |
+                  # Erstelle Version-Datei falls noch nicht vorhanden
+                  mkdir -p version
+                  cat > version/version.go << EOL
+                  package version
+
+                  import (
+                      "fmt"
+                      "time"
+                  )
+
+                  var (
+                      // Major Version, startet bei 1
+                      Major = ${{ needs.version.outputs.major_version }}
+                      // Minor Version, basiert auf der aktuellen Kalenderwoche
+                      Minor = ${{ needs.version.outputs.minor_version }}
+                      // Patch Version, wird durch CI/CD-Pipeline gesetzt
+                      Patch = ${{ needs.version.outputs.patch_version }}
+                      // BuildHash, wird durch CI/CD-Pipeline gesetzt
+                      BuildHash = "${{ needs.version.outputs.build_hash }}"
+                  )
+
+                  // Version gibt die aktuelle Version als String zurück
+                  func Version() string {
+                      return fmt.Sprintf("%d.%d.%d-%s", Major, Minor, Patch, BuildHash)
+                  }
+
+                  // getCalendarWeek berechnet die aktuelle Kalenderwoche
+                  func getCalendarWeek() int {
+                      _, week := time.Now().ISOWeek()
+                      return week
+                  }
+                  EOL
 
             - name: Cache Go modules
               uses: actions/cache@v4
@@ -74,9 +128,9 @@ jobs:
                   cd ${{ github.workspace }}
                   git config --local user.email "action@github.com"
                   git config --local user.name "GitHub Action"
-                  git add backend/sbom.json
+                  git add backend/sbom.json backend/version/version.go
                   if ! git diff --quiet && ! git diff --staged --quiet; then
-                      git commit -m "ci: update backend SBOM"
+                      git commit -m "ci: update backend SBOM and version"
                       git fetch origin
                       git reset --hard origin/main
                       git push
@@ -84,6 +138,7 @@ jobs:
 
     frontend:
         runs-on: ubuntu-latest
+        needs: version
         defaults:
             run:
                 working-directory: ./frontend
@@ -122,6 +177,8 @@ jobs:
               run: npm test -- --coverage
 
             - name: Build
+              env:
+                  VITE_APP_VERSION: ${{ needs.version.outputs.version_string }}
               run: npm run build
 
             - name: Upload build artifacts
